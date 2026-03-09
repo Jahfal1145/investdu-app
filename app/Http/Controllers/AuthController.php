@@ -30,7 +30,7 @@ class AuthController extends Controller
             // --- TAMBAHKAN LOGIKA INI ---
             // Cek apakah user yang baru login ini adalah admin (nilai is_admin = 1)
             if (Auth::user()->is_admin == 1) {
-                return redirect()->intended('/admin/users'); // Lempar ke halaman admin
+                return redirect()->intended('/admin'); // Lempar ke halaman admin
             }
 
             // Jika bukan admin (user biasa), lempar ke dashboard
