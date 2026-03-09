@@ -1,5 +1,13 @@
+<h2>Login Sistem</h2>
+
+@if(session('success'))
+    <p style="color:green; font-weight:bold;">{{ session('success') }}</p>
+@endif
+
 <form action="/login" method="POST">
-    @csrf @if($errors->any())
+    @csrf 
+    
+    @if($errors->any())
         <p style="color:red;">{{ $errors->first() }}</p>
     @endif
 
@@ -11,3 +19,6 @@
 
     <button type="submit">Login</button>
 </form>
+
+<br>
+<p>Belum punya akun? <a href="/register">Register di sini</a></p>
