@@ -11,13 +11,34 @@
         <p style="color:red;">{{ $errors->first() }}</p>
     @endif
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
+    <label>Email atau Username:</label><br>
+    <input type="text" name="login" required><br><br>
 
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
+<label>Password:</label>
+    <input type="password" name="password" id="loginPassword" placeholder="Masukkan Password" required>
+    
+    <div style="margin-top: 5px; margin-bottom: 15px;">
+        <input type="checkbox" onclick="toggleLoginPassword()" id="showLoginPass">
+        <label for="showLoginPass" style="font-size: 14px; cursor: pointer;">Tampilkan Password</label>
+    </div>
+
+    <script>
+        function toggleLoginPassword() {
+            var x = document.getElementById("loginPassword");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
 
     <button type="submit">Login</button>
+
+<a href="/auth/google" style="text-decoration: none;">
+    <img src="link_gambar_tombolmu.png" alt="Continue with Google">
+</a>
+
 </form>
 
 <br>

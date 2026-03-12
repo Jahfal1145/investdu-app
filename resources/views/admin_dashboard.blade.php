@@ -9,7 +9,7 @@
 
     <div style="background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
         <h2 style="margin-top: 0;">👑 Panel Admin Investdu</h2>
-        <p>Selamat datang, Komandan <b>{{ Auth::user()->name }}</b>! Mau ngurusin apa hari ini?</p>
+        <p>Selamat datang, Komandan <b>{{ Auth::user()->username }}</b>! Mau ngurusin apa hari ini?</p>
 
         <hr style="margin: 20px 0;">
 
