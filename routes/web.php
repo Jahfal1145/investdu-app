@@ -38,3 +38,7 @@ Route::put('/admin/users/{id}/update', [AdminController::class, 'update'])->midd
 Route::post('/admin/users/{id}/delete', [AdminController::class, 'destroy'])->middleware('auth');
 // Rute untuk user mengedit profilnya sendiri via popup
 Route::put('/user/profile/update', [AuthController::class, 'updateProfile'])->middleware('auth');
+
+Route::get('/game', function () {
+    return view('game');
+});
