@@ -16,7 +16,12 @@ class AdminController extends Controller
         if (Auth::user()->is_admin == 0) {
             return redirect('/dashboard');
         }
-        return view('admin_dashboard');
+
+        // Statistik untuk dashboard
+        $totalUsers = User::count();
+        $recentUsers = User::latest()->take(10)->get();
+
+        return view('admin_dashboard', compact('totalUsers', 'recentUsers'));
     }
 
 // Fungsi Menampilkan Tabel & Fitur Search
@@ -34,7 +39,7 @@ class AdminController extends Controller
             $users = User::all();
         }
 
-        return view('admin', compact('users'));
+        return view('admin_users', compact('users'));
     }
 
     // Fungsi Menampilkan Halaman Form Edit
