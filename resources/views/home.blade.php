@@ -518,37 +518,727 @@
 
         /* ===== AUTH DASHBOARD AREA ===== */
         .auth-dashboard {
-            padding: 40px;
+            padding: 2rem 3rem;
             background-color: #0d1117;
             min-height: calc(100vh - 60px);
             margin-top: 60px;
         }
 
-        .auth-dashboard h2 {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1rem;
-            color: #FFD000;
-            margin-bottom: 1.5rem;
+        /* ===== GREETING BOX ===== */
+        .greeting-box {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .dashboard-card {
+        .greeting-mascot {
+            flex-shrink: 0;
+        }
+
+        .mascot-img {
+            width: 80px;
+            height: 80px;
+            image-rendering: pixelated;
+            animation: mascot-float 3s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+        }
+
+        @keyframes mascot-float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-4px) rotate(-1deg); }
+            75% { transform: translateY(-2px) rotate(1deg); }
+        }
+
+        .greeting-bubble {
             background-color: #161b22;
-            padding: 24px;
+            border: 2px solid #2d333b;
             border-radius: 12px;
-            border: 1px solid #1e2530;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            padding: 1rem 1.5rem;
+            position: relative;
+            max-width: 500px;
+            animation: bubble-pop 0.4s ease-out;
         }
 
-        .dashboard-card h3 {
+        .greeting-bubble::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent #2d333b transparent transparent;
+        }
+
+        .greeting-bubble::after {
+            content: '';
+            position: absolute;
+            left: -7px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 7px;
+            border-style: solid;
+            border-color: transparent #161b22 transparent transparent;
+        }
+
+        @keyframes bubble-pop {
+            0% { opacity: 0; transform: scale(0.8) translateX(-10px); }
+            100% { opacity: 1; transform: scale(1) translateX(0); }
+        }
+
+        .greeting-text {
             font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: #e6edf3;
+            line-height: 1.5;
+        }
+
+        /* ===== SECTION HEADING ===== */
+        .section-heading {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #e6edf3;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== DASHBOARD 2-COL GRID ===== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        /* ===== COURSE CARD ===== */
+        .course-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #1e2530;
+            height: 280px;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .course-card:hover {
+            border-color: #3d444d;
+            transform: translateY(-2px);
+        }
+
+        .course-card-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            image-rendering: auto;
+        }
+
+        .course-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                180deg,
+                rgba(13, 17, 23, 0.2) 0%,
+                rgba(13, 17, 23, 0.5) 50%,
+                rgba(13, 17, 23, 0.85) 100%
+            );
+        }
+
+        .course-card-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+        }
+
+        .course-progress-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-bar-wrapper {
+            width: 120px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #FFD000, #ffb300);
+            border-radius: 6px;
+            position: relative;
+            transition: width 1s ease-out;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                transparent 100%
+            );
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
+        }
+
+        .progress-text {
+            font-size: 0.55rem;
+            color: #FFD000;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .course-label {
+            font-size: 0.45rem;
+            color: #8b949e;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .course-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.4rem;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .course-next {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: #8b949e;
+            margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .course-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-continue {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
             font-weight: 700;
             color: #ffffff;
-            margin-top: 0;
+            background-color: #1f6feb;
+            border: 3px solid #0d1117;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 0 #0a3d82, 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-continue:hover {
+            background-color: #388bfd;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #0a3d82, 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-continue:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #0a3d82;
+        }
+
+        .btn-view-course {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #8b949e;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .btn-view-course:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* ===== QUICK STATS ROW ===== */
+        .quick-stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+
+        .quick-stat-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: #161b22;
+            border: 2px solid #1e2530;
+            border-radius: 10px;
+            padding: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .quick-stat-card:hover {
+            border-color: #2d333b;
+            background-color: #1c2129;
+            transform: translateY(-1px);
+        }
+
+        .quick-stat-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .quick-stat-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+
+        .quick-stat-value {
+            font-size: 0.6rem;
+            color: #FFD000;
+        }
+
+        .quick-stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: #8b949e;
+        }
+
+        /* ===== DASHBOARD CARD (Generic) ===== */
+        .dashboard-card {
+            background-color: #161b22;
+            padding: 1.25rem;
+            border-radius: 12px;
+            border: 2px solid #1e2530;
+        }
+
+        .card-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #e6edf3;
+        }
+
+        .card-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #1f6feb;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .card-link:hover {
+            color: #388bfd;
+            text-decoration: underline;
+        }
+
+        /* ===== NEWS LIST ===== */
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .news-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .news-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-color: #1e2530;
+        }
+
+        .news-badge {
+            flex-shrink: 0;
+            font-size: 0.35rem;
+            color: #0d1117;
+            background-color: #f85149;
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .news-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .news-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #c9d1d9;
+            line-height: 1.4;
+        }
+
+        .news-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: #484f58;
+        }
+
+        /* ===== PROFILE CARD ===== */
+        .profile-card {
+            background-color: #161b22;
+            border: 2px solid #1e2530;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             margin-bottom: 0.5rem;
         }
 
-        .dashboard-card p {
+        .profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            border: 3px solid #2d333b;
+            background: linear-gradient(135deg, #1a1f2e, #252d3a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: border-color 0.2s;
+        }
+
+        .profile-avatar:hover {
+            border-color: #FFD000;
+        }
+
+        .avatar-char {
+            font-size: 1.8rem;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.2rem;
+        }
+
+        .profile-name {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #e6edf3;
+        }
+
+        .profile-level {
+            font-size: 0.45rem;
             color: #8b949e;
+            letter-spacing: 1px;
+        }
+
+        .profile-edit-link {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #1f6feb;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            transition: color 0.2s;
+        }
+
+        .profile-edit-link:hover {
+            color: #388bfd;
+            text-decoration: underline;
+        }
+
+        /* ===== PROFILE STATS GRID ===== */
+        .profile-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .profile-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid #1e2530;
+            transition: background-color 0.2s;
+        }
+
+        .profile-stat:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .stat-data {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-size: 0.55rem;
+            color: #e6edf3;
+        }
+
+        .stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            color: #484f58;
+        }
+
+        .btn-view-profile {
+            display: block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #c9d1d9;
+            background-color: transparent;
+            border: 2px solid #2d333b;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.15s ease;
+        }
+
+        .btn-view-profile:hover {
+            border-color: #484f58;
+            background-color: rgba(255, 255, 255, 0.04);
+            color: #ffffff;
+        }
+
+        /* ===== CLUB PROMO CARD ===== */
+        .club-promo-card {
+            background: linear-gradient(135deg, #1a1035, #161b22);
+            border: 2px solid #2d1f5e;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .club-close-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            color: #484f58;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1;
+        }
+
+        .club-close-btn:hover {
+            color: #c9d1d9;
+        }
+
+        .club-label {
+            font-size: 0.45rem;
+            color: #a78bfa;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .club-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #e6edf3;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .club-desc {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: #8b949e;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .btn-join-club {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #0d1117;
+            background-color: #FFD000;
+            border: 2px solid #0d1117;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.1s ease;
+            box-shadow: 0 3px 0 #b38f00;
+        }
+
+        .btn-join-club:hover {
+            background-color: #ffe04a;
+            transform: translateY(1px);
+            box-shadow: 0 2px 0 #b38f00;
+        }
+
+        .btn-join-club:active {
+            transform: translateY(3px);
+            box-shadow: 0 0px 0 #b38f00;
+        }
+
+        /* ===== LEADERBOARD MINI ===== */
+        .leaderboard-mini {
+            background-color: #161b22;
+            border: 2px solid #1e2530;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .lb-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            transition: background-color 0.15s;
+        }
+
+        .lb-item:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .lb-item.active {
+            background-color: rgba(255, 208, 0, 0.06);
+            border: 1px solid rgba(255, 208, 0, 0.15);
+        }
+
+        .lb-rank {
+            font-size: 0.55rem;
+            width: 20px;
+            text-align: center;
+            color: #8b949e;
+        }
+
+        .lb-name {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: #c9d1d9;
+            flex: 1;
+        }
+
+        .lb-xp {
+            font-size: 0.45rem;
+            color: #FFD000;
+        }
+
+        /* ===== DASHBOARD RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-right {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+            .club-promo-card,
+            .leaderboard-mini {
+                margin-top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .auth-dashboard {
+                padding: 1.25rem 1rem;
+            }
+
+            .greeting-box {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+
+            .greeting-bubble::before,
+            .greeting-bubble::after {
+                display: none;
+            }
+
+            .mascot-img {
+                width: 60px;
+                height: 60px;
+            }
+
+            .quick-stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-right {
+                grid-template-columns: 1fr;
+            }
+
+            .course-card {
+                height: 240px;
+            }
+
+            .course-title {
+                font-size: 1rem;
+            }
         }
 
         /* ===== SCROLLBAR STYLING ===== */
@@ -693,12 +1383,197 @@
 
     {{-- ===== AUTH DASHBOARD (LOGGED IN USERS) ===== --}}
     @auth
-    <div class="auth-dashboard">
-        <h2>Selamat datang kembali, {{ Auth::user()->username }}! 👋</h2>
-        <div class="dashboard-card">
-            <h3>📰 Berita Pasar Terkini</h3>
-            <p>(Area ini nanti akan diisi oleh NewsAPI...)</p>
+    <div class="auth-dashboard" id="userDashboard">
+
+        {{-- ===== GREETING BOX ===== --}}
+        <div class="greeting-box" id="greetingBox">
+            <div class="greeting-mascot">
+                <img src="/assets/images/pixel-mascot-greeting.png" alt="Mascot" class="mascot-img" id="mascotImg">
+            </div>
+            <div class="greeting-bubble" id="greetingBubble">
+                <span class="greeting-text" id="greetingText">Halo {{ Auth::user()->username }}! Semoga harimu menyenangkan ^^</span>
+            </div>
         </div>
+
+        {{-- ===== MAIN 2-COLUMN GRID ===== --}}
+        <div class="dashboard-grid" id="dashboardGrid">
+
+            {{-- ===== LEFT COLUMN (70%) ===== --}}
+            <div class="dashboard-left">
+
+                {{-- Jump Back In --}}
+                <h2 class="section-heading" id="sectionJumpBack">Jump back in</h2>
+
+                <div class="course-card" id="courseCard">
+                    <img src="/assets/images/pixel-mountain-banner.png" alt="Course Background" class="course-card-bg">
+                    <div class="course-card-overlay"></div>
+                    <div class="course-card-content">
+                        <div class="course-progress-row">
+                            <div class="progress-bar-wrapper" id="progressBar">
+                                <div class="progress-bar-fill" style="width: 27%;"></div>
+                            </div>
+                            <span class="progress-text font-pixel">27%</span>
+                        </div>
+                        <span class="course-label font-pixel">COURSE</span>
+                        <h3 class="course-title">Investasi Saham</h3>
+                        <p class="course-next">Next: Analisis Fundamental</p>
+                        <div class="course-actions">
+                            <a href="/game" class="btn-continue" id="btnContinue">Continue Learning</a>
+                            <a href="#" class="btn-view-course">View course</a>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Quick Stats Row --}}
+                <div class="quick-stats-row" id="quickStats">
+                    <div class="quick-stat-card" id="statPortofolio">
+                        <span class="quick-stat-icon">💼</span>
+                        <div class="quick-stat-info">
+                            <span class="quick-stat-value font-pixel">Rp 10.5M</span>
+                            <span class="quick-stat-label">Total Portofolio</span>
+                        </div>
+                    </div>
+                    <div class="quick-stat-card" id="statProfit">
+                        <span class="quick-stat-icon">📈</span>
+                        <div class="quick-stat-info">
+                            <span class="quick-stat-value font-pixel" style="color: #3fb950;">+12.4%</span>
+                            <span class="quick-stat-label">Profit Bulan Ini</span>
+                        </div>
+                    </div>
+                    <div class="quick-stat-card" id="statTranx">
+                        <span class="quick-stat-icon">🔄</span>
+                        <div class="quick-stat-info">
+                            <span class="quick-stat-value font-pixel">28</span>
+                            <span class="quick-stat-label">Total Transaksi</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Market News Preview --}}
+                <div class="dashboard-card" id="marketNewsCard" style="margin-top: 1.25rem;">
+                    <div class="card-header-row">
+                        <h3 class="card-title">📰 Berita Pasar Terkini</h3>
+                        <a href="/berita" class="card-link">Lihat Semua →</a>
+                    </div>
+                    <div class="news-list">
+                        <div class="news-item" id="news1">
+                            <span class="news-badge font-pixel">HOT</span>
+                            <div class="news-content">
+                                <span class="news-title">IHSG Ditutup Menguat 1.2% di Tengah Rally Global</span>
+                                <span class="news-meta">2 jam lalu · Pasar Saham</span>
+                            </div>
+                        </div>
+                        <div class="news-item" id="news2">
+                            <span class="news-badge font-pixel" style="background-color: #1f6feb;">NEW</span>
+                            <div class="news-content">
+                                <span class="news-title">Bank Indonesia Pertahankan Suku Bunga Acuan 5.75%</span>
+                                <span class="news-meta">5 jam lalu · Ekonomi</span>
+                            </div>
+                        </div>
+                        <div class="news-item" id="news3">
+                            <span class="news-badge font-pixel" style="background-color: #8b5cf6;">TIP</span>
+                            <div class="news-content">
+                                <span class="news-title">5 Saham Blue Chip yang Cocok untuk Pemula di 2026</span>
+                                <span class="news-meta">1 hari lalu · Edukasi</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            {{-- ===== RIGHT COLUMN (30%) ===== --}}
+            <div class="dashboard-right">
+
+                {{-- User Profile Card --}}
+                <div class="profile-card" id="profileCard">
+                    <div class="profile-header">
+                        <div class="profile-avatar" id="profileAvatar">
+                            <span class="avatar-char">🤖</span>
+                        </div>
+                        <div class="profile-info">
+                            <span class="profile-name">{{ Auth::user()->username }}</span>
+                            <span class="profile-level font-pixel">Level 2</span>
+                        </div>
+                    </div>
+                    <a href="#" onclick="openModal('profileModal')" class="profile-edit-link">Edit</a>
+
+                    <div class="profile-stats-grid" id="profileStats">
+                        <div class="profile-stat">
+                            <span class="stat-icon">⭐</span>
+                            <div class="stat-data">
+                                <span class="stat-number font-pixel">205</span>
+                                <span class="stat-label">Total XP</span>
+                            </div>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="stat-icon">🏅</span>
+                            <div class="stat-data">
+                                <span class="stat-number font-pixel" style="color: #cd7f32;">Bronze</span>
+                                <span class="stat-label">Rank</span>
+                            </div>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="stat-icon">🔮</span>
+                            <div class="stat-data">
+                                <span class="stat-number font-pixel">2</span>
+                                <span class="stat-label">Badges</span>
+                            </div>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="stat-icon">🔥</span>
+                            <div class="stat-data">
+                                <span class="stat-number font-pixel" style="color: #f0883e;">1</span>
+                                <span class="stat-label">Day streak</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#" onclick="openModal('profileModal')" class="btn-view-profile" id="btnViewProfile">View profile</a>
+                </div>
+
+                {{-- Club Promo Widget --}}
+                <div class="club-promo-card" id="clubPromo">
+                    <button class="club-close-btn" id="clubCloseBtn" onclick="this.closest('.club-promo-card').style.display='none'">✕</button>
+                    <span class="club-label font-pixel">CLUB</span>
+                    <h4 class="club-title">Dapatkan akses unlimited ke semua materi!</h4>
+                    <p class="club-desc">Gabung Club untuk buka semua course, dapatkan bantuan, dan unlock badge eksklusif.</p>
+                    <a href="#" class="btn-join-club" id="btnJoinClub">Join Club 🚀</a>
+                </div>
+
+                {{-- Leaderboard Mini Widget --}}
+                <div class="leaderboard-mini" id="leaderboardMini">
+                    <div class="card-header-row">
+                        <h3 class="card-title" style="font-size: 0.75rem;">🏆 Leaderboard</h3>
+                        <a href="/leaderboard" class="card-link">Full →</a>
+                    </div>
+                    <div class="leaderboard-list">
+                        <div class="lb-item">
+                            <span class="lb-rank font-pixel" style="color: #FFD000;">1</span>
+                            <span class="lb-name">InvestorPro</span>
+                            <span class="lb-xp font-pixel">1,250 XP</span>
+                        </div>
+                        <div class="lb-item">
+                            <span class="lb-rank font-pixel" style="color: #c0c0c0;">2</span>
+                            <span class="lb-name">SahamMaster</span>
+                            <span class="lb-xp font-pixel">980 XP</span>
+                        </div>
+                        <div class="lb-item">
+                            <span class="lb-rank font-pixel" style="color: #cd7f32;">3</span>
+                            <span class="lb-name">TraderPemula</span>
+                            <span class="lb-xp font-pixel">720 XP</span>
+                        </div>
+                        <div class="lb-item active">
+                            <span class="lb-rank font-pixel">—</span>
+                            <span class="lb-name">{{ Auth::user()->username }} (Kamu)</span>
+                            <span class="lb-xp font-pixel">205 XP</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
     @endauth
 
