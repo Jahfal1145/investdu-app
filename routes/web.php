@@ -9,13 +9,13 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'authenticate']);
-Route::get('/register', [AuthController::class, 'showRegister']);
-Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'authenticate'])->middleware('guest');
+Route::get('/register', [AuthController::class, 'showRegister'])->middleware('guest');
+Route::post('/register', [AuthController::class, 'register'])->name('register')->middleware('guest');
 // --- AREA LOGIN GOOGLE ---
-Route::get('/auth/google', [AuthController::class, 'redirectToGoogle']);
-Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->middleware('guest');
+Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->middleware('guest');
 
 // --- AREA DASHBOARD USER BIASA ---
 Route::get('/dashboard', function () {

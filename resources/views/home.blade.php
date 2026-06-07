@@ -953,7 +953,15 @@
                         <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                     </svg>
                 </button>
-                <a href="/login" class="btn-login">Login</a>
+                @auth
+                    @if(Auth::user()->is_admin)
+                        <a href="/admin" class="btn-login" style="background-color: #10B981;">Admin Panel</a>
+                    @else
+                        <a href="/dashboard" class="btn-login" style="background-color: #10B981;">Dashboard</a>
+                    @endif
+                @else
+                    <a href="/login" class="btn-login">Login</a>
+                @endauth
 
                 <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
                     <span></span><span></span><span></span>
@@ -974,10 +982,24 @@
         <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Komunitas</a>
 
         <div class="mobile-divider"></div>
-        <a href="/login" class="mobile-nav-link" style="color: #3B82F6; font-weight: 600;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-            Login
-        </a>
+        @auth
+            @if(Auth::user()->is_admin)
+                <a href="/admin" class="mobile-nav-link" style="color: #10B981; font-weight: 600;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    Admin Panel
+                </a>
+            @else
+                <a href="/dashboard" class="mobile-nav-link" style="color: #10B981; font-weight: 600;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Dashboard
+                </a>
+            @endif
+        @else
+            <a href="/login" class="mobile-nav-link" style="color: #3B82F6; font-weight: 600;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Login
+            </a>
+        @endauth
     </div>
 
     {{-- ============================================================

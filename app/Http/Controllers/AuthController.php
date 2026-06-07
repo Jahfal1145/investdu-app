@@ -51,7 +51,7 @@ class AuthController extends Controller
             }
             
             // Jika user biasa
-            return redirect()->intended('/'); 
+            return redirect('/'); 
         }
 
         // Kalau gagal, kembalikan dengan pesan error
@@ -132,11 +132,14 @@ class AuthController extends Controller
                 Auth::login($newUser);
             }
 
-            return redirect()->intended('/');
+            return redirect('/');
 
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Google Auth Error: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
             // Kalau batal/error, kembalikan ke halaman login bawa pesan error
-            return redirect('/login')->withErrors(['login' => 'Gagal login pakai Google. Coba lagi ya!']);
+            return redirect('/login')->withErrors(['login' => 'Gagal login pakai Google: ' . $e->getMessage()]);
         }
     }
 // Fungsi untuk user update profil (saat ini baru ganti username)
