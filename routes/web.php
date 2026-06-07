@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController; // <-- INI YANG BIKIN ERROR KALAU KETINGGALAN
+use App\Http\Controllers\QuizAdminController;
+
 
 // --- AREA HALAMAN AWAL & LOGIN ---
 Route::get('/', function () {
@@ -39,6 +41,6 @@ Route::post('/admin/users/{id}/delete', [AdminController::class, 'destroy'])->mi
 // Rute untuk user mengedit profilnya sendiri via popup
 Route::put('/user/profile/update', [AuthController::class, 'updateProfile'])->middleware('auth');
 
-Route::get('/game', function () {
-    return view('game');
+Route::get('/trivia', function () {
+    return view('trivia.index');
 });
