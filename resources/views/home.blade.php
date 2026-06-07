@@ -1,1727 +1,1486 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Investdu - Start Your Investment Adventure</title>
-    <meta name="description" content="Investdu adalah platform edukasi investasi yang paling seru dan ramah pemula. Mulai petualangan investasimu sekarang!">
+    <title>Investdu — Platform Belajar Investasi Terpercaya</title>
+    <meta name="description" content="Investdu adalah platform edukasi investasi bahasa Indonesia untuk pemula hingga investor berpengalaman. Pelajari saham, reksa dana, obligasi, properti, emas, dan tabungan berjangka.">
+    <meta name="keywords" content="belajar investasi, edukasi investasi, saham, reksa dana, obligasi, properti, emas, tabungan berjangka">
 
-    {{-- Google Fonts: Press Start 2P (pixel) + Space Mono --}}
+    {{-- Google Fonts: Inter --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css'])
 
     <style>
-        /* ===== BASE RESET ===== */
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ===========================================================
+           INVESTDU — PREMIUM FINTECH LANDING PAGE
+           Adapted from SantriKoding layout with Investdu palette
+           =========================================================== */
+
+        /* --- Reset & Base --- */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: 'Space Mono', monospace;
-            background-color: #0d1117;
-            color: #ffffff;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #0F172A;
+            color: #F8FAFC;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* ===== PIXEL FONT UTILITY ===== */
-        .font-pixel {
-            font-family: 'Press Start 2P', monospace;
+        ::selection {
+            background-color: rgba(37, 99, 235, 0.35);
+            color: #F8FAFC;
         }
 
-        .font-mono {
-            font-family: 'Space Mono', monospace;
-        }
+        a { text-decoration: none; color: inherit; }
+        button { font-family: inherit; cursor: pointer; }
 
-        /* ===== NAVBAR ===== */
+        /* ===========================================================
+           NAVBAR — Glassmorphism sticky
+           =========================================================== */
         .navbar {
-            position: fixed;
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
             z-index: 100;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background-color: rgba(15, 23, 42, 0.78);
+            border-bottom: 1px solid rgba(71, 85, 105, 0.25);
+            transition: all 0.35s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: rgba(15, 23, 42, 0.92);
+            border-bottom-color: rgba(71, 85, 105, 0.45);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        .navbar-inner {
+            max-width: 1280px;
+            margin: 0 auto;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            background-color: rgba(13, 17, 23, 0.95);
-            backdrop-filter: blur(10px);
+            justify-content: space-between;
             padding: 0 2rem;
-            height: 60px;
-            border-bottom: 2px solid #1e2530;
+            height: 68px;
         }
 
-        .navbar-logo {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.1rem;
-            color: #FFD000;
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            font-size: 1.375rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #F8FAFC;
             text-decoration: none;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 0px #b38f00;
-            transition: all 0.2s;
+            transition: opacity 0.3s ease;
         }
 
-        .navbar-logo:hover {
-            text-shadow: 2px 2px 0px #b38f00, 0 0 20px rgba(255, 208, 0, 0.4);
+        .logo:hover { opacity: 0.85; }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            overflow: hidden;
+            flex-shrink: 0;
         }
 
-        .navbar-logo .logo-icon {
-            display: inline-block;
-            margin-right: 6px;
-            animation: bounce-coin 2s ease-in-out infinite;
-        }
+        .logo .gold { color: #D4AF37; }
 
-        @keyframes bounce-coin {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
-
+        /* Nav Center Links */
         .nav-links {
             display: flex;
-            gap: 0.5rem;
             align-items: center;
-            list-style: none;
-        }
-
-        .nav-links a {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: #8b949e;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            transition: all 0.2s;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .nav-links a:hover {
-            color: #ffffff;
-            background-color: rgba(255, 255, 255, 0.06);
-        }
-
-        .nav-links a.active {
-            color: #FFD000;
-        }
-
-        .btn-signup-nav {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #0d1117;
-            background-color: #FFD000;
-            border: 3px solid #0d1117;
-            padding: 0.45rem 1.2rem;
-            border-radius: 6px;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.15s;
-            box-shadow: 0 3px 0 #b38f00;
-        }
-
-        .btn-signup-nav:hover {
-            transform: translateY(1px);
-            box-shadow: 0 2px 0 #b38f00;
-            background-color: #ffe04a;
-        }
-
-        .btn-signup-nav:active {
-            transform: translateY(3px);
-            box-shadow: 0 0px 0 #b38f00;
-        }
-
-        /* ===== HERO SECTION ===== */
-        .hero-section {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            padding-top: 60px;
-        }
-
-        /* Pixel art background */
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background-image: url('/assets/images/pixel-bg.png');
-            background-size: cover;
-            background-position: center bottom;
-            background-repeat: no-repeat;
-            image-rendering: pixelated;
-            z-index: 0;
-        }
-
-        /* Subtle animated overlay for depth */
-        .hero-bg::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                180deg,
-                rgba(13, 17, 23, 0.15) 0%,
-                rgba(13, 17, 23, 0.0) 30%,
-                rgba(13, 17, 23, 0.0) 70%,
-                rgba(13, 17, 23, 0.5) 100%
-            );
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        /* ===== SUBTITLE (START YOUR) ===== */
-        .hero-subtitle-top {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1rem;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            color: #ffffff;
-            text-shadow:
-                2px 2px 0px #000000,
-                -1px -1px 0px #000000,
-                1px -1px 0px #000000,
-                -1px 1px 0px #000000;
-            opacity: 0;
-            animation: fadeSlideDown 0.8s ease-out 0.3s forwards;
-        }
-
-        /* ===== MAIN TITLE (INVESTMENT ADVENTURE) ===== */
-        .hero-title {
-            font-family: 'Press Start 2P', monospace;
-            font-size: clamp(2rem, 6vw, 4.5rem);
-            line-height: 1.3;
-            text-transform: uppercase;
-            /* Retro yellow-orange gradient fill */
-            background: linear-gradient(
-                180deg,
-                #fff8e1 0%,
-                #FFD54F 20%,
-                #FFB300 50%,
-                #F57C00 80%,
-                #E65100 100%
-            );
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            /* 3D text shadow effect using pseudo-elements */
-            filter: drop-shadow(3px 3px 0px #000000)
-                    drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.6))
-                    drop-shadow(0px 0px 10px rgba(255, 180, 0, 0.3));
-            opacity: 0;
-            animation: fadeScaleIn 1s ease-out 0.6s forwards;
-        }
-
-        /* ===== HERO DESCRIPTION ===== */
-        .hero-description {
-            font-family: 'Space Mono', monospace;
-            font-size: 1rem;
-            color: #e0e0e0;
-            max-width: 550px;
-            line-height: 1.7;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-            opacity: 0;
-            animation: fadeSlideUp 0.8s ease-out 1s forwards;
-        }
-
-        .hero-description .sparkle {
-            display: inline-block;
-            animation: twinkle 1.5s ease-in-out infinite alternate;
-        }
-
-        .hero-description .sparkle:nth-child(2) {
-            animation-delay: 0.5s;
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0.5; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1.1); }
-        }
-
-        /* ===== CTA BUTTON ===== */
-        .btn-cta {
-            display: inline-block;
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.95rem;
-            color: #0d1117;
-            background-color: #FFD000;
-            border: 4px solid #0d1117;
-            padding: 1rem 2.5rem;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.1s ease;
-            box-shadow:
-                0 6px 0 #0d1117,
-                0 8px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
-            opacity: 0;
-            animation: fadeSlideUp 0.8s ease-out 1.2s forwards;
-        }
-
-        .btn-cta:hover {
-            background-color: #ffe04a;
-            transform: translateY(2px);
-            box-shadow:
-                0 4px 0 #0d1117,
-                0 6px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-cta:active {
-            transform: translateY(6px);
-            box-shadow:
-                0 0px 0 #0d1117,
-                0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        /* ===== MASCOT ===== */
-        .hero-mascot {
-            position: absolute;
-            bottom: 5%;
-            left: 5%;
-            z-index: 15;
-            width: clamp(100px, 15vw, 200px);
-            image-rendering: pixelated;
-            filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.5));
-            animation: mascot-idle 3s ease-in-out infinite;
-            opacity: 0;
-            animation: mascot-appear 0.8s ease-out 1.5s forwards, mascot-idle 3s ease-in-out 2.3s infinite;
-        }
-
-        @keyframes mascot-idle {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        @keyframes mascot-appear {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== FLOATING PIXEL PARTICLES ===== */
-        .pixel-particles {
-            position: absolute;
-            inset: 0;
-            z-index: 5;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .pixel-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background-color: rgba(255, 208, 0, 0.6);
-            animation: float-particle linear infinite;
-        }
-
-        .pixel-particle:nth-child(1) { left: 10%; top: 80%; animation-duration: 8s; animation-delay: 0s; background-color: rgba(255, 208, 0, 0.5); }
-        .pixel-particle:nth-child(2) { left: 25%; top: 75%; animation-duration: 10s; animation-delay: 1s; background-color: rgba(255, 255, 255, 0.4); width: 3px; height: 3px; }
-        .pixel-particle:nth-child(3) { left: 45%; top: 85%; animation-duration: 7s; animation-delay: 2s; background-color: rgba(255, 180, 0, 0.5); }
-        .pixel-particle:nth-child(4) { left: 60%; top: 70%; animation-duration: 12s; animation-delay: 0.5s; background-color: rgba(255, 255, 255, 0.3); width: 5px; height: 5px; }
-        .pixel-particle:nth-child(5) { left: 80%; top: 82%; animation-duration: 9s; animation-delay: 3s; background-color: rgba(255, 208, 0, 0.4); }
-        .pixel-particle:nth-child(6) { left: 90%; top: 68%; animation-duration: 11s; animation-delay: 1.5s; background-color: rgba(255, 255, 255, 0.35); width: 3px; height: 3px; }
-        .pixel-particle:nth-child(7) { left: 35%; top: 90%; animation-duration: 6s; animation-delay: 4s; background-color: rgba(255, 180, 0, 0.45); }
-        .pixel-particle:nth-child(8) { left: 70%; top: 78%; animation-duration: 8.5s; animation-delay: 2.5s; background-color: rgba(255, 208, 0, 0.55); width: 4px; height: 4px; }
-
-        @keyframes float-particle {
-            0% { transform: translateY(0) scale(1); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
-        }
-
-        /* ===== ANIMATIONS ===== */
-        @keyframes fadeSlideDown {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeScaleIn {
-            0% { opacity: 0; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        @keyframes fadeSlideUp {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== MOBILE HAMBURGER ===== */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-            z-index: 110;
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 24px;
-            height: 3px;
-            background-color: #FFD000;
-            margin: 4px 0;
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
-        }
-
-        .mobile-nav-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background-color: rgba(13, 17, 23, 0.97);
-            z-index: 99;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2rem;
-        }
-
-        .mobile-nav-overlay.active {
-            display: flex;
-        }
-
-        .mobile-nav-overlay a {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 0.9rem;
-            color: #8b949e;
-            text-decoration: none;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            transition: color 0.2s;
-        }
-
-        .mobile-nav-overlay a:hover {
-            color: #FFD000;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
-            .btn-signup-nav-wrapper {
-                display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero-subtitle-top {
-                font-size: 0.65rem;
-                letter-spacing: 4px;
-            }
-
-            .hero-title {
-                font-size: clamp(1.4rem, 8vw, 2.5rem);
-            }
-
-            .hero-description {
-                font-size: 0.85rem;
-                padding: 0 1rem;
-            }
-
-            .btn-cta {
-                font-size: 0.75rem;
-                padding: 0.8rem 1.8rem;
-            }
-
-            .hero-mascot {
-                width: 80px;
-                bottom: 3%;
-                left: 3%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar {
-                padding: 0 1rem;
-            }
-
-            .navbar-logo {
-                font-size: 0.85rem;
-            }
-
-            .hero-subtitle-top {
-                font-size: 0.55rem;
-                letter-spacing: 3px;
-            }
-
-            .hero-title {
-                font-size: clamp(1.2rem, 7vw, 2rem);
-            }
-        }
-
-        /* ===== MODAL STYLES (preserved from original) ===== */
-        .modal-overlay {
-            display: none;
-            position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            align-items: center; justify-content: center;
-            backdrop-filter: blur(3px);
-        }
-        .modal-content {
-            background-color: #1a1e23; color: white; padding: 30px; border-radius: 12px; width: 400px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid #343a40;
-            position: relative; animation: zoomIn 0.3s;
-        }
-        .modal-close {
-            position: absolute; right: 15px; top: 10px; color: #aaa;
-            font-size: 24px; cursor: pointer; background: none; border: none;
-        }
-        .modal-close:hover { color: #dc3545; }
-
-        .form-group { margin-bottom: 15px; text-align: left; }
-        .form-label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; color: #adb5bd; }
-        .form-input {
-            width: 100%; padding: 10px; box-sizing: border-box;
-            background-color: #2b3035; border: 1px solid #495057; color: white; border-radius: 6px;
-            outline: none;
-        }
-        .form-input:focus { border-color: #FFD000; }
-
-        @keyframes zoomIn { from {transform: scale(0.9); opacity: 0;} to {transform: scale(1); opacity: 1;} }
-
-        /* ===== AUTH DASHBOARD AREA ===== */
-        .auth-dashboard {
-            padding: 2rem 3rem;
-            background-color: #0d1117;
-            min-height: calc(100vh - 60px);
-            margin-top: 60px;
-        }
-
-        /* ===== GREETING BOX ===== */
-        .greeting-box {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .greeting-mascot {
-            flex-shrink: 0;
-        }
-
-        .mascot-img {
-            width: 80px;
-            height: 80px;
-            image-rendering: pixelated;
-            animation: mascot-float 3s ease-in-out infinite;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-        }
-
-        @keyframes mascot-float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: translateY(-4px) rotate(-1deg); }
-            75% { transform: translateY(-2px) rotate(1deg); }
-        }
-
-        .greeting-bubble {
-            background-color: #161b22;
-            border: 2px solid #2d333b;
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            position: relative;
-            max-width: 500px;
-            animation: bubble-pop 0.4s ease-out;
-        }
-
-        .greeting-bubble::before {
-            content: '';
-            position: absolute;
-            left: -10px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-width: 8px;
-            border-style: solid;
-            border-color: transparent #2d333b transparent transparent;
-        }
-
-        .greeting-bubble::after {
-            content: '';
-            position: absolute;
-            left: -7px;
-            top: 50%;
-            transform: translateY(-50%);
-            border-width: 7px;
-            border-style: solid;
-            border-color: transparent #161b22 transparent transparent;
-        }
-
-        @keyframes bubble-pop {
-            0% { opacity: 0; transform: scale(0.8) translateX(-10px); }
-            100% { opacity: 1; transform: scale(1) translateX(0); }
-        }
-
-        .greeting-text {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.9rem;
-            color: #e6edf3;
-            line-height: 1.5;
-        }
-
-        /* ===== SECTION HEADING ===== */
-        .section-heading {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #e6edf3;
-            margin-bottom: 1rem;
-        }
-
-        /* ===== DASHBOARD 2-COL GRID ===== */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 1.5rem;
-            align-items: start;
-        }
-
-        /* ===== COURSE CARD ===== */
-        .course-card {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 2px solid #1e2530;
-            height: 280px;
-            cursor: pointer;
-            transition: border-color 0.2s ease, transform 0.2s ease;
-        }
-
-        .course-card:hover {
-            border-color: #3d444d;
-            transform: translateY(-2px);
-        }
-
-        .course-card-bg {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            image-rendering: auto;
-        }
-
-        .course-card-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                180deg,
-                rgba(13, 17, 23, 0.2) 0%,
-                rgba(13, 17, 23, 0.5) 50%,
-                rgba(13, 17, 23, 0.85) 100%
-            );
-        }
-
-        .course-card-content {
-            position: relative;
-            z-index: 2;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 1.5rem;
-        }
-
-        .course-progress-row {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .progress-bar-wrapper {
-            width: 120px;
-            height: 12px;
-            background-color: rgba(255, 255, 255, 0.15);
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #FFD000, #ffb300);
-            border-radius: 6px;
-            position: relative;
-            transition: width 1s ease-out;
-        }
-
-        .progress-bar-fill::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.3) 50%,
-                transparent 100%
-            );
-            animation: shimmer 2s ease-in-out infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(200%); }
-        }
-
-        .progress-text {
-            font-size: 0.55rem;
-            color: #FFD000;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        .course-label {
-            font-size: 0.45rem;
-            color: #8b949e;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 0.25rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        .course-title {
-            font-family: 'Press Start 2P', monospace;
-            font-size: 1.4rem;
-            color: #ffffff;
-            margin-bottom: 0.4rem;
-            text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
-        }
-
-        .course-next {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            color: #8b949e;
-            margin-bottom: 1rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-        }
-
-        .course-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn-continue {
-            display: inline-block;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #ffffff;
-            background-color: #1f6feb;
-            border: 3px solid #0d1117;
-            padding: 0.6rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-            transition: all 0.1s ease;
-            box-shadow: 0 4px 0 #0a3d82, 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-continue:hover {
-            background-color: #388bfd;
-            transform: translateY(2px);
-            box-shadow: 0 2px 0 #0a3d82, 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-continue:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #0a3d82;
-        }
-
-        .btn-view-course {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #8b949e;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .btn-view-course:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-
-        /* ===== QUICK STATS ROW ===== */
-        .quick-stats-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 1.25rem;
-        }
-
-        .quick-stat-card {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background-color: #161b22;
-            border: 2px solid #1e2530;
-            border-radius: 10px;
-            padding: 1rem;
-            transition: all 0.2s ease;
-        }
-
-        .quick-stat-card:hover {
-            border-color: #2d333b;
-            background-color: #1c2129;
-            transform: translateY(-1px);
-        }
-
-        .quick-stat-icon {
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .quick-stat-info {
-            display: flex;
-            flex-direction: column;
-            gap: 0.15rem;
-        }
-
-        .quick-stat-value {
-            font-size: 0.6rem;
-            color: #FFD000;
-        }
-
-        .quick-stat-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            color: #8b949e;
-        }
-
-        /* ===== DASHBOARD CARD (Generic) ===== */
-        .dashboard-card {
-            background-color: #161b22;
-            padding: 1.25rem;
-            border-radius: 12px;
-            border: 2px solid #1e2530;
-        }
-
-        .card-header-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-
-        .card-title {
-            font-family: 'Space Mono', monospace;
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #e6edf3;
-        }
-
-        .card-link {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #1f6feb;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .card-link:hover {
-            color: #388bfd;
-            text-decoration: underline;
-        }
-
-        /* ===== NEWS LIST ===== */
-        .news-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .news-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            border-radius: 8px;
-            border: 1px solid transparent;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .news-item:hover {
-            background-color: rgba(255, 255, 255, 0.03);
-            border-color: #1e2530;
-        }
-
-        .news-badge {
-            flex-shrink: 0;
-            font-size: 0.35rem;
-            color: #0d1117;
-            background-color: #f85149;
-            padding: 3px 8px;
-            border-radius: 4px;
-            letter-spacing: 1px;
-            margin-top: 2px;
-        }
-
-        .news-content {
-            display: flex;
-            flex-direction: column;
             gap: 0.25rem;
         }
 
-        .news-title {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #c9d1d9;
-            line-height: 1.4;
-        }
-
-        .news-meta {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            color: #484f58;
-        }
-
-        /* ===== PROFILE CARD ===== */
-        .profile-card {
-            background-color: #161b22;
-            border: 2px solid #1e2530;
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .profile-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 10px;
-            border: 3px solid #2d333b;
-            background: linear-gradient(135deg, #1a1f2e, #252d3a);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: border-color 0.2s;
-        }
-
-        .profile-avatar:hover {
-            border-color: #FFD000;
-        }
-
-        .avatar-char {
-            font-size: 1.8rem;
-        }
-
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.2rem;
-        }
-
-        .profile-name {
-            font-family: 'Space Mono', monospace;
-            font-size: 1rem;
-            font-weight: 700;
-            color: #e6edf3;
-        }
-
-        .profile-level {
-            font-size: 0.45rem;
-            color: #8b949e;
-            letter-spacing: 1px;
-        }
-
-        .profile-edit-link {
-            display: inline-block;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #1f6feb;
-            text-decoration: none;
-            margin-bottom: 1rem;
-            transition: color 0.2s;
-        }
-
-        .profile-edit-link:hover {
-            color: #388bfd;
-            text-decoration: underline;
-        }
-
-        /* ===== PROFILE STATS GRID ===== */
-        .profile-stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-            text-align: left;
-        }
-
-        .profile-stat {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.02);
-            border: 1px solid #1e2530;
-            transition: background-color 0.2s;
-        }
-
-        .profile-stat:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .stat-icon {
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .stat-data {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stat-number {
-            font-size: 0.55rem;
-            color: #e6edf3;
-        }
-
-        .stat-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.65rem;
-            color: #484f58;
-        }
-
-        .btn-view-profile {
-            display: block;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: #c9d1d9;
-            background-color: transparent;
-            border: 2px solid #2d333b;
-            border-radius: 8px;
-            padding: 0.6rem 1rem;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.15s ease;
-        }
-
-        .btn-view-profile:hover {
-            border-color: #484f58;
-            background-color: rgba(255, 255, 255, 0.04);
-            color: #ffffff;
-        }
-
-        /* ===== CLUB PROMO CARD ===== */
-        .club-promo-card {
-            background: linear-gradient(135deg, #1a1035, #161b22);
-            border: 2px solid #2d1f5e;
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-top: 1rem;
+        .nav-link-item {
             position: relative;
         }
 
-        .club-close-btn {
-            position: absolute;
-            top: 0.75rem;
-            right: 0.75rem;
-            background: none;
+        .nav-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.625rem;
             border: none;
-            color: #484f58;
-            font-size: 1rem;
+            background: transparent;
+            color: #CBD5E1;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: color 0.2s;
-            line-height: 1;
+            transition: all 0.3s ease;
         }
 
-        .club-close-btn:hover {
-            color: #c9d1d9;
+        .nav-link-btn:hover,
+        .nav-link-btn.active {
+            color: #F8FAFC;
+            background-color: rgba(30, 41, 59, 0.5);
         }
 
-        .club-label {
-            font-size: 0.45rem;
-            color: #a78bfa;
-            letter-spacing: 3px;
-            margin-bottom: 0.5rem;
-            display: block;
+        .nav-link-btn svg.chevron {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s ease;
         }
 
-        .club-title {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #e6edf3;
-            margin-bottom: 0.5rem;
-            line-height: 1.4;
+        .nav-link-btn.active svg.chevron {
+            transform: rotate(180deg);
         }
 
-        .club-desc {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            color: #8b949e;
-            line-height: 1.5;
-            margin-bottom: 1rem;
+        /* Dropdown Panel */
+        .dropdown-panel {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-6px);
+            min-width: 240px;
+            background-color: #1E293B;
+            border: 1px solid rgba(71, 85, 105, 0.45);
+            border-radius: 1rem;
+            padding: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(71, 85, 105, 0.1);
         }
 
-        .btn-join-club {
-            display: inline-block;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #0d1117;
-            background-color: #FFD000;
-            border: 2px solid #0d1117;
-            padding: 0.5rem 1.25rem;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.1s ease;
-            box-shadow: 0 3px 0 #b38f00;
+        .dropdown-panel.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(0);
         }
 
-        .btn-join-club:hover {
-            background-color: #ffe04a;
-            transform: translateY(1px);
-            box-shadow: 0 2px 0 #b38f00;
-        }
-
-        .btn-join-club:active {
-            transform: translateY(3px);
-            box-shadow: 0 0px 0 #b38f00;
-        }
-
-        /* ===== LEADERBOARD MINI ===== */
-        .leaderboard-mini {
-            background-color: #161b22;
-            border: 2px solid #1e2530;
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-top: 1rem;
-        }
-
-        .leaderboard-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-        }
-
-        .lb-item {
+        .dd-item {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 6px;
-            transition: background-color 0.15s;
+            padding: 0.625rem 0.875rem;
+            border-radius: 0.625rem;
+            color: #CBD5E1;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
-        .lb-item:hover {
-            background-color: rgba(255, 255, 255, 0.03);
+        .dd-item:hover {
+            background-color: rgba(37, 99, 235, 0.12);
+            color: #F8FAFC;
         }
 
-        .lb-item.active {
-            background-color: rgba(255, 208, 0, 0.06);
-            border: 1px solid rgba(255, 208, 0, 0.15);
+        .dd-item:hover svg { color: #3B82F6; }
+
+        .dd-item svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            color: #64748B;
+            transition: color 0.2s ease;
         }
 
-        .lb-rank {
-            font-size: 0.55rem;
+        /* Nav Right */
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .nav-icon-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 0.625rem;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #94A3B8;
+            transition: all 0.3s ease;
+        }
+
+        .nav-icon-btn:hover {
+            color: #F8FAFC;
+            background-color: rgba(30, 41, 59, 0.6);
+            border-color: rgba(71, 85, 105, 0.3);
+        }
+
+        .nav-icon-btn svg { width: 20px; height: 20px; }
+
+        .btn-login {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1.375rem;
+            border-radius: 0.75rem;
+            background-color: #2563EB;
+            color: #fff;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-login:hover {
+            background-color: #3B82F6;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* Mobile Toggle */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .mobile-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background-color: #CBD5E1;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .mobile-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .mobile-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .mobile-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* Mobile Drawer */
+        .mobile-drawer {
+            display: none;
+            position: fixed;
+            inset: 0;
+            top: 68px;
+            z-index: 90;
+            background-color: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 1.5rem;
+            overflow-y: auto;
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-drawer.open {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem 1rem;
+            border-radius: 0.75rem;
+            color: #CBD5E1;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-nav-link:hover {
+            background-color: rgba(30, 41, 59, 0.6);
+            color: #F8FAFC;
+        }
+
+        .mobile-nav-link svg {
             width: 20px;
-            text-align: center;
-            color: #8b949e;
+            height: 20px;
+            color: #64748B;
         }
 
-        .lb-name {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            color: #c9d1d9;
+        .mobile-divider {
+            height: 1px;
+            background: rgba(71, 85, 105, 0.3);
+            margin: 0.75rem 0;
+        }
+
+        /* ===========================================================
+           HERO SECTION — SantriKoding-style split layout
+           =========================================================== */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0F172A 0%, #131C31 40%, #162036 100%);
+        }
+
+        .hero-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 4.5rem 2rem 5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            min-height: calc(100vh - 68px);
+        }
+
+        /* Left Content */
+        .hero-left {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4375rem 1rem;
+            border-radius: 9999px;
+            background-color: rgba(37, 99, 235, 0.08);
+            border: 1px solid rgba(37, 99, 235, 0.18);
+            color: #60A5FA;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            margin-bottom: 1.75rem;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: revealUp 0.6s ease forwards 0.1s;
+        }
+
+        .hero-pill .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #10B981;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5.5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            color: #F8FAFC;
+            margin-bottom: 1.25rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealUp 0.7s ease forwards 0.2s;
+        }
+
+        .hero-title .gold { color: #D4AF37; }
+
+        .hero-desc {
+            font-size: 1.0625rem;
+            line-height: 1.7;
+            color: #94A3B8;
+            max-width: 480px;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealUp 0.7s ease forwards 0.35s;
+        }
+
+        /* Category Chips */
+        .hero-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.75rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealUp 0.7s ease forwards 0.45s;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 0.9375rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(71, 85, 105, 0.35);
+            background-color: rgba(30, 41, 59, 0.45);
+            color: #94A3B8;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .chip svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            transition: color 0.3s ease;
+        }
+
+        .chip:hover,
+        .chip.active {
+            border-color: rgba(37, 99, 235, 0.5);
+            color: #F8FAFC;
+            background-color: rgba(37, 99, 235, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        .chip.active {
+            border-color: #2563EB;
+            background-color: rgba(37, 99, 235, 0.18);
+        }
+
+        .chip:hover svg,
+        .chip.active svg { color: #60A5FA; }
+
+        /* Search Bar */
+        .hero-search {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            max-width: 480px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: revealUp 0.7s ease forwards 0.55s;
+        }
+
+        .search-input {
             flex: 1;
+            padding: 0.8125rem 1.125rem;
+            border: 1px solid rgba(71, 85, 105, 0.40);
+            border-right: none;
+            border-radius: 0.75rem 0 0 0.75rem;
+            background-color: rgba(30, 41, 59, 0.5);
+            color: #F8FAFC;
+            font-size: 0.9375rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
         }
 
-        .lb-xp {
-            font-size: 0.45rem;
-            color: #FFD000;
+        .search-input::placeholder { color: #64748B; }
+
+        .search-input:focus {
+            border-color: #2563EB;
+            background-color: rgba(30, 41, 59, 0.75);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
         }
 
-        /* ===== DASHBOARD RESPONSIVE ===== */
+        .search-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 48px;
+            border: none;
+            border-radius: 0 0.75rem 0.75rem 0;
+            background-color: #2563EB;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .search-btn:hover {
+            background-color: #3B82F6;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+        }
+
+        .search-btn svg { width: 20px; height: 20px; }
+
+        /* Right — Floating Icons */
+        .hero-right {
+            position: relative;
+            height: 100%;
+            min-height: 420px;
+        }
+
+        .floating-icon {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            background-color: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(71, 85, 105, 0.25);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(8px);
+            cursor: default;
+            opacity: 1;
+        }
+
+        .floating-icon:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .floating-icon svg {
+            transition: transform 0.4s ease;
+        }
+
+        .floating-icon:hover svg {
+            transform: rotate(-8deg) scale(1.1);
+        }
+
+        /* Icon positions & sizes — scattered like SantriKoding */
+        .fi-1 { width: 64px; height: 64px; top: 5%; left: 15%; animation: idleFloat 7s ease-in-out infinite; }
+        .fi-2 { width: 56px; height: 56px; top: 10%; right: 20%; animation: idleFloat 5.5s ease-in-out -1s infinite; }
+        .fi-3 { width: 72px; height: 72px; top: 30%; left: 5%; animation: idleFloat 8s ease-in-out -2s infinite; }
+        .fi-4 { width: 60px; height: 60px; top: 25%; right: 5%; animation: idleFloat 6s ease-in-out -3s infinite; }
+        .fi-5 { width: 68px; height: 68px; top: 55%; left: 25%; animation: idleFloat 7.5s ease-in-out -1.5s infinite; }
+        .fi-6 { width: 58px; height: 58px; top: 50%; right: 15%; animation: idleFloat 5s ease-in-out -4s infinite; }
+        .fi-7 { width: 52px; height: 52px; top: 75%; left: 10%; animation: idleFloat 6.5s ease-in-out -2.5s infinite; }
+        .fi-8 { width: 62px; height: 62px; top: 72%; right: 25%; animation: idleFloat 8.5s ease-in-out -0.5s infinite; }
+
+        @keyframes idleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-14px); }
+        }
+
+        /* Hero ambient gradient blobs */
+        .hero-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .blob-1 {
+            width: 400px; height: 400px;
+            background: rgba(37, 99, 235, 0.08);
+            top: -10%; right: 10%;
+            animation: blobPulse 10s ease-in-out infinite;
+        }
+
+        .blob-2 {
+            width: 300px; height: 300px;
+            background: rgba(212, 175, 55, 0.06);
+            bottom: -5%; left: 20%;
+            animation: blobPulse 12s ease-in-out infinite 3s;
+        }
+
+        @keyframes blobPulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* ===========================================================
+           LEARNING CATEGORIES SECTION
+           =========================================================== */
+        .categories-section {
+            position: relative;
+            z-index: 1;
+            background-color: #0F172A;
+            padding: 4rem 0 5rem;
+        }
+
+        .categories-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: #F8FAFC;
+        }
+
+        .section-subtitle {
+            font-size: 0.875rem;
+            color: #64748B;
+            font-weight: 500;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        /* Category Card */
+        .cat-card {
+            background-color: #1E293B;
+            border: 1px solid rgba(71, 85, 105, 0.28);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.875rem;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            /* Scroll reveal */
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .cat-card.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.03) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+
+        .cat-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212, 175, 55, 0.55);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.06), 0 4px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .cat-card:hover::before { opacity: 1; }
+
+        .card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.35s ease;
+        }
+
+        .cat-card:hover .card-icon { transform: scale(1.08); }
+
+        .card-icon svg { width: 26px; height: 26px; }
+
+        .card-body h3 {
+            font-size: 1.0625rem;
+            font-weight: 700;
+            color: #F8FAFC;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.375rem;
+        }
+
+        .card-body p {
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            color: #94A3B8;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: #3B82F6;
+            margin-top: auto;
+            padding-top: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .card-action svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .cat-card:hover .card-action { color: #60A5FA; }
+        .cat-card:hover .card-action svg { transform: translateX(5px); }
+
+
+
+        /* ===========================================================
+           CTA SECTION
+           =========================================================== */
+        .cta-section {
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-inner {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #F8FAFC;
+            margin-bottom: 1rem;
+            line-height: 1.15;
+        }
+
+        .cta-title .gold { color: #D4AF37; }
+
+        .cta-desc {
+            font-size: 1rem;
+            color: #94A3B8;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            border-radius: 0.875rem;
+            background-color: #2563EB;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);
+        }
+
+        .cta-btn:hover {
+            background-color: #3B82F6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        .cta-btn svg { width: 18px; height: 18px; }
+
+        /* ===========================================================
+           FOOTER
+           =========================================================== */
+        .footer {
+            border-top: 1px solid rgba(71, 85, 105, 0.2);
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.75rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-brand {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #475569;
+        }
+
+        .footer-brand .gold { color: #D4AF37; }
+
+        .footer-copy {
+            font-size: 0.8125rem;
+            color: #475569;
+        }
+
+        /* ===========================================================
+           ANIMATIONS
+           =========================================================== */
+        @keyframes revealUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===========================================================
+           RESPONSIVE
+           =========================================================== */
         @media (max-width: 1024px) {
-            .dashboard-grid {
+            .hero-inner {
                 grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 3rem 1.5rem 3rem;
+                min-height: auto;
             }
 
-            .dashboard-right {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-            }
+            .hero-right { display: none; }
 
-            .club-promo-card,
-            .leaderboard-mini {
-                margin-top: 0;
-            }
+            .categories-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
-            .auth-dashboard {
-                padding: 1.25rem 1rem;
-            }
+            .nav-links { display: none; }
+            .mobile-toggle { display: flex; }
 
-            .greeting-box {
+            .navbar-inner { padding: 0 1.25rem; }
+
+            .hero-inner { padding: 2.5rem 1.25rem 2.5rem; }
+
+            .hero-title { font-size: clamp(2rem, 8vw, 3rem); }
+            .hero-desc { font-size: 0.9375rem; }
+
+            .hero-search { max-width: 100%; }
+
+            .categories-inner { padding: 0 1.25rem; }
+            .categories-grid { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+
+            .cta-title { font-size: 1.625rem; }
+
+            .footer-inner {
                 flex-direction: column;
+                gap: 0.75rem;
                 text-align: center;
-                align-items: center;
             }
-
-            .greeting-bubble::before,
-            .greeting-bubble::after {
-                display: none;
-            }
-
-            .mascot-img {
-                width: 60px;
-                height: 60px;
-            }
-
-            .quick-stats-row {
-                grid-template-columns: 1fr;
-            }
-
-            .dashboard-right {
-                grid-template-columns: 1fr;
-            }
-
-            .course-card {
-                height: 240px;
-            }
-
-            .course-title {
-                font-size: 1rem;
-            }
-        }
-
-        /* ===== SCROLLBAR STYLING ===== */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #0d1117;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #1e2530;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #2d3540;
         }
     </style>
 </head>
 <body>
 
-    {{-- ===== NAVBAR ===== --}}
-    <nav class="navbar" id="mainNavbar">
-        <a href="/" class="navbar-logo">
-            <span class="logo-icon">💰</span>INVESTDU
-        </a>
+    {{-- ============================================================
+         NAVBAR
+         ============================================================ --}}
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            {{-- Logo --}}
+            <a href="/" class="logo" aria-label="Investdu Home">
+                <svg class="logo-icon" viewBox="0 0 34 34" fill="none">
+                    <rect width="34" height="34" rx="9" fill="#2563EB"/>
+                    <path d="M9 24L14 12L18 19L23 10L25 15" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="25" cy="15" r="2.2" fill="#D4AF37"/>
+                </svg>
+                INVEST<span class="gold">DU</span>
+            </a>
 
-        {{-- Desktop Nav Links --}}
-        <ul class="nav-links">
-            @auth
-                <li><a href="/leaderboard">🏆 Leaderboard</a></li>
-                <li><a href="/berita">📰 Berita</a></li>
-                <li><a href="/bursa">📈 Bursa</a></li>
-                <li><a href="/portofolio">💼 Portofolio</a></li>
-
-                <li>
-                    <div style="position: relative; display: inline-block; cursor: pointer;" onclick="toggleDropdown(event)">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #495057;">
-                            <span style="color: white; font-size: 12px;">▾</span>
-                        </div>
-                        <div id="profilMenu" style="display: none; position: absolute; right: 0; background-color: #161b22; min-width: 200px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); border-radius: 10px; margin-top: 12px; overflow: hidden; z-index: 100; border: 1px solid #1e2530;">
-                            <div style="padding: 15px; background-color: #1e2530; border-bottom: 1px solid #2d3540; color: white; font-size: 13px; font-family: 'Space Mono', monospace;">Hi, <b>{{ Auth::user()->username }}</b></div>
-                            @if(Auth::user()->is_admin)
-                                <a href="/admin" style="color: #0d1117; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #1e2530; background-color: #FFD000; font-weight: bold; font-family: 'Space Mono', monospace;">👑 Panel Admin</a>
-                            @endif
-                            <a href="#" onclick="openModal('profileModal')" style="color: white; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #1e2530; font-family: 'Space Mono', monospace; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#1e2530'" onmouseout="this.style.backgroundColor='transparent'">👤 Profil Saya</a>
-                            <a href="#" onclick="openModal('settingModal')" style="color: white; padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid #1e2530; font-family: 'Space Mono', monospace; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#1e2530'" onmouseout="this.style.backgroundColor='transparent'">⚙️ Pengaturan</a>
-                            <form action="/logout" method="POST" style="margin: 0;">
-                                @csrf
-                                <button type="submit" style="width: 100%; text-align: left; background: none; border: none; color: #f85149; padding: 12px 16px; font-weight: bold; cursor: pointer; font-family: 'Space Mono', monospace; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#1e2530'" onmouseout="this.style.backgroundColor='transparent'">🚪 Logout</button>
-                            </form>
-                        </div>
+            {{-- Center Nav --}}
+            <div class="nav-links" id="navLinks">
+                {{-- Belajar Dropdown --}}
+                <div class="nav-link-item">
+                    <button class="nav-link-btn" data-dropdown="belajar-dropdown" aria-expanded="false">
+                        Belajar
+                        <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="dropdown-panel" id="belajar-dropdown">
+                        <a href="#" class="dd-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><circle cx="16" cy="15" r="1.5"/></svg>
+                            Tabungan Berjangka
+                        </a>
+                        <a href="#" class="dd-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg>
+                            Saham
+                        </a>
+                        <a href="#" class="dd-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
+                            Reksa Dana
+                        </a>
+                        <a href="#" class="dd-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg>
+                            Obligasi
+                        </a>
+                        <a href="#" class="dd-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/><rect x="9" y="14" width="6" height="6"/></svg>
+                            Properti
+                        </a>
+                        <a href="#" class="dd-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l3-10h4l3 10H7z"/><path d="M9 17l2-5h2l2 5"/></svg>
+                            Emas
+                        </a>
                     </div>
-                </li>
-            @endauth
+                </div>
 
-            @guest
-                <li><a href="#features" class="active">Learn</a></li>
-                <li><a href="/game">Game</a></li>
-                <li><a href="/leaderboard">Leaderboard</a></li>
-                <li><a href="#market">Market Status</a></li>
-            @endguest
-        </ul>
+                {{-- Komunitas --}}
+                <div class="nav-link-item">
+                    <button class="nav-link-btn" data-dropdown="komunitas-dropdown" aria-expanded="false">
+                        Komunitas
+                        <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <div class="dropdown-panel" id="komunitas-dropdown">
+                        <a href="#" class="dd-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            Forum Diskusi
+                        </a>
+                        <a href="#" class="dd-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            Tanya Jawab
+                        </a>
+                        <a href="#" class="dd-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                            Blog & Artikel
+                        </a>
+                    </div>
+                </div>
 
-        {{-- Signup / Login Buttons (Guest only) --}}
-        @guest
-            <div class="btn-signup-nav-wrapper">
-                <a href="/register" class="btn-signup-nav">Sign up</a>
+
             </div>
-        @endguest
 
-        {{-- Mobile Hamburger --}}
-        <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+            {{-- Right --}}
+            <div class="nav-right">
+                <button class="nav-icon-btn" id="searchToggle" aria-label="Search" title="Cari materi">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+                </button>
+                <button class="nav-icon-btn" id="themeToggle" aria-label="Toggle theme" title="Ganti tema">
+                    <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                </button>
+                <a href="/login" class="btn-login">Login</a>
+
+                <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
     </nav>
 
-    {{-- Mobile Nav Overlay --}}
-    <div class="mobile-nav-overlay" id="mobileNavOverlay">
-        @guest
-            <a href="#features" onclick="closeMobileMenu()">Learn</a>
-            <a href="/game" onclick="closeMobileMenu()">Game</a>
-            <a href="/leaderboard" onclick="closeMobileMenu()">Leaderboard</a>
-            <a href="#market" onclick="closeMobileMenu()">Market Status</a>
-            <a href="/login" onclick="closeMobileMenu()" style="color: #ffffff;">Login</a>
-            <a href="/register" onclick="closeMobileMenu()" style="color: #FFD000;">Sign Up</a>
-        @endguest
-        @auth
-            <a href="/leaderboard" onclick="closeMobileMenu()">🏆 Leaderboard</a>
-            <a href="/berita" onclick="closeMobileMenu()">📰 Berita</a>
-            <a href="/bursa" onclick="closeMobileMenu()">📈 Bursa</a>
-            <a href="/portofolio" onclick="closeMobileMenu()">💼 Portofolio</a>
-        @endauth
+    {{-- Mobile Drawer --}}
+    <div class="mobile-drawer" id="mobileDrawer">
+        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/></svg> Tabungan Berjangka</a>
+        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg> Saham</a>
+        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg> Reksa Dana</a>
+        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg> Obligasi</a>
+        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/></svg> Properti</a>
+        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M7 17l3-10h4l3 10H7z"/></svg> Emas</a>
+        <div class="mobile-divider"></div>
+        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Komunitas</a>
+
+        <div class="mobile-divider"></div>
+        <a href="/login" class="mobile-nav-link" style="color: #3B82F6; font-weight: 600;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Login
+        </a>
     </div>
 
-    {{-- ===== FLASH MESSAGES ===== --}}
-    @if(session('success'))
-        <div style="background-color: #1a3a2a; color: #3fb950; padding: 15px; text-align: center; font-weight: bold; margin-top: 60px; font-family: 'Space Mono', monospace; border-bottom: 2px solid #238636;">✅ {{ session('success') }}</div>
-    @endif
-    @if($errors->any())
-        <div style="background-color: #3a1a1a; color: #f85149; padding: 15px; text-align: center; font-weight: bold; margin-top: 60px; font-family: 'Space Mono', monospace; border-bottom: 2px solid #da3633;">❌ Gagal memperbarui: {{ $errors->first() }}</div>
-    @endif
+    {{-- ============================================================
+         HERO SECTION
+         ============================================================ --}}
+    <section class="hero" id="hero">
+        {{-- Blobs --}}
+        <div class="hero-blob blob-1" aria-hidden="true"></div>
+        <div class="hero-blob blob-2" aria-hidden="true"></div>
 
-    {{-- ===== HERO SECTION (GUEST ONLY) ===== --}}
-    @guest
-    <section class="hero-section" id="heroSection">
-        {{-- Pixel art background --}}
-        <div class="hero-bg"></div>
+        <div class="hero-inner">
+            {{-- Left --}}
+            <div class="hero-left">
+                <div class="hero-pill">
+                    <span class="dot"></span>
+                    Platform Belajar Investasi Bahasa Indonesia
+                </div>
 
-        {{-- Floating pixel particles --}}
-        <div class="pixel-particles">
-            <div class="pixel-particle"></div>
-            <div class="pixel-particle"></div>
-            <div class="pixel-particle"></div>
-            <div class="pixel-particle"></div>
-            <div class="pixel-particle"></div>
-            <div class="pixel-particle"></div>
-            <div class="pixel-particle"></div>
-            <div class="pixel-particle"></div>
+                <h1 class="hero-title">
+                    INVEST<span class="gold">DU</span>
+                </h1>
+
+                <p class="hero-desc">
+                    Website belajar investasi bahasa Indonesia terlengkap dan mudah dipahami untuk pemula hingga mahir.
+                </p>
+
+                {{-- Category Chips --}}
+                <div class="hero-chips" id="heroChips">
+                    <button class="chip active" data-category="all">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                        Semua
+                    </button>
+                    <button class="chip" data-category="tabungan">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/></svg>
+                        Tabungan Berjangka
+                    </button>
+                    <button class="chip" data-category="saham">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg>
+                        Saham
+                    </button>
+                    <button class="chip" data-category="reksadana">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
+                        Reksa Dana
+                    </button>
+                    <button class="chip" data-category="obligasi">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg>
+                        Obligasi
+                    </button>
+                    <button class="chip" data-category="properti">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/></svg>
+                        Properti
+                    </button>
+                    <button class="chip" data-category="emas">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17l3-10h4l3 10H7z"/><path d="M9 17l2-5h2l2 5"/></svg>
+                        Emas
+                    </button>
+                </div>
+
+                {{-- Search Bar --}}
+                <div class="hero-search">
+                    <input type="text" class="search-input" id="heroSearch" placeholder="Apa yang ingin Anda pelajari?" autocomplete="off">
+                    <button class="search-btn" id="searchBtn" aria-label="Cari">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            {{-- Right — Floating Financial Icons --}}
+            <div class="hero-right" id="heroRight" aria-hidden="true">
+                {{-- Tabungan / Bank Card --}}
+                <div class="floating-icon fi-1" title="Tabungan Berjangka">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><circle cx="16" cy="15" r="1.5"/></svg>
+                </div>
+                {{-- Saham / Chart --}}
+                <div class="floating-icon fi-2" title="Saham">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg>
+                </div>
+                {{-- Reksa Dana / Pie --}}
+                <div class="floating-icon fi-3" title="Reksa Dana">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/><path d="M12 12L6 18"/></svg>
+                </div>
+                {{-- Obligasi --}}
+                <div class="floating-icon fi-4" title="Obligasi">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16"/><path d="M10 4v16"/></svg>
+                </div>
+                {{-- Properti / House --}}
+                <div class="floating-icon fi-5" title="Properti">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/><rect x="9" y="14" width="6" height="6"/></svg>
+                </div>
+                {{-- Emas / Gold Bar --}}
+                <div class="floating-icon fi-6" title="Emas">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l3-10h4l3 10H7z"/><path d="M9 17l2-5h2l2 5"/></svg>
+                </div>
+                {{-- Candlestick --}}
+                <div class="floating-icon fi-7" title="Analisis Teknikal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#60A5FA" stroke-width="1.5" stroke-linecap="round"><line x1="8" y1="6" x2="8" y2="18"/><rect x="6" y="9" width="4" height="6" fill="none"/><line x1="16" y1="4" x2="16" y2="20"/><rect x="14" y="8" width="4" height="8" fill="none"/></svg>
+                </div>
+                {{-- Diamond / Gem --}}
+                <div class="floating-icon fi-8" title="Investasi Premium">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 22,10 12,22 2,10"/><polyline points="2,10 12,14 22,10"/><line x1="12" y1="2" x2="12" y2="14"/></svg>
+                </div>
+            </div>
         </div>
-
-        {{-- Hero content --}}
-        <div class="hero-content">
-            <p class="hero-subtitle-top">Start Your</p>
-            <h1 class="hero-title">Investment<br>Adventure</h1>
-            <p class="hero-description">
-                The most fun and beginner-friendly way to learn investing.
-                <span class="sparkle">✦</span>
-                <span class="sparkle">✧</span>
-            </p>
-            <a href="/register" class="btn-cta" id="ctaGetStarted">Get started</a>
-        </div>
-
-
     </section>
-    @endguest
 
-    {{-- ===== AUTH DASHBOARD (LOGGED IN USERS) ===== --}}
-    @auth
-    <div class="auth-dashboard" id="userDashboard">
-
-        {{-- ===== GREETING BOX ===== --}}
-        <div class="greeting-box" id="greetingBox">
-            <div class="greeting-mascot">
-                <img src="/assets/images/pixel-mascot-greeting.png" alt="Mascot" class="mascot-img" id="mascotImg">
-            </div>
-            <div class="greeting-bubble" id="greetingBubble">
-                <span class="greeting-text" id="greetingText">Halo {{ Auth::user()->username }}! Semoga harimu menyenangkan ^^</span>
-            </div>
-        </div>
-
-        {{-- ===== MAIN 2-COLUMN GRID ===== --}}
-        <div class="dashboard-grid" id="dashboardGrid">
-
-            {{-- ===== LEFT COLUMN (70%) ===== --}}
-            <div class="dashboard-left">
-
-                {{-- Jump Back In --}}
-                <h2 class="section-heading" id="sectionJumpBack">Jump back in</h2>
-
-                <div class="course-card" id="courseCard">
-                    <img src="/assets/images/pixel-mountain-banner.png" alt="Course Background" class="course-card-bg">
-                    <div class="course-card-overlay"></div>
-                    <div class="course-card-content">
-                        <div class="course-progress-row">
-                            <div class="progress-bar-wrapper" id="progressBar">
-                                <div class="progress-bar-fill" style="width: 27%;"></div>
-                            </div>
-                            <span class="progress-text font-pixel">27%</span>
-                        </div>
-                        <span class="course-label font-pixel">COURSE</span>
-                        <h3 class="course-title">Investasi Saham</h3>
-                        <p class="course-next">Next: Analisis Fundamental</p>
-                        <div class="course-actions">
-                            <a href="/game" class="btn-continue" id="btnContinue">Continue Learning</a>
-                            <a href="#" class="btn-view-course">View course</a>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Quick Stats Row --}}
-                <div class="quick-stats-row" id="quickStats">
-                    <div class="quick-stat-card" id="statPortofolio">
-                        <span class="quick-stat-icon">💼</span>
-                        <div class="quick-stat-info">
-                            <span class="quick-stat-value font-pixel">Rp 10.5M</span>
-                            <span class="quick-stat-label">Total Portofolio</span>
-                        </div>
-                    </div>
-                    <div class="quick-stat-card" id="statProfit">
-                        <span class="quick-stat-icon">📈</span>
-                        <div class="quick-stat-info">
-                            <span class="quick-stat-value font-pixel" style="color: #3fb950;">+12.4%</span>
-                            <span class="quick-stat-label">Profit Bulan Ini</span>
-                        </div>
-                    </div>
-                    <div class="quick-stat-card" id="statTranx">
-                        <span class="quick-stat-icon">🔄</span>
-                        <div class="quick-stat-info">
-                            <span class="quick-stat-value font-pixel">28</span>
-                            <span class="quick-stat-label">Total Transaksi</span>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Market News Preview --}}
-                <div class="dashboard-card" id="marketNewsCard" style="margin-top: 1.25rem;">
-                    <div class="card-header-row">
-                        <h3 class="card-title">📰 Berita Pasar Terkini</h3>
-                        <a href="/berita" class="card-link">Lihat Semua →</a>
-                    </div>
-                    <div class="news-list">
-                        <div class="news-item" id="news1">
-                            <span class="news-badge font-pixel">HOT</span>
-                            <div class="news-content">
-                                <span class="news-title">IHSG Ditutup Menguat 1.2% di Tengah Rally Global</span>
-                                <span class="news-meta">2 jam lalu · Pasar Saham</span>
-                            </div>
-                        </div>
-                        <div class="news-item" id="news2">
-                            <span class="news-badge font-pixel" style="background-color: #1f6feb;">NEW</span>
-                            <div class="news-content">
-                                <span class="news-title">Bank Indonesia Pertahankan Suku Bunga Acuan 5.75%</span>
-                                <span class="news-meta">5 jam lalu · Ekonomi</span>
-                            </div>
-                        </div>
-                        <div class="news-item" id="news3">
-                            <span class="news-badge font-pixel" style="background-color: #8b5cf6;">TIP</span>
-                            <div class="news-content">
-                                <span class="news-title">5 Saham Blue Chip yang Cocok untuk Pemula di 2026</span>
-                                <span class="news-meta">1 hari lalu · Edukasi</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+    {{-- ============================================================
+         LEARNING CATEGORIES SECTION
+         ============================================================ --}}
+    <section class="categories-section" id="categoriesSection">
+        <div class="categories-inner">
+            <div class="section-header">
+                <h2 class="section-title">Learning Categories Section</h2>
+                <span class="section-subtitle">6 instrumen investasi populer</span>
             </div>
 
-            {{-- ===== RIGHT COLUMN (30%) ===== --}}
-            <div class="dashboard-right">
-
-                {{-- User Profile Card --}}
-                <div class="profile-card" id="profileCard">
-                    <div class="profile-header">
-                        <div class="profile-avatar" id="profileAvatar">
-                            <span class="avatar-char">🤖</span>
-                        </div>
-                        <div class="profile-info">
-                            <span class="profile-name">{{ Auth::user()->username }}</span>
-                            <span class="profile-level font-pixel">Level 2</span>
-                        </div>
+            <div class="categories-grid" id="categoriesGrid">
+                {{-- Card 1: Tabungan Berjangka --}}
+                <div class="cat-card" data-cat="tabungan" id="card-tabungan">
+                    <div class="card-icon" style="background-color: rgba(37, 99, 235, 0.12);">
+                        <svg viewBox="0 0 28 28" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="22" height="16" rx="3"/><path d="M3 12h22"/><circle cx="19" cy="18" r="2"/><path d="M7 18h4"/></svg>
                     </div>
-                    <a href="#" onclick="openModal('profileModal')" class="profile-edit-link">Edit</a>
-
-                    <div class="profile-stats-grid" id="profileStats">
-                        <div class="profile-stat">
-                            <span class="stat-icon">⭐</span>
-                            <div class="stat-data">
-                                <span class="stat-number font-pixel">205</span>
-                                <span class="stat-label">Total XP</span>
-                            </div>
-                        </div>
-                        <div class="profile-stat">
-                            <span class="stat-icon">🏅</span>
-                            <div class="stat-data">
-                                <span class="stat-number font-pixel" style="color: #cd7f32;">Bronze</span>
-                                <span class="stat-label">Rank</span>
-                            </div>
-                        </div>
-                        <div class="profile-stat">
-                            <span class="stat-icon">🔮</span>
-                            <div class="stat-data">
-                                <span class="stat-number font-pixel">2</span>
-                                <span class="stat-label">Badges</span>
-                            </div>
-                        </div>
-                        <div class="profile-stat">
-                            <span class="stat-icon">🔥</span>
-                            <div class="stat-data">
-                                <span class="stat-number font-pixel" style="color: #f0883e;">1</span>
-                                <span class="stat-label">Day streak</span>
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        <h3>Tabungan Berjangka</h3>
+                        <p>Tabungan Berjangka memiliki risiko yang rendah dengan keuntungan yang relatif stabil. Cocok untuk pemula yang ingin mulai menabung secara disiplin.</p>
                     </div>
-
-                    <a href="#" onclick="openModal('profileModal')" class="btn-view-profile" id="btnViewProfile">View profile</a>
+                    <span class="card-action">
+                        Pelajari Selengkapnya
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
+                    </span>
                 </div>
 
-                {{-- Club Promo Widget --}}
-                <div class="club-promo-card" id="clubPromo">
-                    <button class="club-close-btn" id="clubCloseBtn" onclick="this.closest('.club-promo-card').style.display='none'">✕</button>
-                    <span class="club-label font-pixel">CLUB</span>
-                    <h4 class="club-title">Dapatkan akses unlimited ke semua materi!</h4>
-                    <p class="club-desc">Gabung Club untuk buka semua course, dapatkan bantuan, dan unlock badge eksklusif.</p>
-                    <a href="#" class="btn-join-club" id="btnJoinClub">Join Club 🚀</a>
+                {{-- Card 2: Saham --}}
+                <div class="cat-card" data-cat="saham" id="card-saham">
+                    <div class="card-icon" style="background-color: rgba(16, 185, 129, 0.12);">
+                        <svg viewBox="0 0 28 28" fill="none" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,22 9,14 15,18 25,6"/><polyline points="20,6 25,6 25,11"/><line x1="3" y1="25" x2="25" y2="25"/></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3>Saham</h3>
+                        <p>Dikelola oleh manajer investasi, domisili dan regulasi yang jelas membuat saham menjadi instrumen populer untuk pertumbuhan kekayaan jangka panjang.</p>
+                    </div>
+                    <span class="card-action">
+                        Pelajari Selengkapnya
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
+                    </span>
                 </div>
 
-                {{-- Leaderboard Mini Widget --}}
-                <div class="leaderboard-mini" id="leaderboardMini">
-                    <div class="card-header-row">
-                        <h3 class="card-title" style="font-size: 0.75rem;">🏆 Leaderboard</h3>
-                        <a href="/leaderboard" class="card-link">Full →</a>
+                {{-- Card 3: Reksa Dana --}}
+                <div class="cat-card" data-cat="reksadana" id="card-reksadana">
+                    <div class="card-icon" style="background-color: rgba(139, 92, 246, 0.12);">
+                        <svg viewBox="0 0 28 28" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="10"/><path d="M14 4v10l7 3.5"/><path d="M14 14L7 20"/></svg>
                     </div>
-                    <div class="leaderboard-list">
-                        <div class="lb-item">
-                            <span class="lb-rank font-pixel" style="color: #FFD000;">1</span>
-                            <span class="lb-name">InvestorPro</span>
-                            <span class="lb-xp font-pixel">1,250 XP</span>
-                        </div>
-                        <div class="lb-item">
-                            <span class="lb-rank font-pixel" style="color: #c0c0c0;">2</span>
-                            <span class="lb-name">SahamMaster</span>
-                            <span class="lb-xp font-pixel">980 XP</span>
-                        </div>
-                        <div class="lb-item">
-                            <span class="lb-rank font-pixel" style="color: #cd7f32;">3</span>
-                            <span class="lb-name">TraderPemula</span>
-                            <span class="lb-xp font-pixel">720 XP</span>
-                        </div>
-                        <div class="lb-item active">
-                            <span class="lb-rank font-pixel">—</span>
-                            <span class="lb-name">{{ Auth::user()->username }} (Kamu)</span>
-                            <span class="lb-xp font-pixel">205 XP</span>
-                        </div>
+                    <div class="card-body">
+                        <h3>Reksa Dana</h3>
+                        <p>Dikelola oleh manajer investasi profesional, domisili dan aset yang terdiversifikasi. Pilihan tepat untuk investasi dengan modal terjangkau.</p>
                     </div>
+                    <span class="card-action">
+                        Pelajari Selengkapnya
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
+                    </span>
                 </div>
 
-            </div>
-        </div>
-
-    </div>
-    @endauth
-
-    {{-- ===== MODALS (AUTH ONLY) ===== --}}
-    @auth
-        {{-- Profile Modal --}}
-        <div id="profileModal" class="modal-overlay" onclick="attemptCloseOverlay(event, 'profileModal')">
-            <div class="modal-content" onclick="event.stopPropagation()" style="text-align: center;">
-                <button class="modal-close" onclick="attemptCloseModal('profileModal')">&times;</button>
-
-                <form id="profileForm" action="/user/profile/update" method="POST" onsubmit="isDirty = false;">
-                    @csrf
-                    @method('PUT')
-
-                    <div style="margin-bottom: 25px; position: relative; display: inline-block;">
-                        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #FFD000;">
-                        <label style="position: absolute; bottom: 0; right: 0; background-color: #343a40; border: 2px solid #1a1e23; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;">
-                            <span style="font-size: 16px;">📷</span>
-                            <input type="file" style="display: none;" onchange="alert('Sabar gem! Fitur Upload Foto beneran akan kita coding di tahap selanjutnya ya! 😁')">
-                        </label>
+                {{-- Card 4: Obligasi --}}
+                <div class="cat-card" data-cat="obligasi" id="card-obligasi">
+                    <div class="card-icon" style="background-color: rgba(245, 158, 11, 0.12);">
+                        <svg viewBox="0 0 28 28" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="20" height="20" rx="2"/><path d="M4 10h20"/><path d="M10 4v20"/><path d="M14 14h6"/><path d="M14 18h4"/></svg>
                     </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Username:</label>
-                        <input type="text" name="username" value="{{ Auth::user()->username }}" class="form-input" required oninput="markDirty()">
+                    <div class="card-body">
+                        <h3>Obligasi</h3>
+                        <p>Surat utang yang diterbitkan oleh pemerintah atau perusahaan. Memberikan pendapatan tetap melalui kupon dengan risiko yang terukur.</p>
                     </div>
+                    <span class="card-action">
+                        Pelajari Selengkapnya
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
+                    </span>
+                </div>
 
-                    <div class="form-group">
-                        <label class="form-label">Email:</label>
-                        <input type="email" value="{{ Auth::user()->email }}" class="form-input" readonly style="background-color: #343a40; color: #888; cursor: not-allowed;">
+                {{-- Card 5: Properti --}}
+                <div class="cat-card" data-cat="properti" id="card-properti">
+                    <div class="card-icon" style="background-color: rgba(236, 72, 153, 0.12);">
+                        <svg viewBox="0 0 28 28" fill="none" stroke="#EC4899" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14L14 5L25 14"/><path d="M6 14v10h16V14"/><rect x="11" y="18" width="6" height="6"/><path d="M14 5V2h4v5"/></svg>
                     </div>
-
-                    <div class="form-group" style="margin-bottom: 30px;">
-                        <label class="form-label">Password Baru:</label>
-                        <input type="password" name="password" placeholder="Kosongkan jika tidak ingin diubah" class="form-input" oninput="markDirty()">
+                    <div class="card-body">
+                        <h3>Properti</h3>
+                        <p>Investasi jangka panjang berupa tanah atau bangunan. Nilai properti cenderung naik seiring waktu dan bisa menghasilkan passive income.</p>
                     </div>
+                    <span class="card-action">
+                        Pelajari Selengkapnya
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
+                    </span>
+                </div>
 
-                    <button type="submit" style="width: 100%; background-color: #FFD000; color: #0d1117; border: none; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; font-family: 'Space Mono', monospace; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#ffe04a'" onmouseout="this.style.backgroundColor='#FFD000'">Simpan</button>
-                </form>
-            </div>
-        </div>
-
-        {{-- Settings Modal --}}
-        <div id="settingModal" class="modal-overlay" onclick="attemptCloseOverlay(event, 'settingModal')">
-            <div class="modal-content" onclick="event.stopPropagation()">
-                <button class="modal-close" onclick="attemptCloseModal('settingModal')">&times;</button>
-                <h3 style="margin-top: 0; text-align: center; color: #FFD000; font-family: 'Press Start 2P', monospace; font-size: 0.9rem;">⚙️ Pengaturan</h3>
-                <p style="color: #adb5bd; text-align: center; font-family: 'Space Mono', monospace; margin-top: 1rem;">Fitur Pengaturan sedang dalam pengembangan...</p>
-                <div style="text-align: center; margin-top: 20px;">
-                    <button type="button" onclick="attemptCloseModal('settingModal')" style="background-color: #1e2530; color: white; border: 2px solid #2d3540; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-family: 'Space Mono', monospace; font-weight: bold; transition: background 0.2s;" onmouseover="this.style.backgroundColor='#2d3540'" onmouseout="this.style.backgroundColor='#1e2530'">Tutup</button>
+                {{-- Card 6: Emas --}}
+                <div class="cat-card" data-cat="emas" id="card-emas">
+                    <div class="card-icon" style="background-color: rgba(212, 175, 55, 0.12);">
+                        <svg viewBox="0 0 28 28" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20L11 8H17L20 20H8Z"/><path d="M10 20L12.5 13H15.5L18 20"/><path d="M5 24H23"/><circle cx="14" cy="15" r="1.5"/></svg>
+                    </div>
+                    <div class="card-body">
+                        <h3>Emas</h3>
+                        <p>Emas sering digunakan untuk menjaga alokasi aset dan lindung nilai terhadap inflasi. Investasi yang telah teruji selama ribuan tahun.</p>
+                    </div>
+                    <span class="card-action">
+                        Pelajari Selengkapnya
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
+                    </span>
                 </div>
             </div>
         </div>
+    </section>
 
-        {{-- Warning Modal (unsaved changes) --}}
-        <div id="warningModal" class="modal-overlay" style="z-index: 1001;">
-            <div class="modal-content" style="width: 360px; text-align: center; padding: 24px;">
-                <h3 style="margin-top: 0; color: #FFD000; font-family: 'Press Start 2P', monospace; font-size: 0.75rem;">⚠️ Tunggu Dulu!</h3>
-                <p style="color: white; margin-top: 1rem; font-family: 'Space Mono', monospace;">Perubahan belum disimpan. Yakin mau keluar?</p>
-                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 25px;">
-                    <button onclick="closeWarningModal()" style="background-color: #1e2530; color: white; border: 2px solid #2d3540; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-family: 'Space Mono', monospace;">Kembali</button>
-                    <button onclick="discardChanges()" style="background-color: #da3633; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; font-family: 'Space Mono', monospace;">Batal</button>
-                </div>
-            </div>
+
+
+    {{-- ============================================================
+         CTA SECTION
+         ============================================================ --}}
+    <section class="cta-section">
+        <div class="cta-inner">
+            <h2 class="cta-title">Mulai perjalanan investasimu bersama <span class="gold">Investdu</span></h2>
+            <p class="cta-desc">Daftar sekarang dan akses seluruh materi investasi secara gratis. Tidak perlu pengalaman sebelumnya.</p>
+            <a href="/register" class="cta-btn">
+                Mulai Belajar Gratis
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            </a>
         </div>
-    @endauth
+    </section>
 
-    {{-- ===== JAVASCRIPT ===== --}}
+    {{-- ============================================================
+         FOOTER
+         ============================================================ --}}
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">INVEST<span class="gold">DU</span></div>
+            <p class="footer-copy">&copy; {{ date('Y') }} Investdu. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {{-- ============================================================
+         JAVASCRIPT — Full Interactivity
+         ============================================================ --}}
     <script>
-        let isDirty = false;
+    (function() {
+        'use strict';
 
-        function markDirty() {
-            isDirty = true;
-        }
+        // ==============================================
+        // 1. NAVBAR SCROLL EFFECT
+        // ==============================================
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 40);
+        }, { passive: true });
 
-        // === Dropdown Menu ===
-        function toggleDropdown(event) {
-            event.stopPropagation();
-            var menu = document.getElementById("profilMenu");
-            menu.style.display = (menu.style.display === "block") ? "none" : "block";
-        }
+        // ==============================================
+        // 2. DROPDOWN MENUS (Multiple)
+        // ==============================================
+        const dropdownBtns = document.querySelectorAll('[data-dropdown]');
+        let activeDropdown = null;
 
-        // === Modal Controls ===
-        function openModal(modalId) {
-            var menu = document.getElementById("profilMenu");
-            if(menu) menu.style.display = "none";
-            document.getElementById(modalId).style.display = "flex";
-            isDirty = false;
-        }
+        dropdownBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const targetId = btn.getAttribute('data-dropdown');
+                const panel = document.getElementById(targetId);
 
-        function attemptCloseModal(modalId) {
-            if (modalId === 'profileModal' && isDirty) {
-                document.getElementById('warningModal').style.display = 'flex';
-            } else {
-                document.getElementById(modalId).style.display = "none";
-            }
-        }
+                // Close any other open dropdown
+                if (activeDropdown && activeDropdown !== panel) {
+                    activeDropdown.classList.remove('show');
+                    activeDropdown.previousElementSibling?.classList.remove('active');
+                    activeDropdown.previousElementSibling?.setAttribute('aria-expanded', 'false');
+                }
 
-        function attemptCloseOverlay(event, modalId) {
-            if (event.target === document.getElementById(modalId)) {
-                attemptCloseModal(modalId);
-            }
-        }
-
-        function closeWarningModal() {
-            document.getElementById('warningModal').style.display = 'none';
-        }
-
-        function discardChanges() {
-            isDirty = false;
-            document.getElementById('profileForm').reset();
-            document.getElementById('warningModal').style.display = 'none';
-            document.getElementById('profileModal').style.display = 'none';
-        }
-
-        // === Mobile Menu ===
-        function toggleMobileMenu() {
-            const btn = document.getElementById('mobileMenuBtn');
-            const overlay = document.getElementById('mobileNavOverlay');
-            btn.classList.toggle('active');
-            overlay.classList.toggle('active');
-            document.body.style.overflow = overlay.classList.contains('active') ? 'hidden' : '';
-        }
-
-        function closeMobileMenu() {
-            const btn = document.getElementById('mobileMenuBtn');
-            const overlay = document.getElementById('mobileNavOverlay');
-            btn.classList.remove('active');
-            overlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // === Close dropdown on outside click ===
-        window.onclick = function() {
-            var menu = document.getElementById("profilMenu");
-            if (menu && menu.style.display === "block") {
-                menu.style.display = "none";
-            }
-        }
-
-        // === Parallax effect on hero (subtle) ===
-        window.addEventListener('mousemove', function(e) {
-            const hero = document.querySelector('.hero-bg');
-            if (!hero) return;
-            const x = (e.clientX / window.innerWidth - 0.5) * 10;
-            const y = (e.clientY / window.innerHeight - 0.5) * 5;
-            hero.style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
+                const isOpen = panel.classList.toggle('show');
+                btn.classList.toggle('active', isOpen);
+                btn.setAttribute('aria-expanded', isOpen);
+                activeDropdown = isOpen ? panel : null;
+            });
         });
+
+        // Close dropdowns on outside click
+        document.addEventListener('click', () => {
+            if (activeDropdown) {
+                activeDropdown.classList.remove('show');
+                const btn = activeDropdown.parentElement.querySelector('[data-dropdown]');
+                btn?.classList.remove('active');
+                btn?.setAttribute('aria-expanded', 'false');
+                activeDropdown = null;
+            }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && activeDropdown) {
+                activeDropdown.classList.remove('show');
+                const btn = activeDropdown.parentElement.querySelector('[data-dropdown]');
+                btn?.classList.remove('active');
+                btn?.setAttribute('aria-expanded', 'false');
+                activeDropdown = null;
+            }
+        });
+
+        // ==============================================
+        // 3. MOBILE DRAWER
+        // ==============================================
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+
+        mobileToggle.addEventListener('click', () => {
+            const isOpen = mobileToggle.classList.toggle('open');
+            if (isOpen) {
+                mobileDrawer.style.display = 'flex';
+                requestAnimationFrame(() => {
+                    mobileDrawer.classList.add('open');
+                });
+                document.body.style.overflow = 'hidden';
+            } else {
+                mobileDrawer.classList.remove('open');
+                document.body.style.overflow = '';
+                setTimeout(() => { mobileDrawer.style.display = 'none'; }, 350);
+            }
+        });
+
+        // ==============================================
+        // 4. CATEGORY CHIP FILTERING
+        // ==============================================
+        const chips = document.querySelectorAll('.hero-chips .chip');
+        const catCards = document.querySelectorAll('.cat-card');
+
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                // Toggle active state
+                chips.forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+
+                const category = chip.dataset.category;
+
+                catCards.forEach(card => {
+                    if (category === 'all' || card.dataset.cat === category) {
+                        card.style.display = '';
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        requestAnimationFrame(() => {
+                            card.style.transition = 'all 0.4s ease';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        });
+                    } else {
+                        card.style.transition = 'all 0.3s ease';
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(10px)';
+                        setTimeout(() => { card.style.display = 'none'; }, 300);
+                    }
+                });
+            });
+        });
+
+        // ==============================================
+        // 5. SEARCH INPUT INTERACTION
+        // ==============================================
+        const searchInput = document.getElementById('heroSearch');
+        const searchBtn = document.getElementById('searchBtn');
+
+        // Glow effect on focus
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.style.transform = 'scale(1.015)';
+            searchInput.parentElement.style.transition = 'transform 0.3s ease';
+        });
+
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.style.transform = 'scale(1)';
+        });
+
+        // Filter cards via search
+        function performSearch() {
+            const query = searchInput.value.trim().toLowerCase();
+            if (!query) {
+                // Reset — show all
+                chips.forEach(c => c.classList.remove('active'));
+                chips[0].classList.add('active');
+                catCards.forEach(card => {
+                    card.style.display = '';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                });
+                return;
+            }
+
+            // Deactivate chips
+            chips.forEach(c => c.classList.remove('active'));
+
+            catCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                const match = title.includes(query) || desc.includes(query);
+
+                if (match) {
+                    card.style.display = '';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(10px)';
+                    setTimeout(() => { card.style.display = 'none'; }, 250);
+                }
+            });
+        }
+
+        searchBtn.addEventListener('click', performSearch);
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+
+        // Live search on typing (debounced)
+        let searchTimer;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(performSearch, 300);
+        });
+
+        // ==============================================
+        // 6. FLOATING ICONS — PARALLAX ON MOUSE MOVE
+        // ==============================================
+        const heroRight = document.getElementById('heroRight');
+        const floatingIcons = document.querySelectorAll('.floating-icon');
+
+        // Parallax on mousemove (desktop only)
+        if (heroRight && window.innerWidth > 1024) {
+            const hero = document.getElementById('hero');
+
+            hero.addEventListener('mousemove', (e) => {
+                const rect = hero.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+                floatingIcons.forEach((icon, i) => {
+                    const depth = 1 + (i % 3) * 0.6;
+                    const moveX = x * 20 * depth;
+                    const moveY = y * 15 * depth;
+                    // Pause CSS animation, apply parallax transform
+                    icon.style.animationPlayState = 'paused';
+                    icon.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    icon.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                });
+            });
+
+            hero.addEventListener('mouseleave', () => {
+                floatingIcons.forEach(icon => {
+                    icon.style.transform = '';
+                    icon.style.animationPlayState = 'running';
+                    icon.style.transition = 'transform 0.8s ease';
+                });
+            });
+        }
+
+        // ==============================================
+        // 7. SCROLL REVEAL — Cards
+        // ==============================================
+        const revealElements = document.querySelectorAll('.cat-card');
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const siblings = Array.from(entry.target.parentElement.children);
+                    const index = siblings.indexOf(entry.target);
+                    setTimeout(() => {
+                        entry.target.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                        entry.target.classList.add('revealed');
+                    }, index * 100);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+
+
+        // ==============================================
+        // 9. THEME TOGGLE (Visual)
+        // ==============================================
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        let isDark = true;
+
+        themeToggle.addEventListener('click', () => {
+            isDark = !isDark;
+            sunIcon.style.transition = 'transform 0.5s ease';
+            sunIcon.style.transform = isDark ? 'rotate(0deg)' : 'rotate(180deg)';
+
+            // Subtle visual feedback
+            themeToggle.style.background = isDark ? '' : 'rgba(37, 99, 235, 0.15)';
+            themeToggle.style.borderColor = isDark ? '' : 'rgba(37, 99, 235, 0.3)';
+        });
+
+        // ==============================================
+        // 10. NAVBAR SEARCH TOGGLE (focus search)
+        // ==============================================
+        const navSearchToggle = document.getElementById('searchToggle');
+        navSearchToggle.addEventListener('click', () => {
+            const heroSearch = document.getElementById('heroSearch');
+            heroSearch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => heroSearch.focus(), 500);
+        });
+
+    })();
     </script>
+
 </body>
 </html>
