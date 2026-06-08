@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ArticleController;
 use App\Models\InvestmentCategory;
 
 Route::get('/', function () {
@@ -17,6 +18,15 @@ Route::get('/categories/{slug}', function ($slug) {
     $category = InvestmentCategory::where('slug', $slug)->firstOrFail();
     return view('category', compact('category'));
 })->name('categories.show');
+
+// --- HALAMAN ARTIKEL PER KATEGORI & PENCARIAN (PUBLIC) ---
+Route::get('/search', [ArticleController::class, 'search'])->name('articles.search');
+Route::get('/belajar/{slug}', [ArticleController::class, 'index'])->name('articles.index');
+Route::get('/belajar/{slug}/quiz', function ($slug) {
+    $category = InvestmentCategory::where('slug', $slug)->firstOrFail();
+    return view('category_quiz', compact('category'));
+})->name('category.quiz');
+Route::get('/belajar/{slug}/{articleSlug}', [ArticleController::class, 'show'])->name('articles.show');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authenticate'])->middleware('guest');
@@ -66,6 +76,14 @@ Route::post('/admin/monitor-game/trivia/{id}/delete', [AdminController::class, '
 Route::post('/admin/monitor-game/yes-or-no', [AdminController::class, 'storeYesOrNo'])->middleware('auth');
 Route::put('/admin/monitor-game/yes-or-no/{id}', [AdminController::class, 'updateYesOrNo'])->middleware('auth');
 Route::post('/admin/monitor-game/yes-or-no/{id}/delete', [AdminController::class, 'deleteYesOrNo'])->middleware('auth');
+
+// --- KELOLA ARTIKEL (ADMIN) ---
+Route::get('/admin/articles', [AdminController::class, 'articlesIndex'])->middleware('auth');
+Route::get('/admin/articles/{categoryId}/create', [AdminController::class, 'articleCreate'])->middleware('auth');
+Route::post('/admin/articles/{categoryId}', [AdminController::class, 'articleStore'])->middleware('auth');
+Route::get('/admin/articles/{id}/edit', [AdminController::class, 'articleEdit'])->middleware('auth');
+Route::put('/admin/articles/{id}/update', [AdminController::class, 'articleUpdate'])->middleware('auth');
+Route::post('/admin/articles/{id}/delete', [AdminController::class, 'articleDelete'])->middleware('auth');
 
 // Rute untuk user mengedit profilnya sendiri via popup
 Route::put('/user/profile/update', [AuthController::class, 'updateProfile'])->middleware('auth');

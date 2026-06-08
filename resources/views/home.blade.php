@@ -628,8 +628,9 @@
 
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.25rem;
+            grid-template-columns: repeat(3, minmax(0, 320px));
+            justify-content: center;
+            gap: 2rem;
         }
 
         /* Category Card */
@@ -637,7 +638,7 @@
             background-color: #1E293B;
             border: 1px solid rgba(71, 85, 105, 0.28);
             border-radius: 1rem;
-            padding: 1.5rem;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
             gap: 0.875rem;
@@ -645,6 +646,7 @@
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            aspect-ratio: 3 / 4;
             /* Scroll reveal */
             opacity: 0;
             transform: translateY(30px);
@@ -891,27 +893,27 @@
                         <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                     <div class="dropdown-panel" id="belajar-dropdown">
-                        <a href="#" class="dd-item">
+                        <a href="/belajar/tabungan-berjangka" class="dd-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><circle cx="16" cy="15" r="1.5"/></svg>
                             Tabungan Berjangka
                         </a>
-                        <a href="#" class="dd-item">
+                        <a href="/belajar/saham" class="dd-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg>
                             Saham
                         </a>
-                        <a href="#" class="dd-item">
+                        <a href="/belajar/reksa-dana" class="dd-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
                             Reksa Dana
                         </a>
-                        <a href="#" class="dd-item">
+                        <a href="/belajar/obligasi" class="dd-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg>
                             Obligasi
                         </a>
-                        <a href="#" class="dd-item">
+                        <a href="/belajar/properti" class="dd-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/><rect x="9" y="14" width="6" height="6"/></svg>
                             Properti
                         </a>
-                        <a href="#" class="dd-item">
+                        <a href="/belajar/emas" class="dd-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l3-10h4l3 10H7z"/><path d="M9 17l2-5h2l2 5"/></svg>
                             Emas
                         </a>
@@ -1028,43 +1030,16 @@
 
                 {{-- Category Chips --}}
                 <div class="hero-chips" id="heroChips">
-                    <button class="chip active" data-category="all">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-                        Semua
-                    </button>
-                    <button class="chip" data-category="tabungan">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/></svg>
-                        Tabungan Berjangka
-                    </button>
-                    <button class="chip" data-category="saham">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg>
-                        Saham
-                    </button>
-                    <button class="chip" data-category="reksadana">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
-                        Reksa Dana
-                    </button>
-                    <button class="chip" data-category="obligasi">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg>
-                        Obligasi
-                    </button>
-                    <button class="chip" data-category="properti">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/></svg>
-                        Properti
-                    </button>
-                    <button class="chip" data-category="emas">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17l3-10h4l3 10H7z"/><path d="M9 17l2-5h2l2 5"/></svg>
-                        Emas
-                    </button>
                 </div>
 
                 {{-- Search Bar --}}
-                <div class="hero-search">
-                    <input type="text" class="search-input" id="heroSearch" placeholder="Apa yang ingin Anda pelajari?" autocomplete="off">
-                    <button class="search-btn" id="searchBtn" aria-label="Cari">
+                <form action="/search" method="GET" class="hero-search">
+                    <input type="hidden" name="c" id="categoryFilterInput" value="all">
+                    <input type="text" name="q" class="search-input" id="heroSearch" placeholder="Apa yang ingin Anda pelajari?" autocomplete="off" required>
+                    <button type="submit" class="search-btn" id="searchBtn" aria-label="Cari">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
                     </button>
-                </div>
+                </form>
             </div>
 
             {{-- Right — Floating Financial Icons --}}
@@ -1109,7 +1084,7 @@
          LEARNING CATEGORIES SECTION
          ============================================================ --}}
     <div class="categories-grid" id="categoriesGrid">
-    @foreach($categories as $category)
+    @foreach($categories->take(3) as $category)
         <a href="{{ route('categories.show', $category->slug) }}" class="cat-card" data-cat="{{ $category->slug }}" id="card-{{ $category->slug }}">
             
             {{-- Header Kartu: Ikon & Badge dibuat sejajar biar tidak menambah tinggi kartu --}}
@@ -1441,5 +1416,58 @@
     })();
     </script>
 
+    {{-- Multi-select Categories JS --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chips = document.querySelectorAll('.hero-chips .chip');
+            const hiddenInput = document.getElementById('categoryFilterInput');
+
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const category = chip.getAttribute('data-category');
+
+                    if (category === 'all') {
+                        // Jika 'Semua' diklik, matikan yang lain
+                        chips.forEach(c => c.classList.remove('active'));
+                        chip.classList.add('active');
+                    } else {
+                        // Matikan 'Semua' jika sebelumnya aktif
+                        const allChip = document.querySelector('.hero-chips .chip[data-category="all"]');
+                        if (allChip) allChip.classList.remove('active');
+
+                        // Toggle status aktif chip ini
+                        chip.classList.toggle('active');
+
+                        // Jika tidak ada yang aktif satupun, aktifkan 'Semua' kembali
+                        const anyActive = document.querySelectorAll('.hero-chips .chip.active:not([data-category="all"])');
+                        if (anyActive.length === 0 && allChip) {
+                            allChip.classList.add('active');
+                        }
+                    }
+
+                    // Update hidden input
+                    updateHiddenInput();
+                });
+            });
+
+            function updateHiddenInput() {
+                const activeChips = document.querySelectorAll('.hero-chips .chip.active');
+                let selected = [];
+                
+                activeChips.forEach(c => {
+                    const cat = c.getAttribute('data-category');
+                    if (cat !== 'all') {
+                        selected.push(cat);
+                    }
+                });
+
+                if (selected.length === 0) {
+                    hiddenInput.value = 'all';
+                } else {
+                    hiddenInput.value = selected.join(',');
+                }
+            }
+        });
+    </script>
 </body>
 </html>

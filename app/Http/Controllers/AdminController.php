@@ -8,10 +8,12 @@ use App\Models\TriviaQuestion;
 use App\Models\YesOrNoQuestion;
 use App\Models\ChatRoom;
 use App\Models\Message;
+use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
@@ -395,5 +397,137 @@ class AdminController extends Controller
 
         $question->delete();
         return redirect()->back()->with('success', 'Pertanyaan yes or no berhasil dihapus dari kategori ' . $category->name . '.');
+    }
+
+    // ==========================================
+    // KELOLA ARTIKEL
+    // ==========================================
+
+    public function articlesIndex()
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $categories = InvestmentCategory::with(['articles' => function ($q) {
+            $q->latest();
+        }])->get();
+
+        return view('admin.admin_articles', compact('categories'));
+    }
+
+    public function articleCreate($categoryId)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($categoryId);
+        return view('admin.admin_article_form', compact('category'));
+    }
+
+    public function articleStore(Request $request, $categoryId)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($categoryId);
+
+        $request->validate([
+            'title'        => 'required|string|max:255',
+            'excerpt'      => 'nullable|string|max:500',
+            'body'         => 'required|string',
+            'thumbnail'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'is_published' => 'nullable|boolean',
+        ]);
+
+        $slug = Str::slug($request->title);
+
+        // Pastikan slug unik dalam kategori
+        $originalSlug = $slug;
+        $counter = 1;
+        while (Article::where('category_id', $category->id)->where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter++;
+        }
+
+        $thumbnailPath = null;
+        if ($request->hasFile('thumbnail')) {
+            $thumbnailPath = $request->file('thumbnail')->store('articles', 'public');
+        }
+
+        Article::create([
+            'category_id'  => $category->id,
+            'title'        => $request->title,
+            'slug'         => $slug,
+            'excerpt'      => $request->excerpt,
+            'body'         => $request->body,
+            'thumbnail'    => $thumbnailPath,
+            'is_published' => $request->has('is_published') ? true : false,
+        ]);
+
+        return redirect('/admin/articles')->with('success', 'Artikel berhasil ditambahkan ke kategori ' . $category->name . '!');
+    }
+
+    public function articleEdit($id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $article = Article::with('category')->findOrFail($id);
+        $category = $article->category;
+
+        return view('admin.admin_article_form', compact('article', 'category'));
+    }
+
+    public function articleUpdate(Request $request, $id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $article = Article::findOrFail($id);
+
+        $request->validate([
+            'title'        => 'required|string|max:255',
+            'excerpt'      => 'nullable|string|max:500',
+            'body'         => 'required|string',
+            'thumbnail'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'is_published' => 'nullable|boolean',
+        ]);
+
+        $slug = Str::slug($request->title);
+        $originalSlug = $slug;
+        $counter = 1;
+        while (Article::where('category_id', $article->category_id)->where('slug', $slug)->where('id', '!=', $article->id)->exists()) {
+            $slug = $originalSlug . '-' . $counter++;
+        }
+
+        if ($request->hasFile('thumbnail')) {
+            $article->thumbnail = $request->file('thumbnail')->store('articles', 'public');
+        }
+
+        $article->title        = $request->title;
+        $article->slug         = $slug;
+        $article->excerpt      = $request->excerpt;
+        $article->body         = $request->body;
+        $article->is_published = $request->has('is_published') ? true : false;
+        $article->save();
+
+        return redirect('/admin/articles')->with('success', 'Artikel "' . $article->title . '" berhasil diperbarui!');
+    }
+
+    public function articleDelete($id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $article = Article::findOrFail($id);
+        $title = $article->title;
+        $article->delete();
+
+        return redirect('/admin/articles')->with('success', 'Artikel "' . $title . '" berhasil dihapus!');
     }
 }
