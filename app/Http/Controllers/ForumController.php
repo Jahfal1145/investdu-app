@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSent;
 use App\Models\ChatRoom;
 use App\Models\Message;
 use App\Models\User;
@@ -75,11 +76,14 @@ class ForumController extends Controller
             abort(403);
         }
 
-        Message::create([
+        $message = Message::create([
             'chat_room_id' => $room->id,
             'user_id' => $user->id,
             'body' => $request->message,
         ]);
+
+        $message->load('user');
+        broadcast(new MessageSent($message))->toOthers();
 
         return redirect()->to('/forum-diskusi?room_id=' . $room->id)->with('success', 'Pesan berhasil dikirim.');
     }

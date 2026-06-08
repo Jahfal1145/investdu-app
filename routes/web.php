@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Models\InvestmentCategory;
+use App\Http\Controllers\FaqController;
+use App\Models\Faq;
 
 Route::get('/', function () {
     // Ambil semua kategori dari database
@@ -67,6 +69,14 @@ Route::post('/admin/monitor-game/yes-or-no', [AdminController::class, 'storeYesO
 Route::put('/admin/monitor-game/yes-or-no/{id}', [AdminController::class, 'updateYesOrNo'])->middleware('auth');
 Route::post('/admin/monitor-game/yes-or-no/{id}/delete', [AdminController::class, 'deleteYesOrNo'])->middleware('auth');
 
+// Masukkan ini di area khusus admin kamu
+Route::get('/admin/faqs', [FaqController::class, 'index'])->middleware('auth');
+Route::get('/admin/faqs/create', [FaqController::class, 'create'])->middleware('auth');
+Route::post('/admin/faqs', [FaqController::class, 'store'])->middleware('auth');
+Route::get('/admin/faqs/{id}/edit', [FaqController::class, 'edit'])->middleware('auth');
+Route::put('/admin/faqs/{id}', [FaqController::class, 'update'])->middleware('auth');
+Route::post('/admin/faqs/{id}/delete', [FaqController::class, 'destroy'])->middleware('auth'); // Pakai POST sesuai gaya route delete kamu sebelumnya
+
 // Rute untuk user mengedit profilnya sendiri via popup
 Route::put('/user/profile/update', [AuthController::class, 'updateProfile'])->middleware('auth');
 
@@ -77,3 +87,7 @@ Route::get('/trivia', function () {
 Route::get('/yes-or-no', function () {
     return view('yes_or_no');
 });
+
+// Rute untuk halaman FAQ Komunitas
+Route::get('/komunitas/faq', [FaqController::class, 'publicIndex'])->name('faq.public');
+Route::get('/faq', [FaqController::class, 'publicIndex']);

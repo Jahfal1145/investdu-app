@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Forum Diskusi | InvestDU</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
@@ -142,9 +143,14 @@
         </main>
     </div>
 
+    @vite('resources/js/app.js')
+
     <script>
         const textarea = document.querySelector('textarea[name="message"]');
         const form = textarea.closest('form');
+        const messageArea = document.querySelector('.message-area');
+        const activeRoomId = {{ $activeRoomId }};
+        const currentUserId = {{ auth()->id() }};
 
         textarea.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !event.shiftKey) {
@@ -152,6 +158,33 @@
                 form.submit();
             }
         });
+
+        const initChatListener = () => {
+            if (!window.Echo) {
+                return setTimeout(initChatListener, 50);
+            }
+
+            window.Echo.private(`chat-room.${activeRoomId}`)
+                .listen('MessageSent', (event) => {
+                    if (parseInt(event.message.chat_room_id, 10) !== activeRoomId) {
+                        return;
+                    }
+
+                    const isOutgoing = event.message.user?.id === currentUserId;
+                    const time = new Date(event.message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const messageHtml = `
+                        <div class="message ${isOutgoing ? 'outgoing' : 'incoming'}">
+                            <div class="bubble">${event.message.body}</div>
+                            <div class="info">${event.message.user?.username ?? 'User'} · ${time}</div>
+                        </div>
+                    `;
+
+                    messageArea.insertAdjacentHTML('beforeend', messageHtml);
+                    messageArea.scrollTop = messageArea.scrollHeight;
+                });
+        };
+
+        initChatListener();
     </script>
 </body>
 </html>
