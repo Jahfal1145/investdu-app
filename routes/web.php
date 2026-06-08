@@ -31,6 +31,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth');
 
+Route::get('/forum-diskusi', function () {
+    return view('forum_diskusi');
+})->middleware('auth');
+
 Route::post('/logout', [AuthController::class, 'logout']);
 
 // --- AREA KHUSUS ADMIN ---
@@ -56,6 +60,7 @@ Route::post('/admin/literasi/{category}/yes-or-no', [AdminController::class, 'st
 Route::put('/admin/literasi/{category}/yes-or-no/{id}', [AdminController::class, 'updateCategoryYesOrNo'])->middleware('auth');
 Route::post('/admin/literasi/{category}/yes-or-no/{id}/delete', [AdminController::class, 'deleteCategoryYesOrNo'])->middleware('auth');
 
+Route::get('/admin/forum-diskusi', [AdminController::class, 'forumDiskusi'])->middleware('auth');
 Route::get('/admin/monitor-game', [AdminController::class, 'monitorGame'])->middleware('auth');
 Route::post('/admin/monitor-game/trivia', [AdminController::class, 'storeTrivia'])->middleware('auth');
 Route::put('/admin/monitor-game/trivia/{id}', [AdminController::class, 'updateTrivia'])->middleware('auth');

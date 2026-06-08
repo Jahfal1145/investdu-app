@@ -381,10 +381,9 @@
                 Monitor Game
             </a>
 
-            <a href="#" class="nav-item" id="navLeaderboard">
-                <span class="nav-item-icon">🏆</span>
-                Data Leaderboard
-                <span class="nav-item-badge">SOON</span>
+            <a href="/admin/forum-diskusi" class="nav-item {{ request()->is('admin/forum-diskusi*') ? 'active' : '' }}" id="navForum">
+                <span class="nav-item-icon">💬</span>
+                Forum Diskusi
             </a>
 
             <div class="nav-section-label" style="margin-top: 0.5rem;">── SYSTEM ──</div>

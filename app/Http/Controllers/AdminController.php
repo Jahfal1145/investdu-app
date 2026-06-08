@@ -120,6 +120,15 @@ class AdminController extends Controller
         return view('edit_literasi', compact('category'));
     }
 
+    public function forumDiskusi()
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        return view('admin.forum_diskusi');
+    }
+
     public function literasiUpdate(Request $request, $id)
     {
         if (Auth::user()->is_admin == 0) {
