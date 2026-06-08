@@ -31,9 +31,8 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth');
 
-Route::get('/forum-diskusi', function () {
-    return view('forum_diskusi');
-})->middleware('auth');
+Route::get('/forum-diskusi', [App\Http\Controllers\ForumController::class, 'index'])->middleware('auth');
+Route::post('/forum-diskusi', [App\Http\Controllers\ForumController::class, 'storeMessage'])->middleware('auth');
 
 Route::post('/logout', [AuthController::class, 'logout']);
 
@@ -42,13 +41,9 @@ Route::get('/admin', [AdminController::class, 'dashboard'])->middleware('auth');
 Route::get('/admin/users', [AdminController::class, 'index'])->middleware('auth');
 Route::post('/admin/users/{id}/delete', [AdminController::class, 'destroy'])->middleware('auth');
 
-Route::get('/admin/users', [AdminController::class, 'index'])->middleware('auth');
-
 // TAMBAHKAN 2 BARIS INI UNTUK FITUR EDIT
 Route::get('/admin/users/{id}/edit', [AdminController::class, 'edit'])->middleware('auth');
 Route::put('/admin/users/{id}/update', [AdminController::class, 'update'])->middleware('auth');
-
-Route::post('/admin/users/{id}/delete', [AdminController::class, 'destroy'])->middleware('auth');
 Route::get('/admin/literasi', [AdminController::class, 'literasiIndex'])->middleware('auth');
 Route::get('/admin/literasi/{id}/edit', [AdminController::class, 'literasiEdit'])->middleware('auth');
 Route::put('/admin/literasi/{id}/update', [AdminController::class, 'literasiUpdate'])->middleware('auth');
@@ -61,6 +56,9 @@ Route::put('/admin/literasi/{category}/yes-or-no/{id}', [AdminController::class,
 Route::post('/admin/literasi/{category}/yes-or-no/{id}/delete', [AdminController::class, 'deleteCategoryYesOrNo'])->middleware('auth');
 
 Route::get('/admin/forum-diskusi', [AdminController::class, 'forumDiskusi'])->middleware('auth');
+Route::post('/admin/forum-diskusi/message', [AdminController::class, 'storeForumMessage'])->middleware('auth');
+Route::post('/admin/forum-diskusi/message/{message}/delete', [AdminController::class, 'deleteForumMessage'])->middleware('auth');
+Route::get('/admin/users/{id}/chat', [AdminController::class, 'chatUser'])->middleware('auth');
 Route::get('/admin/monitor-game', [AdminController::class, 'monitorGame'])->middleware('auth');
 Route::post('/admin/monitor-game/trivia', [AdminController::class, 'storeTrivia'])->middleware('auth');
 Route::put('/admin/monitor-game/trivia/{id}', [AdminController::class, 'updateTrivia'])->middleware('auth');

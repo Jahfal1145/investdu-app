@@ -92,25 +92,68 @@
         <div class="forum-panel-header">
             <div>
                 <h2>General Chat</h2>
-                <p>Semua percakapan grup tersedia di sini.</p>
+                <p>Semua peserta dan pesan grup tersedia di sini.</p>
             </div>
-            <span class="badge active">Aktif</span>
+            <span class="badge active">{{ $participants->where('online', true)->count() }} Online</span>
         </div>
-        <div class="participant-list" id="participantList"></div>
+        <div class="participant-list" id="participantList">
+            @forelse($participants as $participant)
+                <div class="participant-card">
+                    <div class="participant-meta">
+                        <strong>{{ $participant->username }}</strong>
+                        <span>{{ $participant->is_admin ? 'Admin' : 'Member' }}</span>
+                    </div>
+                    <div class="participant-actions">
+                        <span class="badge {{ $participant->online ? 'active' : 'suspended' }}">
+                            {{ $participant->online ? 'Online' : 'Offline' }}
+                        </span>
+                    </div>
+                </div>
+            @empty
+                <p style="color:#94a3b8;">Belum ada peserta.</p>
+            @endforelse
+        </div>
     </div>
 
     <div class="forum-panel">
         <div class="forum-panel-header chat-header">
             <div>
                 <h2>Admin View</h2>
-                <small>Hapus pesan dan suspend peserta.</small>
+                <small>Pengelolaan pesan grup dan moderasi forum.</small>
             </div>
             <span class="badge active">General</span>
         </div>
-        <div class="chat-messages" id="chatMessages"></div>
+
+        @if(session('success'))
+            <div class="message-item" style="border-color:#22c55e;background:rgba(16,185,129,.08);color:#d9f99d;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <div class="chat-messages" id="chatMessages">
+            @forelse($messages as $message)
+                <div class="message-item">
+                    <div class="message-header">
+                        <div class="message-sender">{{ $message->user?->username ?? 'User' }}</div>
+                        <div class="message-time">{{ $message->created_at->format('H:i') }}</div>
+                    </div>
+                    <div class="message-text">{{ $message->body }}</div>
+                    <div class="message-actions">
+                        <form action="/admin/forum-diskusi/message/{{ $message->id }}/delete" method="POST">
+                            @csrf
+                            <button type="submit">Hapus</button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <p style="color:#94a3b8;">Belum ada percakapan di general chat.</p>
+            @endforelse
+        </div>
+
         <div class="admin-chat-footer">
-            <form id="adminReplyForm">
-                <input type="text" id="adminReplyInput" placeholder="Tulis pesan admin..." />
+            <form id="adminReplyForm" action="/admin/forum-diskusi/message" method="POST">
+                @csrf
+                <input type="text" id="adminReplyInput" name="message" placeholder="Tulis pesan admin..." autocomplete="off" />
                 <button type="submit">Kirim</button>
             </form>
         </div>
@@ -118,102 +161,12 @@
 </div>
 
 <script>
-    const participants = [
-        { id: 'user_a', name: 'Rina', role: 'Member', suspended: false },
-        { id: 'user_b', name: 'Andi', role: 'Member', suspended: false },
-        { id: 'user_c', name: 'Joko', role: 'Member', suspended: false }
-    ];
-
-    const chatMessages = [
-        { id: 1, sender: 'Rina', text: 'Halo semua, ada yang bisa bantu soal saham hari ini?', time: '09:12' },
-        { id: 2, sender: 'Admin', text: 'Silakan tanya, saya siap membantu.', time: '09:14' },
-        { id: 3, sender: 'Andi', text: 'Apakah reksa dana aman untuk pemula?', time: '09:16' }
-    ];
-
-    const participantList = document.getElementById('participantList');
-    const chatMessagesEl = document.getElementById('chatMessages');
-    const adminReplyForm = document.getElementById('adminReplyForm');
-    const adminReplyInput = document.getElementById('adminReplyInput');
-
-    function renderParticipants() {
-        participantList.innerHTML = '';
-        participants.forEach(person => {
-            const card = document.createElement('div');
-            card.className = 'participant-card';
-            card.innerHTML = `
-                <div class="participant-meta">
-                    <strong>${person.name}</strong>
-                    <span>${person.role}</span>
-                </div>
-                <div class="participant-actions">
-                    <span class="badge ${person.suspended ? 'suspended' : 'active'}">${person.suspended ? 'Suspended' : 'Active'}</span>
-                    <button type="button" onclick="toggleSuspend('${person.id}')">${person.suspended ? 'Buka suspend' : 'Suspend'}</button>
-                </div>
-            `;
-            participantList.appendChild(card);
-        });
-    }
-
-    function renderChatMessages() {
-        chatMessagesEl.innerHTML = '';
-        if (chatMessages.length === 0) {
-            chatMessagesEl.innerHTML = '<p style="color:#94a3b8;">Belum ada percakapan di general chat.</p>';
-            return;
+    window.addEventListener('DOMContentLoaded', () => {
+        const chatMessagesEl = document.getElementById('chatMessages');
+        if (chatMessagesEl) {
+            chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
         }
-        chatMessages.forEach(message => {
-            const item = document.createElement('div');
-            item.className = 'message-item';
-            item.innerHTML = `
-                <div class="message-header">
-                    <div class="message-sender">${message.sender}</div>
-                    <div class="message-time">${message.time}</div>
-                </div>
-                <div class="message-text">${escapeHtml(message.text)}</div>
-                <div class="message-actions">
-                    <button type="button" onclick="deleteMessage(${message.id})">Hapus</button>
-                </div>
-            `;
-            chatMessagesEl.appendChild(item);
-        });
-    }
-
-    function deleteMessage(id) {
-        const index = chatMessages.findIndex(msg => msg.id === id);
-        if (index !== -1) {
-            chatMessages.splice(index, 1);
-            renderChatMessages();
-        }
-    }
-
-    function toggleSuspend(id) {
-        const user = participants.find(person => person.id === id);
-        if (!user) return;
-        user.suspended = !user.suspended;
-        renderParticipants();
-    }
-
-    adminReplyForm.addEventListener('submit', event => {
-        event.preventDefault();
-        const text = adminReplyInput.value.trim();
-        if (!text) return;
-        const now = new Date();
-        const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        chatMessages.push({ id: Date.now(), sender: 'Admin', text, time });
-        adminReplyInput.value = '';
-        renderChatMessages();
     });
-
-    function escapeHtml(text) {
-        return String(text)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-    }
-
-    renderParticipants();
-    renderChatMessages();
 </script>
 
 @endsection

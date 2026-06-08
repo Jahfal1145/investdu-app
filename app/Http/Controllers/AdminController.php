@@ -6,8 +6,11 @@ use App\Models\User;
 use App\Models\InvestmentCategory;
 use App\Models\TriviaQuestion;
 use App\Models\YesOrNoQuestion;
+use App\Models\ChatRoom;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -24,7 +27,7 @@ class AdminController extends Controller
         $totalUsers = User::count();
         $recentUsers = User::latest()->take(10)->get();
 
-        return view('admin_dashboard', compact('totalUsers', 'recentUsers'));
+        return view('admin.admin_dashboard', compact('totalUsers', 'recentUsers'));
     }
 
 // Fungsi Menampilkan Tabel & Fitur Search
@@ -42,7 +45,7 @@ class AdminController extends Controller
             $users = User::all();
         }
 
-        return view('admin_users', compact('users'));
+        return view('admin.admin_users', compact('users'));
     }
 
     // Fungsi Menampilkan Halaman Form Edit
@@ -51,7 +54,7 @@ class AdminController extends Controller
         if (Auth::user()->is_admin == 0) return redirect('/dashboard');
         
         $user = User::findOrFail($id);
-        return view('edit_user', compact('user'));
+        return view('admin.edit_user', compact('user'));
     }
 
     // Fungsi Menyimpan Perubahan Edit
@@ -107,7 +110,7 @@ class AdminController extends Controller
         }
 
         $categories = InvestmentCategory::with(['triviaQuestions', 'yesOrNoQuestions'])->get();
-        return view('admin_literasi', compact('categories'));
+        return view('admin.admin_literasi', compact('categories'));
     }
 
     public function literasiEdit($id)
@@ -117,16 +120,119 @@ class AdminController extends Controller
         }
 
         $category = InvestmentCategory::findOrFail($id);
-        return view('edit_literasi', compact('category'));
+        return view('admin.edit_literasi', compact('category'));
     }
 
-    public function forumDiskusi()
+    public function forumDiskusi(Request $request)
     {
         if (Auth::user()->is_admin == 0) {
             return redirect('/dashboard');
         }
 
-        return view('admin.forum_diskusi');
+        $generalRoom = ChatRoom::firstOrCreate(
+            ['name' => 'General Chat'],
+            ['type' => 'group']
+        );
+
+        $roomId = $request->query('room_id');
+        $room = $generalRoom;
+
+        if ($roomId && $roomId != $generalRoom->id) {
+            $candidate = ChatRoom::find($roomId);
+            if ($candidate && ($candidate->type !== 'private' || $candidate->participants()->where('user_id', Auth::id())->exists())) {
+                $room = $candidate;
+            }
+        }
+
+        if ($room->type === 'private' && ! $room->participants()->where('user_id', Auth::id())->exists()) {
+            $room = $generalRoom;
+        }
+
+        $onlineUserIds = DB::table('sessions')
+            ->whereNotNull('user_id')
+            ->where('last_activity', '>=', now()->subMinutes(5)->timestamp)
+            ->pluck('user_id')
+            ->unique()
+            ->toArray();
+
+        if ($room->type === 'private') {
+            $participants = $room->participants()->select('users.id', 'users.username', 'users.is_admin')->get();
+        } else {
+            $participants = User::select('id', 'username', 'is_admin')->get();
+        }
+
+        $participants = $participants
+            ->map(function ($user) use ($onlineUserIds) {
+                $user->online = in_array($user->id, $onlineUserIds, true);
+                return $user;
+            })
+            ->sort(function ($a, $b) {
+                if ($a->online === $b->online) {
+                    return strcasecmp($a->username, $b->username);
+                }
+                return $a->online ? -1 : 1;
+            })
+            ->values();
+
+        $messages = Message::with('user')
+            ->where('chat_room_id', $room->id)
+            ->orderBy('created_at')
+            ->get();
+
+        $roomName = $room->type === 'private' ? 'Private Chat' : 'General Chat';
+        $roomSubtitle = $room->type === 'private'
+            ? 'Chat pribadi dengan ' . $participants->where('id', '!=', Auth::id())->first()?->username
+            : 'Semua peserta dapat melihat pesan ini';
+
+        return view('admin.forum_diskusi', compact('participants', 'messages', 'room', 'roomName', 'roomSubtitle'));
+    }
+
+    public function chatUser($id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $user = User::findOrFail($id);
+        $admin = Auth::user();
+        $room = ChatRoom::privateRoom($user->id, $admin->id);
+
+        return redirect('/admin/forum-diskusi?room_id=' . $room->id);
+    }
+
+    public function storeForumMessage(Request $request)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $request->validate([
+            'message' => 'required|string|max:1000',
+        ]);
+
+        $room = ChatRoom::firstOrCreate(
+            ['name' => 'General Chat'],
+            ['type' => 'group']
+        );
+
+        Message::create([
+            'chat_room_id' => $room->id,
+            'user_id' => Auth::id(),
+            'body' => $request->message,
+        ]);
+
+        return redirect()->back()->with('success', 'Pesan berhasil dikirim.');
+    }
+
+    public function deleteForumMessage(Message $message)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $message->delete();
+
+        return redirect()->back()->with('success', 'Pesan berhasil dihapus.');
     }
 
     public function literasiUpdate(Request $request, $id)
@@ -160,7 +266,7 @@ class AdminController extends Controller
         }
 
         $categories = InvestmentCategory::with(['triviaQuestions', 'yesOrNoQuestions'])->get();
-        return view('admin_monitor_game', compact('categories'));
+        return view('admin.admin_monitor_game', compact('categories'));
     }
 
     public function storeCategoryTrivia(Request $request, $categoryId)

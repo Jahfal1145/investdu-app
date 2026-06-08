@@ -91,28 +91,50 @@
                         <h2>Kontak</h2>
                         <p>Admin dan grup umum</p>
                     </div>
-                    <span class="badge">3 kontak</span>
+                    <span class="badge">{{ count($rooms) }} kontak</span>
                 </div>
-                <div class="contact-list" id="contactList"></div>
-                <div class="add-friend">
-                    <button class="add-button" id="openFriendModal">Tambahkan Teman</button>
+                <div class="contact-list">
+                    @php $activeRoom = collect($rooms)->firstWhere('id', $activeRoomId); @endphp
+                    @foreach ($rooms as $room)
+                        <a href="/forum-diskusi?room_id={{ $room['id'] }}" class="contact-card{{ $room['id'] === $activeRoomId ? ' active' : '' }}">
+                            <div class="title">{{ $room['name'] }}</div>
+                            <div class="meta">
+                                <span>{{ $room['subtitle'] }}</span>
+                                <span class="badge">{{ $room['messages'] ?? 0 }} pesan</span>
+                            </div>
+                        </a>
+                    @endforeach
                 </div>
             </section>
             <section class="panel chat-shell">
                 <div class="chat-header">
                     <div class="title-block">
-                        <h2 id="chatTitle">General</h2>
-                        <p id="chatSubtitle">Semua orang ada di grup ini.</p>
+                        <h2>{{ $activeRoom['name'] ?? 'General' }}</h2>
+                        <p>{{ $activeRoom['subtitle'] ?? 'Semua orang ada di grup ini.' }}</p>
                     </div>
-                    <div id="chatStatus" class="badge" style="background: rgba(56,189,248,.12); border-color: rgba(56,189,248,.2); color: #7dd3fc;">Online</div>
+                    <div class="badge" style="background: rgba(56,189,248,.12); border-color: rgba(56,189,248,.2); color: #7dd3fc;">Online</div>
                 </div>
-                <div class="message-area" id="messageArea"></div>
+                <div class="message-area">
+                    @forelse ($messages as $message)
+                        @php $isOutgoing = $message->user_id === auth()->id(); @endphp
+                        <div class="message {{ $isOutgoing ? 'outgoing' : 'incoming' }}">
+                            <div class="bubble">{{ $message->body }}</div>
+                            <div class="info">{{ $message->user?->username ?? 'User' }} · {{ $message->created_at->format('H:i') }}</div>
+                        </div>
+                    @empty
+                        <div class="message incoming">
+                            <div class="bubble">Belum ada pesan di ruang ini. Jadilah yang pertama memulai percakapan!</div>
+                        </div>
+                    @endforelse
+                </div>
                 <div class="composer">
-                    <form id="messageForm">
-                        <textarea id="messageInput" placeholder="Ketik pesan..." required></textarea>
+                    <form action="/forum-diskusi" method="POST">
+                        @csrf
+                        <input type="hidden" name="chat_room_id" value="{{ $activeRoomId }}">
+                        <textarea name="message" placeholder="Ketik pesan..." required></textarea>
                         <div class="composer-row">
                             <button type="submit">Kirim Pesan</button>
-                            <span id="sendHint" style="color:#94a3b8; font-size:.78rem;">Pesan akan muncul setelah 5 detik.</span>
+                            <span style="color:#94a3b8; font-size:.78rem;">Tekan Enter untuk kirim, Shift+Enter untuk baris baru.</span>
                         </div>
                     </form>
                 </div>
@@ -120,180 +142,16 @@
         </main>
     </div>
 
-    <div class="modal-backdrop" id="friendModal">
-        <div class="modal-panel">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:1rem;">
-                <div>
-                    <h3>Tambahkan Teman</h3>
-                    <p style="color:#94a3b8; font-size:.85rem;">Cari investor baru dan tambahkan ke daftar.</p>
-                </div>
-                <button class="close-btn" id="closeFriendModal">Tutup</button>
-            </div>
-            <div class="modal-row">
-                <input type="text" id="friendSearch" placeholder="Cari nama..." />
-            </div>
-            <div class="friend-suggestions" id="friendSuggestions"></div>
-            <div class="modal-footer">
-                <button class="close-btn" id="closeFriendModal2">Batal</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        const contacts = [
-            { id: 'general', name: 'General', type: 'group', subtitle: 'Semua orang ada di sini', certified: false, messages: [
-                { id: 1, sender: 'Admin', text: 'Halo semua, selamat berdiskusi! Silakan tambahkan teman dan mulai percakapan.', time: '09:00', type: 'incoming' },
-            ] },
-            { id: 'admin', name: 'Admin', type: 'person', subtitle: 'Certified account', certified: true, messages: [
-                { id: 1, sender: 'Admin', text: 'Hai, saya Admin. Silakan tanya apa saja tentang investasi.', time: '09:05', type: 'incoming' },
-            ] }
-        ];
+        const textarea = document.querySelector('textarea[name="message"]');
+        const form = textarea.closest('form');
 
-        const suggestedFriends = [
-            { id: 'tia', name: 'Tia Investor', subtitle: 'Online' },
-            { id: 'budi', name: 'Budi Cuan', subtitle: 'Online' },
-            { id: 'ratna', name: 'Ratna Saham', subtitle: 'Offline' }
-        ];
-
-        let activeContactId = 'general';
-        let canSend = true;
-        let sendCooldownTimer = null;
-
-        const contactList = document.getElementById('contactList');
-        const messageArea = document.getElementById('messageArea');
-        const chatTitle = document.getElementById('chatTitle');
-        const chatSubtitle = document.getElementById('chatSubtitle');
-        const messageForm = document.getElementById('messageForm');
-        const messageInput = document.getElementById('messageInput');
-        const sendHint = document.getElementById('sendHint');
-        const sendButton = messageForm.querySelector('button');
-        const openFriendModal = document.getElementById('openFriendModal');
-        const friendModal = document.getElementById('friendModal');
-        const closeFriendModal = document.getElementById('closeFriendModal');
-        const closeFriendModal2 = document.getElementById('closeFriendModal2');
-        const friendSearch = document.getElementById('friendSearch');
-        const friendSuggestions = document.getElementById('friendSuggestions');
-
-        function renderContacts() {
-            contactList.innerHTML = '';
-            contacts.forEach(contact => {
-                const card = document.createElement('div');
-                card.className = 'contact-card' + (contact.id === activeContactId ? ' active' : '');
-                card.innerHTML = `
-                    <div class="title">${contact.name} ${contact.certified ? '<span class="badge">Certified</span>' : ''}</div>
-                    <div class="meta">
-                        <span>${contact.subtitle}</span>
-                        <span>${contact.messages.length} pesan</span>
-                    </div>
-                `;
-                card.onclick = () => { activeContactId = contact.id; renderChat(); renderContacts(); };
-                contactList.appendChild(card);
-            });
-        }
-
-        function renderChat() {
-            const contact = contacts.find(c => c.id === activeContactId);
-            if (!contact) return;
-            chatTitle.textContent = contact.name;
-            chatSubtitle.textContent = contact.type === 'group' ? contact.subtitle : 'Chat pribadi dengan Admin';
-            messageArea.innerHTML = '';
-            contact.messages.forEach(message => {
-                const msg = document.createElement('div');
-                msg.className = 'message ' + (message.type === 'outgoing' ? 'outgoing' : 'incoming');
-                msg.innerHTML = `
-                    <div class="bubble">${message.text}</div>
-                    <div class="info">${message.sender} · ${message.time}</div>
-                `;
-                messageArea.appendChild(msg);
-            });
-            messageArea.scrollTop = messageArea.scrollHeight;
-        }
-
-        function openModal() { friendModal.classList.add('open'); friendSearch.value = ''; renderFriendSuggestions(); }
-        function closeModal() { friendModal.classList.remove('open'); }
-
-        function renderFriendSuggestions() {
-            const search = friendSearch.value.toLowerCase();
-            friendSuggestions.innerHTML = '';
-            suggestedFriends.filter(friend => friend.name.toLowerCase().includes(search)).forEach(friend => {
-                const item = document.createElement('div');
-                item.className = 'friend-item';
-                item.innerHTML = `
-                    <div class="friend-meta">
-                        <strong>${friend.name}</strong>
-                        <span>${friend.subtitle}</span>
-                    </div>
-                    <button type="button">Tambah</button>
-                `;
-                item.querySelector('button').onclick = () => addFriend(friend);
-                friendSuggestions.appendChild(item);
-            });
-        }
-
-        function addFriend(friend) {
-            if (contacts.some(c => c.id === friend.id)) return;
-            contacts.push({ id: friend.id, name: friend.name, type: 'person', subtitle: friend.subtitle, certified: false, messages: [{ id: 1, sender: friend.name, text: 'Halo! Senang bergabung di forum diskusi.', time: '09:10', type: 'incoming' }] });
-            renderContacts();
-            closeModal();
-        }
-
-        messageForm.addEventListener('submit', event => {
-            event.preventDefault();
-            if (!canSend) return;
-            const text = messageInput.value.trim();
-            if (!text) return;
-            const contact = contacts.find(c => c.id === activeContactId);
-            if (!contact) return;
-            const now = new Date();
-            const formattedTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            contact.messages.push({ id: Date.now(), sender: '{{ Auth::user()->username }}', text, time: formattedTime, type: 'outgoing' });
-            renderChat();
-            messageInput.value = '';
-            startSendCooldown(5);
-        });
-
-        messageInput.addEventListener('keydown', event => {
+        textarea.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !event.shiftKey) {
                 event.preventDefault();
-                messageForm.requestSubmit();
+                form.submit();
             }
         });
-
-        function startSendCooldown(seconds) {
-            canSend = false;
-            let remaining = seconds;
-            updateSendHint(remaining);
-            sendButton.disabled = true;
-            if (sendCooldownTimer) clearInterval(sendCooldownTimer);
-            sendCooldownTimer = setInterval(() => {
-                remaining -= 1;
-                if (remaining <= 0) {
-                    clearInterval(sendCooldownTimer);
-                    canSend = true;
-                    sendButton.disabled = false;
-                    updateSendHint();
-                    return;
-                }
-                updateSendHint(remaining);
-            }, 1000);
-        }
-
-        function updateSendHint(remaining) {
-            if (remaining) {
-                sendHint.textContent = `Tunggu ${remaining} detik sebelum kirim lagi.`;
-            } else {
-                sendHint.textContent = 'Tekan Enter untuk kirim, Shift+Enter untuk baris baru.';
-            }
-        }
-
-        openFriendModal.addEventListener('click', openModal);
-        closeFriendModal.addEventListener('click', closeModal);
-        closeFriendModal2.addEventListener('click', closeModal);
-        friendSearch.addEventListener('input', renderFriendSuggestions);
-
-        renderContacts();
-        renderChat();
-        renderFriendSuggestions();
     </script>
 </body>
 </html>

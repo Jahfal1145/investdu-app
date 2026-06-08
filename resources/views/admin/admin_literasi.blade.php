@@ -262,6 +262,6 @@
     @endforeach
 </div>
 
-@include('partials.game_monitor_popup')
+@include('admin.game_monitor_popup')
 
 @endsection

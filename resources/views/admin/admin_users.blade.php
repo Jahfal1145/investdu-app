@@ -208,6 +208,11 @@
         color: #0a0e1a;
     }
 
+    .btn-retro--chat {
+        background-color: #2563eb;
+        color: #ffffff;
+    }
+
     .btn-retro--delete {
         background-color: #f85149;
         color: #ffffff;
@@ -267,7 +272,8 @@
                     <th>Username</th>
                     <th>Email</th>
                     <th>Status</th>
-                    <th>Aksi</th>
+                    <th style="text-align:center;">Aksi</th>
+                    <th style="text-align:center;">Chat</th>
                 </tr>
             </thead>
             <tbody>
@@ -291,6 +297,9 @@
                                 <button type="submit" class="btn-retro btn-retro--delete">HAPUS</button>
                             </form>
                         </div>
+                    </td>
+                    <td style="text-align:center;">
+                        <a href="/admin/users/{{ $user->id }}/chat" class="btn-retro btn-retro--chat">CHAT</a>
                     </td>
                 </tr>
                 @empty
