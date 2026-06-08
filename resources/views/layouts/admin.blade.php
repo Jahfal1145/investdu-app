@@ -376,10 +376,9 @@
                 Kelola Literasi
             </a>
 
-            <a href="#" class="nav-item" id="navGame">
+            <a href="/admin/monitor-game" class="nav-item {{ request()->is('admin/monitor-game*') ? 'active' : '' }}" id="navGame">
                 <span class="nav-item-icon">🎮</span>
                 Monitor Game
-                <span class="nav-item-badge">SOON</span>
             </a>
 
             <a href="#" class="nav-item" id="navLeaderboard">

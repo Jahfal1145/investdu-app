@@ -4,21 +4,26 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\YesOrNoQuestion;
+use App\Models\InvestmentCategory;
 
 class YesOrNoQuestionSeeder extends Seeder
 {
     public function run(): void
     {
+        $cryptoId = InvestmentCategory::where('name', 'Crypto')->value('id') ?? 1;
+        $sahamId = InvestmentCategory::where('name', 'Saham')->value('id') ?? $cryptoId;
         $questions = [
             [
                 'question' => 'Investasi saham selalu lebih berisiko daripada tabungan biasa.',
                 'correct_answer' => 'yes',
-                'explanation' => 'Secara umum, saham memiliki risiko lebih tinggi dibandingkan tabungan berjangka karena nilai pasar saham bisa berfluktuasi.'
+                'explanation' => 'Secara umum, saham memiliki risiko lebih tinggi dibandingkan tabungan berjangka karena nilai pasar saham bisa berfluktuasi.',
+                'category_id' => $sahamId,
             ],
             [
                 'question' => 'Obligasi negara biasanya memberikan pembayaran bunga reguler.',
                 'correct_answer' => 'yes',
-                'explanation' => 'Obligasi memberikan kupon atau bunga berkala yang dibayarkan kepada pemegang obligasi.'
+                'explanation' => 'Obligasi memberikan kupon atau bunga berkala yang dibayarkan kepada pemegang obligasi.',
+                'category_id' => $sahamId,
             ],
             [
                 'question' => 'Reksa dana tidak pernah bisa rugi karena dikelola oleh profesional.',

@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
-@section('title', 'Kelola Literasi')
-@section('page-title', 'kelola literasi')
+@section('title', 'Monitor Game')
+@section('page-title', 'monitor game')
 
 @section('content')
 
@@ -11,71 +11,46 @@
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.5rem;
     }
 
     .page-title-block {
         display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-family: 'Press Start 2P', monospace;
-        color: #c9d1d9;
-        font-size: 0.85rem;
+        flex-direction: column;
+        gap: 0.4rem;
     }
 
-    .page-title-block span {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.2rem;
-        height: 2.2rem;
-        border-radius: 0.85rem;
-        background: #0a0e18;
-        color: #58a6ff;
-        font-size: 1rem;
+    .page-title-block span.title {
+        font-family: 'Press Start 2P', monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: #c9d1d9;
+        font-size: 0.95rem;
+    }
+
+    .page-title-block span.subtitle {
+        font-family: 'Space Mono', monospace;
+        color: #94a3b8;
+        font-size: 0.75rem;
     }
 
     .open-popup-btn {
         display: inline-flex;
         align-items: center;
-        gap: 0.55rem;
+        gap: 0.6rem;
+        background: #2563eb;
+        color: white;
         border-radius: 999px;
         border: none;
-        background: #38bdf8;
-        color: #0f172a;
-        padding: 0.85rem 1.1rem;
-        cursor: pointer;
+        padding: 0.95rem 1.35rem;
         font-family: 'Space Mono', monospace;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        font-size: 0.85rem;
+        cursor: pointer;
         transition: background-color 0.2s ease;
     }
 
     .open-popup-btn:hover {
-        background: #0ea5e9;
-    }
-
-    .page-subtitle {
-        color: #6e7681;
-        font-family: 'Space Mono', monospace;
-        font-size: 0.75rem;
-        margin-top: 0.4rem;
-    }
-
-    .flash-success {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.75rem 1.25rem;
-        margin-bottom: 1rem;
-        background-color: rgba(63, 185, 80, 0.08);
-        border: 3px solid rgba(63, 185, 80, 0.3);
-        border-radius: 6px;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 0.45rem;
-        color: #3fb950;
-        letter-spacing: 1px;
+        background: #1d4ed8;
     }
 
     .categories-grid {
@@ -228,14 +203,14 @@
 <div class="page-header">
     <div>
         <div class="page-title-block">
-            <span>📚</span>
-            KELOLA LITERASI
+            <span>🎮</span>
+            MONITOR GAME
         </div>
-        <div class="page-subtitle">Pilih kategori untuk mengubah teks dan deskripsi literasi.</div>
+        <div class="page-subtitle">Klik kartu kategori untuk membuka popup pengaturan game per kategori.</div>
     </div>
     <div style="display: flex; gap: 0.85rem; align-items: center;">
         @if($categories->isNotEmpty())
-            <button type="button" class="open-popup-btn" onclick="openGamePopup({{ $categories->first()->id }})">Monitor Game</button>
+            <button type="button" class="open-popup-btn" onclick="openGamePopup({{ $categories->first()->id }})">Buka Monitor Game</button>
         @endif
         <div class="page-title-block" style="color:#94a3b8;">
             <span>{{ $categories->count() }}</span>
@@ -248,7 +223,7 @@
     @foreach($categories as $category)
         <div class="category-card" onclick="openGamePopup({{ $category->id }})">
             <div class="card-top">
-                <div class="card-icon">{{ $category->icon ?? '📘' }}</div>
+                <div class="card-icon">{{ $category->icon ?? '🎲' }}</div>
                 @if($category->badge)
                     <div class="card-badge">{{ $category->badge }}</div>
                 @endif
@@ -256,7 +231,7 @@
             <h3>{{ $category->name }}</h3>
             <p>{{ \Illuminate\Support\Str::limit($category->description, 120) }}</p>
             <div class="card-actions">
-                <a href="/admin/literasi/{{ $category->id }}/edit" class="action-link" onclick="event.stopPropagation();">Edit Literasi</a>
+                <button type="button" class="action-button" onclick="event.stopPropagation(); openGamePopup({{ $category->id }})">Kelola Game</button>
             </div>
         </div>
     @endforeach

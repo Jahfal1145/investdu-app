@@ -4,11 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\TriviaQuestion;
+use App\Models\InvestmentCategory;
 
 class TriviaQuestionSeeder extends Seeder
 {
     public function run(): void
     {
+        $cryptoId = InvestmentCategory::where('name', 'Crypto')->value('id') ?? 1;
+        $sahamId = InvestmentCategory::where('name', 'Saham')->value('id') ?? $cryptoId;
+        $emasId = InvestmentCategory::where('name', 'Emas')->value('id') ?? $cryptoId;
         $questions = [
             [
                 'question' => 'Aset crypto manakah yang dikenal sebagai "Raja Crypto" dan merupakan cryptocurrency pertama di dunia?',
@@ -17,7 +21,8 @@ class TriviaQuestionSeeder extends Seeder
                 'option_c' => 'Solana (SOL)',
                 'option_d' => 'Ripple (XRP)',
                 'correct_answer' => 'B',
-                'explanation' => 'Bitcoin (BTC) diciptakan pada tahun 2009 oleh Satoshi Nakamoto dan merupakan cryptocurrency pertama sekaligus terbesar di dunia berdasarkan kapitalisasi pasar.'
+                'explanation' => 'Bitcoin (BTC) diciptakan pada tahun 2009 oleh Satoshi Nakamoto dan merupakan cryptocurrency pertama sekaligus terbesar di dunia berdasarkan kapitalisasi pasar.',
+                'category_id' => $cryptoId,
             ],
             [
                 'question' => 'Apa yang dimaksud dengan "Diversifikasi" dalam dunia investasi?',
@@ -35,7 +40,8 @@ class TriviaQuestionSeeder extends Seeder
                 'option_c' => 'Emas Batangan / Logam Mulia',
                 'option_d' => 'Non-Fungible Token (NFT)',
                 'correct_answer' => 'C',
-                'explanation' => 'Emas batangan dikategorikan sebagai aset safe-haven yang memiliki risiko rendah, tahan terhadap inflasi, dan nilainya cenderung stabil dalam jangka panjang.'
+                'explanation' => 'Emas batangan dikategorikan sebagai aset safe-haven yang memiliki risiko rendah, tahan terhadap inflasi, dan nilainya cenderung stabil dalam jangka panjang.',
+                'category_id' => $emasId,
             ]
         ];
 

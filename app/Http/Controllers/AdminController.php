@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\InvestmentCategory;
+use App\Models\TriviaQuestion;
+use App\Models\YesOrNoQuestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -104,7 +106,7 @@ class AdminController extends Controller
             return redirect('/dashboard');
         }
 
-        $categories = InvestmentCategory::all();
+        $categories = InvestmentCategory::with(['triviaQuestions', 'yesOrNoQuestions'])->get();
         return view('admin_literasi', compact('categories'));
     }
 
@@ -140,5 +142,143 @@ class AdminController extends Controller
         $category->save();
 
         return redirect('/admin/literasi')->with('success', 'Kategori literasi berhasil diperbarui!');
+    }
+
+    public function monitorGame()
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $categories = InvestmentCategory::with(['triviaQuestions', 'yesOrNoQuestions'])->get();
+        return view('admin_monitor_game', compact('categories'));
+    }
+
+    public function storeCategoryTrivia(Request $request, $categoryId)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($categoryId);
+        $request->validate([
+            'question' => 'required|string|max:500',
+            'option_a' => 'required|string|max:255',
+            'option_b' => 'required|string|max:255',
+            'option_c' => 'required|string|max:255',
+            'option_d' => 'required|string|max:255',
+            'correct_answer' => 'required|in:A,B,C,D',
+            'explanation' => 'nullable|string|max:1000',
+        ]);
+
+        TriviaQuestion::create(array_merge($request->only([
+            'question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer', 'explanation'
+        ]), ['category_id' => $category->id]));
+
+        return redirect()->back()->with('success', 'Pertanyaan trivia berhasil ditambahkan untuk kategori ' . $category->name . '.');
+    }
+
+    public function updateCategoryTrivia(Request $request, $categoryId, $id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($categoryId);
+        $question = TriviaQuestion::findOrFail($id);
+        $request->validate([
+            'question' => 'required|string|max:500',
+            'option_a' => 'required|string|max:255',
+            'option_b' => 'required|string|max:255',
+            'option_c' => 'required|string|max:255',
+            'option_d' => 'required|string|max:255',
+            'correct_answer' => 'required|in:A,B,C,D',
+            'explanation' => 'nullable|string|max:1000',
+        ]);
+
+        if ($question->category_id !== $category->id) {
+            return redirect()->back()->with('error', 'Pertanyaan tidak ditemukan untuk kategori ini.');
+        }
+
+        $question->update($request->only([
+            'question', 'option_a', 'option_b', 'option_c', 'option_d', 'correct_answer', 'explanation'
+        ]));
+
+        return redirect()->back()->with('success', 'Pertanyaan trivia berhasil diperbarui untuk kategori ' . $category->name . '.');
+    }
+
+    public function deleteCategoryTrivia($categoryId, $id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($categoryId);
+        $question = TriviaQuestion::findOrFail($id);
+
+        if ($question->category_id !== $category->id) {
+            return redirect()->back()->with('error', 'Pertanyaan tidak ditemukan untuk kategori ini.');
+        }
+
+        $question->delete();
+        return redirect()->back()->with('success', 'Pertanyaan trivia berhasil dihapus dari kategori ' . $category->name . '.');
+    }
+
+    public function storeCategoryYesOrNo(Request $request, $categoryId)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($categoryId);
+        $request->validate([
+            'question' => 'required|string|max:500',
+            'correct_answer' => 'required|in:Yes,No',
+            'explanation' => 'nullable|string|max:1000',
+        ]);
+
+        YesOrNoQuestion::create(array_merge($request->only(['question', 'correct_answer', 'explanation']), ['category_id' => $category->id]));
+
+        return redirect()->back()->with('success', 'Pertanyaan yes or no berhasil ditambahkan untuk kategori ' . $category->name . '.');
+    }
+
+    public function updateCategoryYesOrNo(Request $request, $categoryId, $id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($categoryId);
+        $question = YesOrNoQuestion::findOrFail($id);
+        $request->validate([
+            'question' => 'required|string|max:500',
+            'correct_answer' => 'required|in:Yes,No',
+            'explanation' => 'nullable|string|max:1000',
+        ]);
+
+        if ($question->category_id !== $category->id) {
+            return redirect()->back()->with('error', 'Pertanyaan tidak ditemukan untuk kategori ini.');
+        }
+
+        $question->update($request->only(['question', 'correct_answer', 'explanation']));
+
+        return redirect()->back()->with('success', 'Pertanyaan yes or no berhasil diperbarui untuk kategori ' . $category->name . '.');
+    }
+
+    public function deleteCategoryYesOrNo($categoryId, $id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($categoryId);
+        $question = YesOrNoQuestion::findOrFail($id);
+
+        if ($question->category_id !== $category->id) {
+            return redirect()->back()->with('error', 'Pertanyaan tidak ditemukan untuk kategori ini.');
+        }
+
+        $question->delete();
+        return redirect()->back()->with('success', 'Pertanyaan yes or no berhasil dihapus dari kategori ' . $category->name . '.');
     }
 }

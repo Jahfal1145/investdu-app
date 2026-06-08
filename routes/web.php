@@ -2,8 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AdminController; // <-- INI YANG BIKIN ERROR KALAU KETINGGALAN
-use App\Http\Controllers\QuizAdminController;
+use App\Http\Controllers\AdminController;
 use App\Models\InvestmentCategory;
 
 Route::get('/', function () {
@@ -49,6 +48,21 @@ Route::post('/admin/users/{id}/delete', [AdminController::class, 'destroy'])->mi
 Route::get('/admin/literasi', [AdminController::class, 'literasiIndex'])->middleware('auth');
 Route::get('/admin/literasi/{id}/edit', [AdminController::class, 'literasiEdit'])->middleware('auth');
 Route::put('/admin/literasi/{id}/update', [AdminController::class, 'literasiUpdate'])->middleware('auth');
+
+Route::post('/admin/literasi/{category}/trivia', [AdminController::class, 'storeCategoryTrivia'])->middleware('auth');
+Route::put('/admin/literasi/{category}/trivia/{id}', [AdminController::class, 'updateCategoryTrivia'])->middleware('auth');
+Route::post('/admin/literasi/{category}/trivia/{id}/delete', [AdminController::class, 'deleteCategoryTrivia'])->middleware('auth');
+Route::post('/admin/literasi/{category}/yes-or-no', [AdminController::class, 'storeCategoryYesOrNo'])->middleware('auth');
+Route::put('/admin/literasi/{category}/yes-or-no/{id}', [AdminController::class, 'updateCategoryYesOrNo'])->middleware('auth');
+Route::post('/admin/literasi/{category}/yes-or-no/{id}/delete', [AdminController::class, 'deleteCategoryYesOrNo'])->middleware('auth');
+
+Route::get('/admin/monitor-game', [AdminController::class, 'monitorGame'])->middleware('auth');
+Route::post('/admin/monitor-game/trivia', [AdminController::class, 'storeTrivia'])->middleware('auth');
+Route::put('/admin/monitor-game/trivia/{id}', [AdminController::class, 'updateTrivia'])->middleware('auth');
+Route::post('/admin/monitor-game/trivia/{id}/delete', [AdminController::class, 'deleteTrivia'])->middleware('auth');
+Route::post('/admin/monitor-game/yes-or-no', [AdminController::class, 'storeYesOrNo'])->middleware('auth');
+Route::put('/admin/monitor-game/yes-or-no/{id}', [AdminController::class, 'updateYesOrNo'])->middleware('auth');
+Route::post('/admin/monitor-game/yes-or-no/{id}/delete', [AdminController::class, 'deleteYesOrNo'])->middleware('auth');
 
 // Rute untuk user mengedit profilnya sendiri via popup
 Route::put('/user/profile/update', [AuthController::class, 'updateProfile'])->middleware('auth');
