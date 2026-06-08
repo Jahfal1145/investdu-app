@@ -1108,107 +1108,44 @@
     {{-- ============================================================
          LEARNING CATEGORIES SECTION
          ============================================================ --}}
-    <section class="categories-section" id="categoriesSection">
-        <div class="categories-inner">
-            <div class="section-header">
-                <h2 class="section-title">Learning Categories Section</h2>
-                <span class="section-subtitle">6 instrumen investasi populer</span>
+    <div class="categories-grid" id="categoriesGrid">
+    @foreach($categories as $category)
+        <a href="{{ route('categories.show', $category->slug) }}" class="cat-card" data-cat="{{ $category->slug }}" id="card-{{ $category->slug }}">
+            
+            {{-- Header Kartu: Ikon & Badge dibuat sejajar biar tidak menambah tinggi kartu --}}
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div class="card-icon" style="background-color: rgba(37, 99, 235, 0.12);">
+                    <svg viewBox="0 0 28 28" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="6" width="22" height="16" rx="3"/>
+                        <path d="M3 12h22"/><circle cx="19" cy="18" r="2"/><path d="M7 18h4"/>
+                    </svg>
+                </div>
+                
+                {{-- Badge dipindah ke kanan atas --}}
+                @if($category->badge)
+                    <span style="font-size: 11px; padding: 4px 10px; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 99px; color: #D4AF37; font-weight: 600;">
+                        {{ $category->badge }}
+                    </span>
+                @endif
             </div>
-
-            <div class="categories-grid" id="categoriesGrid">
-                {{-- Card 1: Tabungan Berjangka --}}
-                <div class="cat-card" data-cat="tabungan" id="card-tabungan">
-                    <div class="card-icon" style="background-color: rgba(37, 99, 235, 0.12);">
-                        <svg viewBox="0 0 28 28" fill="none" stroke="#3B82F6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="22" height="16" rx="3"/><path d="M3 12h22"/><circle cx="19" cy="18" r="2"/><path d="M7 18h4"/></svg>
-                    </div>
-                    <div class="card-body">
-                        <h3>Tabungan Berjangka</h3>
-                        <p>Tabungan Berjangka memiliki risiko yang rendah dengan keuntungan yang relatif stabil. Cocok untuk pemula yang ingin mulai menabung secara disiplin.</p>
-                    </div>
-                    <span class="card-action">
-                        Pelajari Selengkapnya
-                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
-                    </span>
-                </div>
-
-                {{-- Card 2: Saham --}}
-                <div class="cat-card" data-cat="saham" id="card-saham">
-                    <div class="card-icon" style="background-color: rgba(16, 185, 129, 0.12);">
-                        <svg viewBox="0 0 28 28" fill="none" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,22 9,14 15,18 25,6"/><polyline points="20,6 25,6 25,11"/><line x1="3" y1="25" x2="25" y2="25"/></svg>
-                    </div>
-                    <div class="card-body">
-                        <h3>Saham</h3>
-                        <p>Dikelola oleh manajer investasi, domisili dan regulasi yang jelas membuat saham menjadi instrumen populer untuk pertumbuhan kekayaan jangka panjang.</p>
-                    </div>
-                    <span class="card-action">
-                        Pelajari Selengkapnya
-                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
-                    </span>
-                </div>
-
-                {{-- Card 3: Reksa Dana --}}
-                <div class="cat-card" data-cat="reksadana" id="card-reksadana">
-                    <div class="card-icon" style="background-color: rgba(139, 92, 246, 0.12);">
-                        <svg viewBox="0 0 28 28" fill="none" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="14" r="10"/><path d="M14 4v10l7 3.5"/><path d="M14 14L7 20"/></svg>
-                    </div>
-                    <div class="card-body">
-                        <h3>Reksa Dana</h3>
-                        <p>Dikelola oleh manajer investasi profesional, domisili dan aset yang terdiversifikasi. Pilihan tepat untuk investasi dengan modal terjangkau.</p>
-                    </div>
-                    <span class="card-action">
-                        Pelajari Selengkapnya
-                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
-                    </span>
-                </div>
-
-                {{-- Card 4: Obligasi --}}
-                <div class="cat-card" data-cat="obligasi" id="card-obligasi">
-                    <div class="card-icon" style="background-color: rgba(245, 158, 11, 0.12);">
-                        <svg viewBox="0 0 28 28" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="20" height="20" rx="2"/><path d="M4 10h20"/><path d="M10 4v20"/><path d="M14 14h6"/><path d="M14 18h4"/></svg>
-                    </div>
-                    <div class="card-body">
-                        <h3>Obligasi</h3>
-                        <p>Surat utang yang diterbitkan oleh pemerintah atau perusahaan. Memberikan pendapatan tetap melalui kupon dengan risiko yang terukur.</p>
-                    </div>
-                    <span class="card-action">
-                        Pelajari Selengkapnya
-                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
-                    </span>
-                </div>
-
-                {{-- Card 5: Properti --}}
-                <div class="cat-card" data-cat="properti" id="card-properti">
-                    <div class="card-icon" style="background-color: rgba(236, 72, 153, 0.12);">
-                        <svg viewBox="0 0 28 28" fill="none" stroke="#EC4899" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14L14 5L25 14"/><path d="M6 14v10h16V14"/><rect x="11" y="18" width="6" height="6"/><path d="M14 5V2h4v5"/></svg>
-                    </div>
-                    <div class="card-body">
-                        <h3>Properti</h3>
-                        <p>Investasi jangka panjang berupa tanah atau bangunan. Nilai properti cenderung naik seiring waktu dan bisa menghasilkan passive income.</p>
-                    </div>
-                    <span class="card-action">
-                        Pelajari Selengkapnya
-                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
-                    </span>
-                </div>
-
-                {{-- Card 6: Emas --}}
-                <div class="cat-card" data-cat="emas" id="card-emas">
-                    <div class="card-icon" style="background-color: rgba(212, 175, 55, 0.12);">
-                        <svg viewBox="0 0 28 28" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20L11 8H17L20 20H8Z"/><path d="M10 20L12.5 13H15.5L18 20"/><path d="M5 24H23"/><circle cx="14" cy="15" r="1.5"/></svg>
-                    </div>
-                    <div class="card-body">
-                        <h3>Emas</h3>
-                        <p>Emas sering digunakan untuk menjaga alokasi aset dan lindung nilai terhadap inflasi. Investasi yang telah teruji selama ribuan tahun.</p>
-                    </div>
-                    <span class="card-action">
-                        Pelajari Selengkapnya
-                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8H13M9 4L13 8L9 12"/></svg>
-                    </span>
-                </div>
+            
+            {{-- Judul dan Deskripsi --}}
+            <div class="card-body">
+                <h3>{{ $category->name }}</h3>
+                <p>{{ $category->description }}</p>
             </div>
-        </div>
-    </section>
-
+            
+            {{-- Tombol Aksi --}}
+            <span class="card-action">
+                Pelajari Selengkapnya
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 8H13M9 4L13 8L9 12"/>
+                </svg>
+            </span>
+            
+        </a>
+    @endforeach
+</div>
 
 
     {{-- ============================================================

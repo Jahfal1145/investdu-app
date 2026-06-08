@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminSeeder::class,
+            \Database\Seeders\YesOrNoQuestionSeeder::class,
         ]);
 
         User::factory()->create([

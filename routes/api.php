@@ -11,3 +11,4 @@ Route::get('/user', function (Request $request) {
     
     
 Route::get('/trivia/questions', [TriviaController::class, 'getQuestions']);
+Route::get('/yes-or-no/questions', [\App\Http\Controllers\Api\YesOrNoController::class, 'getQuestions']);

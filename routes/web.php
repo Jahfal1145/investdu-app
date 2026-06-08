@@ -4,12 +4,20 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController; // <-- INI YANG BIKIN ERROR KALAU KETINGGALAN
 use App\Http\Controllers\QuizAdminController;
+use App\Models\InvestmentCategory;
 
-
-// --- AREA HALAMAN AWAL & LOGIN ---
 Route::get('/', function () {
-    return view('home');
+    // Ambil semua kategori dari database
+    $categories = InvestmentCategory::all();
+    
+    // Kirim data ke file view home.blade.php
+    return view('home', compact('categories'));
 });
+
+Route::get('/categories/{slug}', function ($slug) {
+    $category = InvestmentCategory::where('slug', $slug)->firstOrFail();
+    return view('category', compact('category'));
+})->name('categories.show');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
 Route::post('/login', [AuthController::class, 'authenticate'])->middleware('guest');
@@ -43,4 +51,8 @@ Route::put('/user/profile/update', [AuthController::class, 'updateProfile'])->mi
 
 Route::get('/trivia', function () {
     return view('trivia.index');
+});
+
+Route::get('/yes-or-no', function () {
+    return view('yes_or_no');
 });
