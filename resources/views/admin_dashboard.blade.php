@@ -123,7 +123,7 @@
 
     .stat-card-icon {
         font-size: 1.3rem;
-        line-height: 1;
+        line-height: 1
     }
 
     .stat-card-value {

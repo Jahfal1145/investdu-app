@@ -46,6 +46,10 @@ Route::get('/admin/users/{id}/edit', [AdminController::class, 'edit'])->middlewa
 Route::put('/admin/users/{id}/update', [AdminController::class, 'update'])->middleware('auth');
 
 Route::post('/admin/users/{id}/delete', [AdminController::class, 'destroy'])->middleware('auth');
+Route::get('/admin/literasi', [AdminController::class, 'literasiIndex'])->middleware('auth');
+Route::get('/admin/literasi/{id}/edit', [AdminController::class, 'literasiEdit'])->middleware('auth');
+Route::put('/admin/literasi/{id}/update', [AdminController::class, 'literasiUpdate'])->middleware('auth');
+
 // Rute untuk user mengedit profilnya sendiri via popup
 Route::put('/user/profile/update', [AuthController::class, 'updateProfile'])->middleware('auth');
 

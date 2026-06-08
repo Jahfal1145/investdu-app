@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\InvestmentCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -94,5 +95,50 @@ class AdminController extends Controller
         $user->delete();
 
         return back()->with('success', 'User berhasil dihapus!');
+    }
+
+    // 4. Halaman Kelola Literasi
+    public function literasiIndex()
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $categories = InvestmentCategory::all();
+        return view('admin_literasi', compact('categories'));
+    }
+
+    public function literasiEdit($id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($id);
+        return view('edit_literasi', compact('category'));
+    }
+
+    public function literasiUpdate(Request $request, $id)
+    {
+        if (Auth::user()->is_admin == 0) {
+            return redirect('/dashboard');
+        }
+
+        $category = InvestmentCategory::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:80',
+            'description' => 'required|string|max:500',
+            'badge' => 'nullable|string|max:50',
+            'icon' => 'nullable|string|max:50',
+        ]);
+
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->badge = $request->badge;
+        $category->icon = $request->icon;
+        $category->save();
+
+        return redirect('/admin/literasi')->with('success', 'Kategori literasi berhasil diperbarui!');
     }
 }

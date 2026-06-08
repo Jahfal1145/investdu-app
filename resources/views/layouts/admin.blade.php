@@ -371,10 +371,9 @@
                 Dashboard
             </a>
 
-            <a href="#" class="nav-item" id="navLiterasi">
+            <a href="/admin/literasi" class="nav-item {{ request()->is('admin/literasi*') ? 'active' : '' }}" id="navLiterasi">
                 <span class="nav-item-icon">📚</span>
                 Kelola Literasi
-                <span class="nav-item-badge">SOON</span>
             </a>
 
             <a href="#" class="nav-item" id="navGame">
