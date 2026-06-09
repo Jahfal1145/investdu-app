@@ -91,12 +91,21 @@
     <div class="forum-panel">
         <div class="forum-panel-header">
             <div>
-                <h2>General Chat</h2>
-                <p>Semua peserta dan pesan grup tersedia di sini.</p>
+                <h2>Peserta & Ruang</h2>
+                <p>Daftar peserta dan akses ruang diskusi.</p>
             </div>
             <span class="badge active">{{ $participants->where('online', true)->count() }} Online</span>
         </div>
         <div class="participant-list" id="participantList">
+            <div class="participant-card" style="border-color: #38bdf8;">
+                <div class="participant-meta">
+                    <strong>General Chat</strong>
+                    <span>Grup Publik</span>
+                </div>
+                <div class="participant-actions">
+                    <a href="/admin/forum-diskusi" class="badge active" style="text-decoration:none;">Buka</a>
+                </div>
+            </div>
             @forelse($participants as $participant)
                 <div class="participant-card">
                     <div class="participant-meta">
@@ -107,6 +116,9 @@
                         <span class="badge {{ $participant->online ? 'active' : 'suspended' }}">
                             {{ $participant->online ? 'Online' : 'Offline' }}
                         </span>
+                        @if(!$participant->is_admin)
+                            <a href="/admin/users/{{ $participant->id }}/chat" class="badge active" style="text-decoration:none; margin-left:5px;">Chat</a>
+                        @endif
                     </div>
                 </div>
             @empty
@@ -118,10 +130,10 @@
     <div class="forum-panel">
         <div class="forum-panel-header chat-header">
             <div>
-                <h2>Admin View</h2>
-                <small>Pengelolaan pesan grup dan moderasi forum.</small>
+                <h2>{{ $roomName }}</h2>
+                <small>{{ $roomSubtitle }}</small>
             </div>
-            <span class="badge active">General</span>
+            <span class="badge active">{{ $room->type === 'private' ? 'Private' : 'General' }}</span>
         </div>
 
         @if(session('success'))
@@ -153,6 +165,7 @@
         <div class="admin-chat-footer">
             <form id="adminReplyForm" action="/admin/forum-diskusi/message" method="POST">
                 @csrf
+                <input type="hidden" name="chat_room_id" value="{{ $room->id }}">
                 <input type="text" id="adminReplyInput" name="message" placeholder="Tulis pesan admin..." autocomplete="off" />
                 <button type="submit">Kirim</button>
             </form>
