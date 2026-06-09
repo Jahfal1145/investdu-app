@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\TriviaQuestion;
 use App\Models\YesOrNoQuestion;
+use App\Models\Article;
 
 class InvestmentCategory extends Model
 {
@@ -18,5 +19,10 @@ class InvestmentCategory extends Model
     public function yesOrNoQuestions()
     {
         return $this->hasMany(YesOrNoQuestion::class, 'category_id');
+    }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'category_id');
     }
 }

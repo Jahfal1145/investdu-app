@@ -8,10 +8,16 @@ use Illuminate\Http\Request;
 
 class TriviaController extends Controller
 {
-    public function getQuestions()
+    public function getQuestions(Request $request)
     {
+        $query = TriviaQuestion::query();
+
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->input('category_id'));
+        }
+
         // Ambil maksimal 20 soal secara acak (random)
-        $questions = TriviaQuestion::inRandomOrder()->limit(20)->get();
+        $questions = $query->inRandomOrder()->limit(20)->get();
 
         // Kembalikan dalam bentuk REST API (JSON)
         return response()->json([

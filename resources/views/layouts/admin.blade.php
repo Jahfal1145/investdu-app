@@ -376,6 +376,11 @@
                 Kelola Literasi
             </a>
 
+            <a href="/admin/articles" class="nav-item {{ request()->is('admin/articles*') ? 'active' : '' }}" id="navArticles">
+                <span class="nav-item-icon">📝</span>
+                Kelola Artikel
+            </a>
+
             <a href="/admin/monitor-game" class="nav-item {{ request()->is('admin/monitor-game*') ? 'active' : '' }}" id="navGame">
                 <span class="nav-item-icon">🎮</span>
                 Monitor Game
