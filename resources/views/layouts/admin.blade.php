@@ -469,5 +469,9 @@
             document.getElementById('sidebarOverlay').classList.toggle('open');
         }
     </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

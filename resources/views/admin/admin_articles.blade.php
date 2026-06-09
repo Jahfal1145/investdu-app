@@ -275,10 +275,21 @@
 @endif
 
 {{-- Page header --}}
-<div class="page-header">
+<div class="page-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; min-height: 40px;">
     <div>
-        <h1>📝 KELOLA ARTIKEL</h1>
-        <p>Tambah, edit, dan kelola artikel edukasi per kategori investasi.</p>
+        <h1 style="font-family: 'Press Start 2P', monospace; font-size: 0.8rem; color: #FFD000; letter-spacing: 1px; margin: 0;">📝 KELOLA ARTIKEL</h1>
+    </div>
+    <div style="display: flex; gap: 0.85rem; align-items: center;">
+        <div class="page-title-block" style="display: inline-flex; align-items: center; gap: 0.5rem; background-color: #0d1120; padding: 0.4rem 0.8rem; border-radius: 6px; border: 2px solid #1a1f2e; font-family: 'Press Start 2P', monospace; font-size: 0.5rem; color: #94a3b8;">
+            @php
+                $totalArticles = 0;
+                foreach($categories as $cat) {
+                    $totalArticles += $cat->articles->count();
+                }
+            @endphp
+            <span style="font-size: 0.8rem; color: #94a3b8;">{{ $totalArticles }}</span>
+            ARTIKEL TERSEDIA
+        </div>
     </div>
 </div>
 

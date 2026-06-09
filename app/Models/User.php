@@ -68,4 +68,12 @@ class User extends Authenticatable
                     ->withTimestamps()
                     ->orderByPivot('created_at', 'desc');
     }
+
+    /**
+     * Skor kuis user.
+     */
+    public function scores()
+    {
+        return $this->hasMany(UserScore::class);
+    }
 }

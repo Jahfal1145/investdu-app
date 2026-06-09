@@ -411,37 +411,51 @@
 {{-- Stat Cards --}}
 <div class="stats-grid">
 
-    {{-- Card 1: Total Users --}}
+    {{-- Card 1: User Online --}}
     <div class="stat-card stat-card--yellow" id="cardTotalUsers">
         <div class="stat-card-header">
-            <span class="stat-card-label">Total User</span>
-            <span class="stat-card-icon">👥</span>
+            <span class="stat-card-label">User Online</span>
+            <span class="stat-card-icon">🟢</span>
         </div>
-        <div class="stat-card-value">{{ $totalUsers }}</div>
-        <div class="stat-card-desc">Pengguna terdaftar</div>
+        <div class="stat-card-value">{{ $onlineUsers }}</div>
+        <div class="stat-card-desc">Pengguna aktif (15m)</div>
     </div>
 
-    {{-- Card 2: Modul Literasi --}}
+    {{-- Card 2: Total Literasi --}}
     <div class="stat-card stat-card--blue" id="cardTotalModul">
         <div class="stat-card-header">
-            <span class="stat-card-label">Modul Literasi</span>
+            <span class="stat-card-label">Total Literasi</span>
             <span class="stat-card-icon">📚</span>
         </div>
-        <div class="stat-card-value">5</div>
-        <div class="stat-card-desc">Modul tersedia</div>
+        <div class="stat-card-value">{{ $totalLiterasi }}</div>
+        <div class="stat-card-desc">Kategori literasi</div>
     </div>
 
-    {{-- Card 3: Rata-rata Skor --}}
-    <div class="stat-card stat-card--purple" id="cardAvgScore">
+    {{-- Card 3: Total Artikel --}}
+    <div class="stat-card stat-card--purple" id="cardTotalArticles">
         <div class="stat-card-header">
-            <span class="stat-card-label">Rata-rata Skor</span>
-            <span class="stat-card-icon">🎯</span>
+            <span class="stat-card-label">Total Artikel</span>
+            <span class="stat-card-icon">📄</span>
         </div>
-        <div class="stat-card-value">78</div>
-        <div class="stat-card-desc">Poin kuis rata-rata</div>
+        <div class="stat-card-value">{{ $totalArticles }}</div>
+        <div class="stat-card-desc">Artikel edukasi</div>
     </div>
 
-
+    {{-- Card 4: Game Status --}}
+    <div class="stat-card stat-card--green" id="cardGameStatus" style="display: flex; justify-content: space-between; padding-top: 1.2rem;">
+        <div style="flex: 1;">
+            <div class="stat-card-header" style="margin-bottom: 0.5rem;">
+                <span class="stat-card-label">Soal Quiz</span>
+            </div>
+            <div class="stat-card-value" style="font-size: 1.2rem; margin-bottom: 0;">{{ $totalQuiz }}</div>
+        </div>
+        <div style="flex: 1; border-left: 1px dashed rgba(63, 185, 80, 0.3); padding-left: 15px;">
+            <div class="stat-card-header" style="margin-bottom: 0.5rem;">
+                <span class="stat-card-label">Yes/No</span>
+            </div>
+            <div class="stat-card-value" style="font-size: 1.2rem; margin-bottom: 0;">{{ $totalYesNo }}</div>
+        </div>
+    </div>
 
 </div>
 
@@ -498,6 +512,59 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+</div>
+
+{{-- Game Sessions Chart --}}
+<div class="game-stats-container" style="margin-top: 2rem; display: flex; gap: 1.5rem; background-color: #0d1120; border: 4px solid #1a1f2e; border-radius: 6px; padding: 1.5rem; box-shadow: 4px 4px 0 #050810; flex-wrap: wrap;">
+    
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 250px;">
+        <h3 style="font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: #FFD000; margin-bottom: 1.5rem; text-align: center; line-height: 1.5;">DATA GAME<br>(HARI INI)</h3>
+        @php
+            $quizPct = $totalPlays > 0 ? ($quizPlays / $totalPlays * 100) : 50;
+            // Jika 0 dua-duanya, tampilkan abu-abu
+            $chartColor = $totalPlays > 0 ? "conic-gradient(#58a6ff 0% {$quizPct}%, #a371f7 {$quizPct}% 100%)" : "conic-gradient(#30363d 0% 100%)";
+        @endphp
+        <div style="width: 150px; height: 150px; border-radius: 50%; background: {{ $chartColor }}; border: 4px solid #1a1f2e; box-shadow: 0 0 15px rgba(0,0,0,0.5);"></div>
+        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.7rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div style="width: 12px; height: 12px; background-color: {{ $totalPlays > 0 ? '#58a6ff' : '#30363d' }}; border-radius: 2px;"></div>
+                <span style="color: #c9d1d9;">Trivia Quiz</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div style="width: 12px; height: 12px; background-color: {{ $totalPlays > 0 ? '#a371f7' : '#30363d' }}; border-radius: 2px;"></div>
+                <span style="color: #c9d1d9;">Yes or No</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="flex: 2; min-width: 300px; display: flex; flex-direction: column; justify-content: center;">
+        <div class="stat-card stat-card--blue" style="margin-bottom: 1rem; padding: 1rem;">
+            <div class="stat-card-header" style="margin-bottom: 0.2rem;">
+                <span class="stat-card-label">Trivia Quiz Dimainkan</span>
+            </div>
+            <div class="stat-card-value" style="font-size: 1.2rem; margin-bottom: 0;">{{ $quizPlays }} <span style="font-size:0.6rem; color:#6e7681;">kali</span></div>
+        </div>
+        <div class="stat-card stat-card--purple" style="margin-bottom: 1rem; padding: 1rem;">
+            <div class="stat-card-header" style="margin-bottom: 0.2rem;">
+                <span class="stat-card-label">Yes or No Dimainkan</span>
+            </div>
+            <div class="stat-card-value" style="font-size: 1.2rem; margin-bottom: 0;">{{ $yesnoPlays }} <span style="font-size:0.6rem; color:#6e7681;">kali</span></div>
+        </div>
+        <div style="display: flex; gap: 1rem;">
+            <div class="stat-card stat-card--yellow" style="flex: 1; padding: 1rem;">
+                <div class="stat-card-header" style="margin-bottom: 0.2rem;">
+                    <span class="stat-card-label">Paling Banyak Dimainkan</span>
+                </div>
+                <div class="stat-card-value" style="font-size: 0.8rem; margin-bottom: 0;">{{ $mostPlayed }}</div>
+            </div>
+            <div class="stat-card stat-card--green" style="flex: 1; padding: 1rem;">
+                <div class="stat-card-header" style="margin-bottom: 0.2rem;">
+                    <span class="stat-card-label">Total Kedua Game</span>
+                </div>
+                <div class="stat-card-value" style="font-size: 1.2rem; margin-bottom: 0;">{{ $totalPlays }}</div>
+            </div>
+        </div>
     </div>
 </div>
 

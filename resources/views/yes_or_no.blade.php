@@ -760,12 +760,9 @@
                 <span class="score-detail"><span id="correctCount">0</span> dari <span id="totalCount">0</span> soal benar</span>
             </div>
             <div class="score-actions">
-                <button class="btn-action btn-primary" onclick="location.reload()">
+                <button class="btn-action btn-primary" onclick="location.reload()" style="grid-column: 1 / -1;">
                     🔄 Main Lagi
                 </button>
-                <a href="{{ route('articles.index', $category->slug) }}" class="btn-action btn-secondary">
-                    📚 Kembali Belajar
-                </a>
             </div>
         </div>
 
@@ -773,9 +770,9 @@
         <div class="empty-state" id="emptyState">
             <div class="empty-icon">📭</div>
             <h3 class="empty-title">Belum Ada Soal</h3>
-            <p class="empty-desc">Tantangan Benar / Salah untuk kategori {{ $category->name }} belum tersedia. Nantikan update terbaru!</p>
-            <a href="{{ route('articles.index', $category->slug) }}" class="btn-action btn-secondary">
-                Kembali ke Artikel
+            <p class="empty-desc">Soal Benar/Salah untuk kategori {{ $category->name }} belum tersedia. Nantikan update terbaru!</p>
+            <a href="{{ route('categories.show', $category->slug) }}" class="btn-action btn-secondary">
+                Kembali ke Menu Game
             </a>
         </div>
 
@@ -971,6 +968,22 @@
                 } else {
                     emoji.textContent = '📚';
                 }
+
+                // POST score to backend
+                fetch('/user/score/save', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        game_type: 'yes_or_no',
+                        category_id: {{ $category->id }},
+                        score: score,
+                        correct_answers: correctAnswers,
+                        total_questions: allQuestions.length
+                    })
+                }).catch(err => console.error('Error saving score:', err));
             }
         }
     </script>

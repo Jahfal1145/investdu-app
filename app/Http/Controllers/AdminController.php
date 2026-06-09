@@ -25,11 +25,28 @@ class AdminController extends Controller
             return redirect('/dashboard');
         }
 
-        // Statistik untuk dashboard
-        $totalUsers = User::count();
-        $recentUsers = User::latest()->take(10)->get();
+        $today = \Carbon\Carbon::today();
 
-        return view('admin.admin_dashboard', compact('totalUsers', 'recentUsers'));
+        // Statistik untuk dashboard
+        $onlineUsers = User::where('updated_at', '>=', now()->subMinutes(15))->count();
+        $totalLiterasi = InvestmentCategory::count();
+        $totalArticles = Article::count();
+        $totalQuiz = TriviaQuestion::count();
+        $totalYesNo = YesOrNoQuestion::count();
+        
+        // Pengguna baru max 5 dan daftar hari ini
+        $recentUsers = User::whereDate('created_at', $today)->latest()->take(5)->get();
+
+        // Statistik Game hari ini
+        $quizPlays = \App\Models\GameSession::where('game_type', 'quiz')->whereDate('created_at', $today)->count();
+        $yesnoPlays = \App\Models\GameSession::where('game_type', 'yesorno')->whereDate('created_at', $today)->count();
+        $totalPlays = $quizPlays + $yesnoPlays;
+        $mostPlayed = $quizPlays > $yesnoPlays ? 'Trivia Quiz' : ($yesnoPlays > $quizPlays ? 'Yes or No' : ($totalPlays > 0 ? 'Sama' : 'Belum Ada'));
+
+        return view('admin.admin_dashboard', compact(
+            'onlineUsers', 'totalLiterasi', 'totalArticles', 'totalQuiz', 'totalYesNo', 'recentUsers',
+            'quizPlays', 'yesnoPlays', 'totalPlays', 'mostPlayed'
+        ));
     }
 
 // Fungsi Menampilkan Tabel & Fitur Search
@@ -252,15 +269,15 @@ class AdminController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:80',
-            'description' => 'required|string|max:500',
+            'description' => 'required|string|max:5000',
             'badge' => 'nullable|string|max:50',
             'icon' => 'nullable|string|max:50',
         ]);
 
         $category->name = $request->name;
         $category->description = $request->description;
-        $category->badge = $request->badge;
-        $category->icon = $request->icon;
+        $category->badge = $request->badge ?: '';
+        $category->icon = $request->icon ?: 'book';
         $category->save();
 
         return redirect('/admin/literasi')->with('success', 'Kategori literasi berhasil diperbarui!');

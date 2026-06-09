@@ -524,10 +524,19 @@
                 <p>Di halaman ini Anda dapat mengeksplorasi wawasan dasar dan memahami prinsip-prinsip penting dalam instrumen investasi <strong>{{ $category->name }}</strong>. Didesain secara interaktif agar proses belajar menjadi lebih menyenangkan dan mudah diingat.</p>
             </section>
 
-            <button id="start-learning-btn" class="start-button" type="button">
-                Mulai Bermain Game
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-            </button>
+            <div style="margin-top: 1rem;">
+                @auth
+                    <button id="start-learning-btn" class="start-button" type="button">
+                        Mulai Bermain Game
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+                    </button>
+                @else
+                    <a href="/login" class="start-button" style="text-decoration: none; background: linear-gradient(135deg, #475569, #334155); color: #cbd5e1; box-shadow: none;">
+                        Login untuk Bermain
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </a>
+                @endauth
+            </div>
         </article>
     </main>
 
