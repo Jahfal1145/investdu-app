@@ -8,6 +8,35 @@ use App\Models\Article;
 class ArticleController extends Controller
 {
     /**
+     * Tampilkan semua artikel secara global (Halaman Blog)
+     */
+    public function globalIndex(\Illuminate\Http\Request $request)
+    {
+        $query = $request->input('q');
+        $categorySlug = $request->input('category', 'all');
+
+        $articlesQuery = Article::with('category')->where('is_published', true);
+
+        if (!empty($query)) {
+            $articlesQuery->where(function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('excerpt', 'like', "%{$query}%");
+            });
+        }
+
+        if (!empty($categorySlug) && $categorySlug !== 'all') {
+            $articlesQuery->whereHas('category', function ($q) use ($categorySlug) {
+                $q->where('slug', $categorySlug);
+            });
+        }
+
+        $articles = $articlesQuery->latest()->paginate(9);
+        $categories = InvestmentCategory::all();
+
+        return view('blog', compact('articles', 'query', 'categorySlug', 'categories'));
+    }
+
+    /**
      * Tampilkan daftar artikel dalam satu kategori.
      */
     public function index(\Illuminate\Http\Request $request, $slug)

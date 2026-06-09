@@ -20,6 +20,7 @@ Route::get('/categories/{slug}', function ($slug) {
 })->name('categories.show');
 
 // --- HALAMAN ARTIKEL PER KATEGORI & PENCARIAN (PUBLIC) ---
+Route::get('/blog', [ArticleController::class, 'globalIndex'])->name('blog.index');
 Route::get('/search', [ArticleController::class, 'search'])->name('articles.search');
 Route::get('/belajar/{slug}', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/belajar/{slug}/quiz', function ($slug) {
@@ -91,6 +92,7 @@ Route::get('/trivia', function () {
     return view('trivia.index');
 });
 
-Route::get('/yes-or-no', function () {
-    return view('yes_or_no');
+Route::get('/yes-or-no/{slug}', function ($slug) {
+    $category = \App\Models\InvestmentCategory::where('slug', $slug)->firstOrFail();
+    return view('yes_or_no', compact('category'));
 });

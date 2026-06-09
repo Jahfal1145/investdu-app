@@ -47,7 +47,7 @@ class AuthController extends Controller
 
             // Cek apakah admin
             if (Auth::user()->is_admin == 1) {
-                return redirect()->intended('/admin');
+                return redirect('/admin');
             }
             
             // Jika user biasa

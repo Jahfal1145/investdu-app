@@ -799,24 +799,14 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // Fetch both trivia and yes/no questions in parallel
-                const [triviaRes, yesnoRes] = await Promise.all([
-                    fetch(`/api/trivia/questions?category_id=${CATEGORY_ID}`).then(r => r.json()),
-                    fetch(`/api/yes-or-no/questions?category_id=${CATEGORY_ID}`).then(r => r.json())
-                ]);
+                // Fetch ONLY trivia questions
+                const triviaRes = await fetch(`/api/trivia/questions?category_id=${CATEGORY_ID}`).then(r => r.json());
 
                 let questions = [];
 
                 if (triviaRes.status === 'success' && triviaRes.data.length > 0) {
                     triviaRes.data.forEach(q => {
                         q._type = 'trivia';
-                        questions.push(q);
-                    });
-                }
-
-                if (yesnoRes.status === 'success' && yesnoRes.data.length > 0) {
-                    yesnoRes.data.forEach(q => {
-                        q._type = 'yesno';
                         questions.push(q);
                     });
                 }

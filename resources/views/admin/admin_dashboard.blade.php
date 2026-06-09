@@ -441,20 +441,7 @@
         <div class="stat-card-desc">Poin kuis rata-rata</div>
     </div>
 
-    {{-- Card 4: Status API --}}
-    <div class="stat-card stat-card--green" id="cardApiStatus">
-        <div class="stat-card-header">
-            <span class="stat-card-label">API Pasar Saham</span>
-            <span class="stat-card-icon">📈</span>
-        </div>
-        <div style="margin-bottom: 0.5rem;">
-            <span class="status-indicator">
-                <span class="status-indicator-dot"></span>
-                ONLINE
-            </span>
-        </div>
-        <div class="stat-card-desc">Koneksi stabil</div>
-    </div>
+
 
 </div>
 
