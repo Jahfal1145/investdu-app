@@ -39,9 +39,8 @@ Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->middlew
 Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->middleware('guest');
 
 // --- AREA DASHBOARD USER BIASA ---
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->middleware('auth');
+Route::post('/dashboard/bookmark/{article}', [App\Http\Controllers\DashboardController::class, 'toggleBookmark'])->middleware('auth');
 
 Route::get('/forum-diskusi', [App\Http\Controllers\ForumController::class, 'index'])->middleware('auth');
 Route::post('/forum-diskusi', [App\Http\Controllers\ForumController::class, 'storeMessage'])->middleware('auth');

@@ -210,12 +210,17 @@ class AdminController extends Controller
 
         $request->validate([
             'message' => 'required|string|max:1000',
+            'chat_room_id' => 'nullable|exists:chat_rooms,id',
         ]);
 
-        $room = ChatRoom::firstOrCreate(
-            ['name' => 'General Chat'],
-            ['type' => 'group']
-        );
+        if ($request->filled('chat_room_id')) {
+            $room = ChatRoom::findOrFail($request->chat_room_id);
+        } else {
+            $room = ChatRoom::firstOrCreate(
+                ['name' => 'General Chat'],
+                ['type' => 'group']
+            );
+        }
 
         Message::create([
             'chat_room_id' => $room->id,

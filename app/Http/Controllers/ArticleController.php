@@ -171,7 +171,24 @@ class ArticleController extends Controller
             ->where('is_published', true)
             ->firstOrFail();
 
-        return view('article_detail', compact('category', 'article'));
+        // Track read history untuk user yang login
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            $user = \Illuminate\Support\Facades\Auth::user();
+            $user->readArticles()->syncWithoutDetaching([
+                $article->id => ['read_at' => now()],
+            ]);
+        }
+
+        // Cek apakah sudah di-bookmark
+        $isBookmarked = false;
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            $isBookmarked = \Illuminate\Support\Facades\Auth::user()
+                ->bookmarkedArticles()
+                ->where('article_id', $article->id)
+                ->exists();
+        }
+
+        return view('article_detail', compact('category', 'article', 'isBookmarked'));
     }
 
     /**

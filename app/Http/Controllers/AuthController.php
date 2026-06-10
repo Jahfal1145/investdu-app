@@ -142,29 +142,37 @@ class AuthController extends Controller
             return redirect('/login')->withErrors(['login' => 'Gagal login pakai Google: ' . $e->getMessage()]);
         }
     }
-// Fungsi untuk user update profil (saat ini baru ganti username)
-    // Fungsi untuk user update profil (Username & Password)
+// Fungsi untuk user update profil (Username, Password & Foto Profil)
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
 
-        // Validasi: username unik, password minimal 6 karakter (boleh kosong kalau ga mau ganti)
         $request->validate([
             'username' => 'required|string|max:50|alpha_dash|unique:users,username,'.$user->id,
-            'password' => 'nullable|min:6', // Tambahan validasi password
+            'password' => 'nullable|min:6',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         // Simpan username
         $user->username = $request->username;
 
-        // Kalau kotak password diisi, maka enkripsi (blender) dan simpan password barunya
+        // Kalau kotak password diisi, maka enkripsi dan simpan password barunya
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
 
+        // Upload foto profil jika ada
+        if ($request->hasFile('profile_picture')) {
+            // Hapus foto lama jika ada
+            if ($user->profile_picture && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->profile_picture)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->profile_picture);
+            }
+            $user->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
+        }
+
         $user->save();
 
-        return redirect('/')->with('success', 'Profil kamu berhasil diperbarui!');
+        return redirect('/dashboard')->with('success', 'Profil kamu berhasil diperbarui!');
     }
 }
 

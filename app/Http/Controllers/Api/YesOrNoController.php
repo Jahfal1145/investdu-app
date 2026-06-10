@@ -3,24 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\YesOrNoQuestion;
+use App\Models\YesOrNoQuestion; 
 use Illuminate\Http\Request;
 
+// Perhatikan baris di bawah ini, namanya wajib YesOrNoController!
 class YesOrNoController extends Controller
 {
-    public function getQuestions(Request $request)
+    public function getQuestions()
     {
-        $query = YesOrNoQuestion::query();
-
-        if ($request->has('category_id')) {
-            $query->where('category_id', $request->input('category_id'));
-        }
-
-        $questions = $query->inRandomOrder()->limit(20)->get();
+        $questions = YesOrNoQuestion::inRandomOrder()->get();
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Berhasil mengambil soal yes or no',
+            'message' => 'Berhasil mengambil soal Yes or No',
             'data' => $questions
         ]);
     }

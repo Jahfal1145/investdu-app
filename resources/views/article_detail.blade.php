@@ -450,6 +450,32 @@
                         {{ ceil(str_word_count(strip_tags($article->body)) / 200) }} menit baca
                     </span>
                 </div>
+
+                @auth
+                    <div style="margin-top: 16px;">
+                        <form action="/dashboard/bookmark/{{ $article->id }}" method="POST" style="display:inline;">
+                            @csrf
+                            <button type="submit" style="
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 8px;
+                                padding: 10px 20px;
+                                border-radius: 10px;
+                                font-family: 'Inter', sans-serif;
+                                font-size: 0.8125rem;
+                                font-weight: 700;
+                                cursor: pointer;
+                                transition: all 0.25s ease;
+                                border: 1px solid {{ isset($isBookmarked) && $isBookmarked ? 'rgba(212,175,55,0.4)' : 'rgba(71,85,105,0.35)' }};
+                                background: {{ isset($isBookmarked) && $isBookmarked ? 'rgba(212,175,55,0.12)' : 'rgba(30,41,59,0.5)' }};
+                                color: {{ isset($isBookmarked) && $isBookmarked ? '#D4AF37' : '#CBD5E1' }};
+                            ">
+                                <svg viewBox="0 0 24 24" fill="{{ isset($isBookmarked) && $isBookmarked ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                                {{ isset($isBookmarked) && $isBookmarked ? 'Tersimpan' : 'Simpan Artikel' }}
+                            </button>
+                        </form>
+                    </div>
+                @endauth
             </div>
         </div>
     </header>

@@ -212,4 +212,14 @@ class ArticleController extends Controller
 
         return response()->json($article);
     }
+    /**
+     * User yang mem-bookmark artikel ini.
+     */
+    public function bookmarkers()
+    {
+        return $this->belongsToMany(User::class, 'article_user_bookmarks')
+                    ->withTimestamps();
+    }
 }
+
+
