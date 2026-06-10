@@ -1145,7 +1145,7 @@
                 </h1>
 
                 <p class="hero-desc">
-                    Website belajar investasi bahasa Indonesia terlengkap dan mudah dipahami untuk pemula hingga mahir.
+                    Website belajar investasi bahasa Indonesia terlengkap dan mudah dipahami untuk pemula.
                 </p>
 
                 {{-- Category Chips --}}

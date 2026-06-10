@@ -664,7 +664,17 @@
     </style>
 </head>
 <body>
-
+    @php
+        $categoryIcons = [
+            'piggy-bank' => '🏦',
+            'trending-up' => '📈',
+            'users' => '📊',
+            'file-text' => '📃',
+            'home' => '🏠',
+            'award' => '🥇',
+            'cpu' => '💎',
+        ];
+    @endphp
     {{-- SIDEBAR OVERLAY (MOBILE) --}}
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
@@ -683,40 +693,29 @@
 
             <div class="sb-section">
                 <div class="sb-section-label">Menu Utama</div>
-                <a href="#artikel" class="sb-nav-item active" onclick="setActiveNav(this)">
+                <a href="#artikel" class="sb-nav-item active" onclick="showTab('artikel', this, event)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     Artikel
                 </a>
-                <a href="#game" class="sb-nav-item" onclick="setActiveNav(this)">
+                <a href="#game" class="sb-nav-item" onclick="showTab('game', this, event)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="15" cy="13" r="1"/><circle cx="18" cy="11" r="1"/></svg>
                     Game
                 </a>
-                <a href="#option" class="sb-nav-item" onclick="setActiveNav(this)">
+                <a href="#option" class="sb-nav-item" onclick="showTab('option', this, event)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                     Option
                 </a>
             </div>
 
             <div class="sb-section">
-                <button type="button" class="sb-nav-item" onclick="document.getElementById('catDropdown').classList.toggle('show')" style="justify-content: space-between; width: 100%;">
+                <button type="button" class="sb-nav-item" onclick="toggleCatDropdown()" style="justify-content: space-between; width: 100%;">
                     <div style="display:flex; align-items:center; gap:12px;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
                         Kategori Investasi
                     </div>
-                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
+                    <svg id="catChevron" style="width:16px;height:16px; transition: transform 0.3s ease; {{ $activeSlug ? 'transform: rotate(180deg);' : '' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
                 <div id="catDropdown" style="display: {{ $activeSlug ? 'block' : 'none' }}; margin-top: 4px; padding-left: 12px;">
-                    @php
-                        $categoryIcons = [
-                            'piggy-bank' => '🏦',
-                            'trending-up' => '📈',
-                            'users' => '📊',
-                            'file-text' => '📃',
-                            'home' => '🏠',
-                            'award' => '🥇',
-                            'cpu' => '💎',
-                        ];
-                    @endphp
                     @foreach($categories as $cat)
                         <a href="/dashboard?category={{ $cat->slug }}#artikel" class="sb-nav-item{{ $activeSlug === $cat->slug ? ' active' : '' }}" style="padding: 8px 12px; font-size: 0.8rem;">
                             <span class="cat-icon" style="font-size:1rem;">{{ $categoryIcons[$cat->icon] ?? '📁' }}</span>
@@ -781,7 +780,7 @@
                         </button>
 
                         <div class="profile-dropdown" id="profileDropdown">
-                            <a href="#option" class="dd-item" onclick="document.getElementById('profileDropdown').classList.remove('show')">
+                            <a href="#option" class="dd-item" onclick="showTab('option', null, event); document.getElementById('profileDropdown').classList.remove('show')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                 Edit Profil
                             </a>
@@ -820,11 +819,29 @@
                 {{-- ==============================
                      ARTIKEL SECTION
                      ============================== --}}
-                <section id="artikel" style="padding-top: 20px; margin-bottom: 60px;">
+                <section id="artikel" class="tab-section" style="padding-top: 20px; margin-bottom: 60px;">
                 @if(!$activeCategory)
                     <div class="welcome-card">
                         <h1>👋 Halo, {{ $user->username }}!</h1>
                         <p>Selamat datang kembali di dashboard belajar investasi kamu.</p>
+                    </div>
+
+                    {{-- KATEGORI INVESTASI --}}
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                                Kategori Investasi
+                            </h2>
+                        </div>
+                        <div class="article-grid">
+                            @foreach($categories as $cat)
+                                <a href="/dashboard?category={{ $cat->slug }}" class="article-card" style="text-align: center; align-items: center; justify-content: center; padding: 30px 20px;">
+                                    <span style="font-size: 3rem; margin-bottom: 12px;">{{ $categoryIcons[$cat->icon] ?? '📁' }}</span>
+                                    <h3 style="font-size: 1.25rem;">{{ $cat->name }}</h3>
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
                 @endif
 
@@ -963,11 +980,15 @@
                 {{-- ==============================
                      GAME SECTION
                      ============================== --}}
-                <section id="game" style="padding-top: 40px; margin-bottom: 60px;">
+                <section id="game" class="tab-section" style="padding-top: 40px; margin-bottom: 60px; display: none;">
                     <div class="section-header">
                         <h2 class="section-title">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="15" cy="13" r="1"/><circle cx="18" cy="11" r="1"/></svg>
-                            Nilai & Histori Game
+                            @if($activeCategory)
+                                Nilai & Histori Game {{ $activeCategory->name }}
+                            @else
+                                Nilai & Histori Game Terbaru
+                            @endif
                         </h2>
                         <span class="section-count">{{ $gameScores->count() }} game dimainkan</span>
                     </div>
@@ -1025,7 +1046,7 @@
                 {{-- ==============================
                      OPTION SECTION
                      ============================== --}}
-                <section id="option" style="padding-top: 40px; margin-bottom: 60px;">
+                <section id="option" class="tab-section" style="padding-top: 40px; margin-bottom: 60px; display: none;">
                     <div class="section-header">
                         <h2 class="section-title">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -1099,10 +1120,61 @@
             }
         });
 
-        // Active nav state
-        function setActiveNav(element) {
-            document.querySelectorAll('.sb-nav-item').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
+        // Tab navigation state
+        function showTab(tabId, element, event) {
+            if (event) {
+                event.preventDefault();
+                history.pushState(null, null, '#' + tabId);
+            }
+
+            // Hide all sections
+            document.querySelectorAll('.tab-section').forEach(el => {
+                el.style.display = 'none';
+            });
+
+            // Show target section
+            const target = document.getElementById(tabId);
+            if (target) {
+                target.style.display = 'block';
+            }
+
+            // Update active state in sidebar menu
+            document.querySelectorAll('.sb-nav-item').forEach(el => {
+                if (el.getAttribute('href') && el.getAttribute('href').startsWith('#')) {
+                    el.classList.remove('active');
+                }
+            });
+
+            if (element) {
+                element.classList.add('active');
+            } else {
+                // If called without element (e.g. from topbar), find the element manually
+                const link = document.querySelector(`.sb-nav-item[href="#${tabId}"]`);
+                if (link) link.classList.add('active');
+            }
+        }
+
+        // Initialize tabs on page load based on URL hash
+        document.addEventListener('DOMContentLoaded', function() {
+            let hash = window.location.hash.substring(1);
+            if (hash === 'game' || hash === 'option') {
+                showTab(hash, null, null);
+            } else {
+                showTab('artikel', null, null);
+            }
+        });
+
+        // Sidebar Category Dropdown
+        function toggleCatDropdown() {
+            const dropdown = document.getElementById('catDropdown');
+            const chevron = document.getElementById('catChevron');
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                dropdown.style.display = 'none';
+                chevron.style.transform = 'rotate(0deg)';
+            }
         }
 
         // Avatar preview

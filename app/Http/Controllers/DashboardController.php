@@ -33,6 +33,12 @@ class DashboardController extends Controller
             $bookmarkedArticles = $user->bookmarkedArticles()
                 ->where('category_id', $activeCategory->id)
                 ->get();
+
+            $gameScores = $user->scores()
+                ->with('category')
+                ->where('category_id', $activeCategory->id)
+                ->orderBy('created_at', 'desc')
+                ->get();
         } else {
             // Halaman utama: tampilkan semua artikel terakhir dibaca
             $readArticles = $user->readArticles()
@@ -44,9 +50,13 @@ class DashboardController extends Controller
                 ->with('category')
                 ->take(10)
                 ->get();
-        }
 
-        $gameScores = $user->scores()->with('category')->orderBy('created_at', 'desc')->get();
+            $gameScores = $user->scores()
+                ->with('category')
+                ->orderBy('created_at', 'desc')
+                ->take(10)
+                ->get();
+        }
 
         return view('dashboard', compact(
             'user',

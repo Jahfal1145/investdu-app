@@ -405,7 +405,6 @@
         <h1>👑 GAME MASTER CONSOLE</h1>
         <p>Selamat datang kembali, <strong>{{ Auth::user()->username }}</strong>! Ini panel kontrol platformmu.</p>
     </div>
-    <div class="welcome-badge">LVL 99 ADMIN</div>
 </div>
 
 {{-- Stat Cards --}}
