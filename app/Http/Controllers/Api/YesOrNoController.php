@@ -13,6 +13,8 @@ class YesOrNoController extends Controller
     {
         $questions = YesOrNoQuestion::inRandomOrder()->get();
 
+        \App\Models\GameSession::create(['game_type' => 'yesorno']);
+
         return response()->json([
             'status' => 'success',
             'message' => 'Berhasil mengambil soal Yes or No',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\InvestmentCategory;
+use App\Models\UserScore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -45,13 +46,16 @@ class DashboardController extends Controller
                 ->get();
         }
 
+        $gameScores = $user->scores()->with('category')->orderBy('created_at', 'desc')->get();
+
         return view('dashboard', compact(
             'user',
             'categories',
             'activeCategory',
             'activeSlug',
             'readArticles',
-            'bookmarkedArticles'
+            'bookmarkedArticles',
+            'gameScores'
         ));
     }
 
@@ -68,5 +72,29 @@ class DashboardController extends Controller
         }
 
         return redirect()->back()->with('success', $message);
+    }
+
+    public function saveScore(Request $request)
+    {
+        $request->validate([
+            'game_type' => 'required|string|in:trivia,yes_or_no',
+            'category_id' => 'nullable|exists:investment_categories,id',
+            'score' => 'required|integer',
+            'correct_answers' => 'required|integer',
+            'total_questions' => 'required|integer',
+        ]);
+
+        $user = Auth::user();
+
+        UserScore::create([
+            'user_id' => $user->id,
+            'game_type' => $request->game_type,
+            'category_id' => $request->category_id,
+            'score' => $request->score,
+            'correct_answers' => $request->correct_answers,
+            'total_questions' => $request->total_questions,
+        ]);
+
+        return response()->json(['status' => 'success']);
     }
 }

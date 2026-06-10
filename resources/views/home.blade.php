@@ -160,6 +160,7 @@
             pointer-events: none;
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(71, 85, 105, 0.1);
+            z-index: 500;
         }
 
         .dropdown-panel.show {
@@ -865,6 +866,102 @@
                 text-align: center;
             }
         }
+        /* ===== FAQ SECTION ===== */
+        .faq-section {
+            padding: 5rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .faq-title {
+            font-size: clamp(2rem, 3vw, 2.5rem);
+            font-weight: 800;
+            color: #F8FAFC;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .faq-desc {
+            color: #94A3B8;
+            font-size: 1.125rem;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(37, 99, 235, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            color: #F8FAFC;
+            font-size: 1.125rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            text-align: left;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .faq-question:hover {
+            color: #60A5FA;
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 1rem;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+            background: rgba(37, 99, 235, 0.2);
+            color: #60A5FA;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .faq-answer-inner {
+            padding: 0 1.5rem 1.5rem;
+            color: #94A3B8;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
@@ -875,7 +972,7 @@
     <nav class="navbar" id="navbar">
         <div class="navbar-inner">
             {{-- Logo --}}
-            <a href="/" class="logo" aria-label="Investdu Home">
+            <a href="/" class="logo">
                 <svg class="logo-icon" viewBox="0 0 34 34" fill="none">
                     <rect width="34" height="34" rx="9" fill="#2563EB"/>
                     <path d="M9 24L14 12L18 19L23 10L25 15" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -893,30 +990,36 @@
                         <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </button>
                     <div class="dropdown-panel" id="belajar-dropdown">
-                        <a href="/belajar/tabungan-berjangka" class="dd-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><circle cx="16" cy="15" r="1.5"/></svg>
-                            Tabungan Berjangka
-                        </a>
-                        <a href="/belajar/saham" class="dd-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg>
-                            Saham
-                        </a>
-                        <a href="/belajar/reksa-dana" class="dd-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
-                            Reksa Dana
-                        </a>
-                        <a href="/belajar/obligasi" class="dd-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg>
-                            Obligasi
-                        </a>
-                        <a href="/belajar/properti" class="dd-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/><rect x="9" y="14" width="6" height="6"/></svg>
-                            Properti
-                        </a>
-                        <a href="/belajar/emas" class="dd-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l3-10h4l3 10H7z"/><path d="M9 17l2-5h2l2 5"/></svg>
-                            Emas
-                        </a>
+                        @foreach($categories as $category)
+                            <a href="/categories/{{ $category->slug }}" class="dd-item">
+                                @switch($category->icon)
+                                    @case('piggy-bank')
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><circle cx="16" cy="15" r="1.5"/></svg>
+                                        @break
+                                    @case('trending-up')
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg>
+                                        @break
+                                    @case('users')
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
+                                        @break
+                                    @case('file-text')
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg>
+                                        @break
+                                    @case('home')
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/><rect x="9" y="14" width="6" height="6"/></svg>
+                                        @break
+                                    @case('award')
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l3-10h4l3 10H7z"/><path d="M9 17l2-5h2l2 5"/></svg>
+                                        @break
+                                    @case('cpu')
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                                        @break
+                                    @default
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                                @endswitch
+                                {{ $category->name }}
+                            </a>
+                        @endforeach
                     </div>
                 </div>
 
@@ -931,11 +1034,8 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                             Forum Diskusi
                         </a>
-                        <a href="/komunitas/faq" class="dd-item">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                            Tanya Jawab
-                        </a>
-                        <a href="#" class="dd-item">
+
+                        <a href="/blog" class="dd-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                             Blog & Artikel
                         </a>
@@ -950,11 +1050,7 @@
                 <button class="nav-icon-btn" id="searchToggle" aria-label="Search" title="Cari materi">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
                 </button>
-                <button class="nav-icon-btn" id="themeToggle" aria-label="Toggle theme" title="Ganti tema">
-                    <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                    </svg>
-                </button>
+
                 @auth
                     @if(Auth::user()->is_admin)
                         <a href="/admin" class="btn-login" style="background-color: #10B981;">Admin Panel</a>
@@ -974,12 +1070,36 @@
 
     {{-- Mobile Drawer --}}
     <div class="mobile-drawer" id="mobileDrawer">
-        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/></svg> Tabungan Berjangka</a>
-        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg> Saham</a>
-        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg> Reksa Dana</a>
-        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg> Obligasi</a>
-        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/></svg> Properti</a>
-        <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M7 17l3-10h4l3 10H7z"/></svg> Emas</a>
+        @foreach($categories as $category)
+            <a href="/categories/{{ $category->slug }}" class="mobile-nav-link">
+                @switch($category->icon)
+                    @case('piggy-bank')
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><circle cx="16" cy="15" r="1.5"/></svg>
+                        @break
+                    @case('trending-up')
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg>
+                        @break
+                    @case('users')
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
+                        @break
+                    @case('file-text')
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg>
+                        @break
+                    @case('home')
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/><rect x="9" y="14" width="6" height="6"/></svg>
+                        @break
+                    @case('award')
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M7 17l3-10h4l3 10H7z"/><path d="M9 17l2-5h2l2 5"/></svg>
+                        @break
+                    @case('cpu')
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                        @break
+                    @default
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                @endswitch
+                {{ $category->name }}
+            </a>
+        @endforeach
         <div class="mobile-divider"></div>
         <a href="#" class="mobile-nav-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Komunitas</a>
 
@@ -1030,6 +1150,40 @@
 
                 {{-- Category Chips --}}
                 <div class="hero-chips" id="heroChips">
+                    <button type="button" class="chip active" data-category="all">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        Semua
+                    </button>
+                    @foreach($categories as $category)
+                        <button type="button" class="chip" data-category="{{ $category->slug }}">
+                            @switch($category->icon)
+                                @case('piggy-bank')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><circle cx="16" cy="15" r="1.5"/></svg>
+                                    @break
+                                @case('trending-up')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3,18 8,12 13,15 21,6"/><polyline points="17,6 21,6 21,10"/></svg>
+                                    @break
+                                @case('users')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
+                                    @break
+                                @case('file-text')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3v18"/><path d="M6 3h12c0 0 3 0 3 3s-3 3-3 3H6"/><path d="M6 9h10c0 0 3 0 3 3s-3 3-3 3H6"/></svg>
+                                    @break
+                                @case('home')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-8 9 8"/><path d="M5 12v8h14v-8"/><rect x="9" y="14" width="6" height="6"/></svg>
+                                    @break
+                                @case('award')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17l3-10h4l3 10H7z"/><path d="M9 17l2-5h2l2 5"/></svg>
+                                    @break
+                                @case('cpu')
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+                                    @break
+                                @default
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                            @endswitch
+                            {{ $category->name }}
+                        </button>
+                    @endforeach
                 </div>
 
                 {{-- Search Bar --}}
@@ -1084,7 +1238,7 @@
          LEARNING CATEGORIES SECTION
          ============================================================ --}}
     <div class="categories-grid" id="categoriesGrid">
-    @foreach($categories->take(3) as $category)
+    @foreach($categories as $category)
         <a href="{{ route('categories.show', $category->slug) }}" class="cat-card" data-cat="{{ $category->slug }}" id="card-{{ $category->slug }}">
             
             {{-- Header Kartu: Ikon & Badge dibuat sejajar biar tidak menambah tinggi kartu --}}
@@ -1124,16 +1278,69 @@
 
 
     {{-- ============================================================
-         CTA SECTION
+         FAQ SECTION
          ============================================================ --}}
-    <section class="cta-section">
-        <div class="cta-inner">
-            <h2 class="cta-title">Mulai perjalanan investasimu bersama <span class="gold">Investdu</span></h2>
-            <p class="cta-desc">Daftar sekarang dan akses seluruh materi investasi secara gratis. Tidak perlu pengalaman sebelumnya.</p>
-            <a href="/register" class="cta-btn">
-                Mulai Belajar Gratis
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-            </a>
+    <section class="faq-section" id="faq">
+        <div class="faq-header">
+            <h2 class="faq-title">Pertanyaan yang Sering Diajukan</h2>
+            <p class="faq-desc">Temukan jawaban atas pertanyaan umum tentang Investdu.</p>
+        </div>
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question">
+                    Apa itu Investdu?
+                    <div class="faq-icon">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Investdu adalah platform belajar investasi bahasa Indonesia terlengkap yang dirancang untuk membantu pemula hingga mahir dalam memahami pasar keuangan, saham, reksadana, dan instrumen investasi lainnya secara interaktif.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <button class="faq-question">
+                    Apakah materi di Investdu benar-benar gratis?
+                    <div class="faq-icon">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Ya! Kami berkomitmen untuk menyediakan edukasi finansial yang berkualitas tanpa biaya. Seluruh materi literasi, kuis interaktif, dan forum komunitas dapat Anda akses sepenuhnya secara gratis.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Apakah saya perlu pengalaman sebelum belajar di sini?
+                    <div class="faq-icon">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Tidak sama sekali. Materi kami disusun secara terstruktur mulai dari tingkat dasar (pemula) hingga tingkat lanjutan (mahir). Anda bisa belajar dari nol sesuai dengan kecepatan pemahaman Anda sendiri.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Bagaimana cara berinteraksi dengan pengguna lain?
+                    <div class="faq-icon">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </div>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Anda dapat bergabung dan berdiskusi di menu Komunitas -> Forum Diskusi setelah mendaftarkan akun. Di sana Anda bisa bertanya, berbagi wawasan, dan belajar bersama dengan sesama calon investor lainnya.
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1170,15 +1377,18 @@
 
         dropdownBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
+                e.preventDefault();
                 e.stopPropagation();
+                
                 const targetId = btn.getAttribute('data-dropdown');
                 const panel = document.getElementById(targetId);
 
                 // Close any other open dropdown
                 if (activeDropdown && activeDropdown !== panel) {
                     activeDropdown.classList.remove('show');
-                    activeDropdown.previousElementSibling?.classList.remove('active');
-                    activeDropdown.previousElementSibling?.setAttribute('aria-expanded', 'false');
+                    const oldBtn = activeDropdown.parentElement.querySelector('[data-dropdown]');
+                    oldBtn?.classList.remove('active');
+                    oldBtn?.setAttribute('aria-expanded', 'false');
                 }
 
                 const isOpen = panel.classList.toggle('show');
@@ -1189,8 +1399,11 @@
         });
 
         // Close dropdowns on outside click
-        document.addEventListener('click', () => {
+        document.addEventListener('click', (e) => {
             if (activeDropdown) {
+                // If the click is inside the active dropdown panel, do nothing (don't close it)
+                if (activeDropdown.contains(e.target)) return;
+
                 activeDropdown.classList.remove('show');
                 const btn = activeDropdown.parentElement.querySelector('[data-dropdown]');
                 btn?.classList.remove('active');
@@ -1216,18 +1429,22 @@
         const mobileToggle = document.getElementById('mobileToggle');
         const mobileDrawer = document.getElementById('mobileDrawer');
 
-        mobileToggle.addEventListener('click', () => {
+        mobileToggle?.addEventListener('click', () => {
             const isOpen = mobileToggle.classList.toggle('open');
             if (isOpen) {
-                mobileDrawer.style.display = 'flex';
-                requestAnimationFrame(() => {
-                    mobileDrawer.classList.add('open');
-                });
+                if (mobileDrawer) {
+                    mobileDrawer.style.display = 'flex';
+                    requestAnimationFrame(() => {
+                        mobileDrawer.classList.add('open');
+                    });
+                }
                 document.body.style.overflow = 'hidden';
             } else {
-                mobileDrawer.classList.remove('open');
+                if (mobileDrawer) {
+                    mobileDrawer.classList.remove('open');
+                    setTimeout(() => { mobileDrawer.style.display = 'none'; }, 350);
+                }
                 document.body.style.overflow = '';
-                setTimeout(() => { mobileDrawer.style.display = 'none'; }, 350);
             }
         });
 
@@ -1272,13 +1489,17 @@
         const searchBtn = document.getElementById('searchBtn');
 
         // Glow effect on focus
-        searchInput.addEventListener('focus', () => {
-            searchInput.parentElement.style.transform = 'scale(1.015)';
-            searchInput.parentElement.style.transition = 'transform 0.3s ease';
+        searchInput?.addEventListener('focus', () => {
+            if (searchInput.parentElement) {
+                searchInput.parentElement.style.transform = 'scale(1.015)';
+                searchInput.parentElement.style.transition = 'transform 0.3s ease';
+            }
         });
 
-        searchInput.addEventListener('blur', () => {
-            searchInput.parentElement.style.transform = 'scale(1)';
+        searchInput?.addEventListener('blur', () => {
+            if (searchInput.parentElement) {
+                searchInput.parentElement.style.transform = 'scale(1)';
+            }
         });
 
         // Filter cards via search
@@ -1287,7 +1508,7 @@
             if (!query) {
                 // Reset — show all
                 chips.forEach(c => c.classList.remove('active'));
-                chips[0].classList.add('active');
+                if(chips.length > 0) chips[0].classList.add('active');
                 catCards.forEach(card => {
                     card.style.display = '';
                     card.style.opacity = '1';
@@ -1316,14 +1537,20 @@
             });
         }
 
-        searchBtn.addEventListener('click', performSearch);
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') performSearch();
+        searchBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            performSearch();
+        });
+        searchInput?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
         });
 
         // Live search on typing (debounced)
         let searchTimer;
-        searchInput.addEventListener('input', () => {
+        searchInput?.addEventListener('input', () => {
             clearTimeout(searchTimer);
             searchTimer = setTimeout(performSearch, 300);
         });
@@ -1387,30 +1614,15 @@
 
 
         // ==============================================
-        // 9. THEME TOGGLE (Visual)
-        // ==============================================
-        const themeToggle = document.getElementById('themeToggle');
-        const sunIcon = document.getElementById('sunIcon');
-        let isDark = true;
-
-        themeToggle.addEventListener('click', () => {
-            isDark = !isDark;
-            sunIcon.style.transition = 'transform 0.5s ease';
-            sunIcon.style.transform = isDark ? 'rotate(0deg)' : 'rotate(180deg)';
-
-            // Subtle visual feedback
-            themeToggle.style.background = isDark ? '' : 'rgba(37, 99, 235, 0.15)';
-            themeToggle.style.borderColor = isDark ? '' : 'rgba(37, 99, 235, 0.3)';
-        });
-
-        // ==============================================
         // 10. NAVBAR SEARCH TOGGLE (focus search)
         // ==============================================
         const navSearchToggle = document.getElementById('searchToggle');
-        navSearchToggle.addEventListener('click', () => {
+        navSearchToggle?.addEventListener('click', () => {
             const heroSearch = document.getElementById('heroSearch');
-            heroSearch.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            setTimeout(() => heroSearch.focus(), 500);
+            if (heroSearch) {
+                heroSearch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => heroSearch.focus(), 500);
+            }
         });
 
     })();
@@ -1467,6 +1679,29 @@
                     hiddenInput.value = selected.join(',');
                 }
             }
+        });
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.closest('.faq-item');
+                const answer = item.querySelector('.faq-answer');
+                
+                // Close other open faqs
+                document.querySelectorAll('.faq-item.active').forEach(activeItem => {
+                    if (activeItem !== item) {
+                        activeItem.classList.remove('active');
+                        activeItem.querySelector('.faq-answer').style.maxHeight = null;
+                    }
+                });
+
+                item.classList.toggle('active');
+                
+                if (item.classList.contains('active')) {
+                    answer.style.maxHeight = answer.scrollHeight + "px";
+                } else {
+                    answer.style.maxHeight = null;
+                }
+            });
         });
     </script>
 </body>

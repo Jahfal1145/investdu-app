@@ -11,135 +11,38 @@ use Illuminate\Support\Str;
 class ArticleController extends Controller
 {
     /**
-     * ==========================================
-     * AREA ADMIN (Manajemen CRUD)
-     * ==========================================
+     * Tampilkan semua artikel secara global (Halaman Blog)
      */
-    private function ensureAdmin(): void
+    public function globalIndex(\Illuminate\Http\Request $request)
     {
-        if (! Auth::check() || ! Auth::user()->is_admin) {
-            abort(403);
-        }
-    }
+        $query = $request->input('q');
+        $categorySlug = $request->input('category', 'all');
 
-    public function index()
-    {
-        $this->ensureAdmin();
+        $articlesQuery = Article::with('category')->where('is_published', true);
 
-        $articles = Article::orderByDesc('created_at')->get();
-
-        return view('admin.articles.index', compact('articles'));
-    }
-
-    public function create()
-    {
-        $this->ensureAdmin();
-
-        // Pastikan Anda juga mengirim data kategori ke view create jika formnya butuh dropdown kategori
-        // $categories = InvestmentCategory::all();
-        // return view('admin.articles.create', compact('categories'));
-        
-        return view('admin.articles.create');
-    }
-
-    public function store(Request $request)
-    {
-        $this->ensureAdmin();
-
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'excerpt' => 'nullable|string',
-            'content' => 'required|string',
-            'image_url' => 'nullable|string|max:255',
-            'is_published' => 'nullable|boolean',
-            // Pastikan input category_id ditambahkan di form admin kamu
-            // 'category_id' => 'required|exists:investment_categories,id', 
-        ]);
-
-        $validated['slug'] = Str::slug($validated['title']);
-        $validated['is_published'] = $request->boolean('is_published');
-        $validated['published_at'] = $validated['is_published'] ? now() : null;
-
-        Article::create($validated);
-
-        return redirect('/admin/articles')->with('success', 'Artikel berhasil ditambahkan!');
-    }
-
-    public function edit(string $id)
-    {
-        $this->ensureAdmin();
-
-        $article = Article::findOrFail($id);
-
-        return view('admin.articles.edit', compact('article'));
-    }
-
-    public function update(Request $request, string $id)
-    {
-        $this->ensureAdmin();
-
-        $article = Article::findOrFail($id);
-
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'excerpt' => 'nullable|string',
-            'content' => 'required|string',
-            'image_url' => 'nullable|string|max:255',
-            'is_published' => 'nullable|boolean',
-            // 'category_id' => 'required|exists:investment_categories,id',
-        ]);
-
-        $validated['slug'] = Str::slug($validated['title']);
-        $validated['is_published'] = $request->boolean('is_published');
-
-        if ($validated['is_published'] && ! $article->is_published) {
-            $validated['published_at'] = now();
-        } elseif (! $validated['is_published']) {
-            $validated['published_at'] = null;
+        if (!empty($query)) {
+            $articlesQuery->where(function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                  ->orWhere('excerpt', 'like', "%{$query}%");
+            });
         }
 
-        $article->update($validated);
+        if (!empty($categorySlug) && $categorySlug !== 'all') {
+            $articlesQuery->whereHas('category', function ($q) use ($categorySlug) {
+                $q->where('slug', $categorySlug);
+            });
+        }
 
-        return redirect('/admin/articles')->with('success', 'Artikel berhasil diperbarui!');
-    }
+        $articles = $articlesQuery->latest()->paginate(9);
+        $categories = InvestmentCategory::all();
 
-    public function destroy(string $id)
-    {
-        $this->ensureAdmin();
-
-        Article::findOrFail($id)->delete();
-
-        return redirect('/admin/articles')->with('success', 'Artikel berhasil dihapus!');
+        return view('blog', compact('articles', 'query', 'categorySlug', 'categories'));
     }
 
     /**
-     * ==========================================
-     * AREA PUBLIK (Blog & Pencarian)
-     * ==========================================
+     * Tampilkan daftar artikel dalam satu kategori.
      */
-    public function publicIndex()
-    {
-        $articles = Article::where('is_published', true)
-            ->orderByDesc('published_at')
-            ->orderByDesc('created_at')
-            ->get();
-
-        return view('blog.index', compact('articles'));
-    }
-
-    public function publicShow(string $slug)
-    {
-        $article = Article::where('slug', $slug)
-            ->where('is_published', true)
-            ->firstOrFail();
-
-        return view('blog.show', compact('article'));
-    }
-
-    /**
-     * Tampilkan daftar artikel dalam satu kategori spesifik.
-     */
-    public function categoryIndex(Request $request, $slug)
+    public function index(\Illuminate\Http\Request $request, $slug)
     {
         $category = InvestmentCategory::where('slug', $slug)->firstOrFail();
         $query = $request->input('q');

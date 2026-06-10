@@ -22,12 +22,14 @@ Route::get('/categories/{slug}', function ($slug) {
 })->name('categories.show');
 
 // --- HALAMAN ARTIKEL PER KATEGORI & PENCARIAN (PUBLIC) ---
+Route::get('/blog', [ArticleController::class, 'globalIndex'])->name('blog.index');
 Route::get('/search', [ArticleController::class, 'search'])->name('articles.search');
 Route::get('/belajar/{slug}', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/belajar/{slug}/quiz', function ($slug) {
     $category = InvestmentCategory::where('slug', $slug)->firstOrFail();
     return view('category_quiz', compact('category'));
-})->name('category.quiz');
+})->name('category.quiz')->middleware('auth');
+
 Route::get('/belajar/{slug}/{articleSlug}', [ArticleController::class, 'show'])->name('articles.show');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');
@@ -41,6 +43,7 @@ Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallbac
 // --- AREA DASHBOARD USER BIASA ---
 Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->middleware('auth');
 Route::post('/dashboard/bookmark/{article}', [App\Http\Controllers\DashboardController::class, 'toggleBookmark'])->middleware('auth');
+Route::post('/user/score/save', [App\Http\Controllers\DashboardController::class, 'saveScore'])->middleware('auth');
 
 Route::get('/forum-diskusi', [App\Http\Controllers\ForumController::class, 'index'])->middleware('auth');
 Route::post('/forum-diskusi', [App\Http\Controllers\ForumController::class, 'storeMessage'])->middleware('auth');
@@ -98,14 +101,17 @@ Route::post('/admin/articles/{id}/delete', [AdminController::class, 'articleDele
 // Rute untuk user mengedit profilnya sendiri via popup
 Route::put('/user/profile/update', [AuthController::class, 'updateProfile'])->middleware('auth');
 
+
+
 Route::get('/trivia', function () {
     return view('trivia.index');
-});
+})->middleware('auth');
 
 Route::get('/yes-or-no', function () {
     return view('yes_or_no');
 });
 
-// Rute untuk halaman FAQ Komunitas
-Route::get('/komunitas/faq', [FaqController::class, 'publicIndex'])->name('faq.public');
-Route::get('/faq', [FaqController::class, 'publicIndex']);
+Route::get('/yes-or-no/{slug}', function ($slug) {
+    $category = \App\Models\InvestmentCategory::where('slug', $slug)->firstOrFail();
+    return view('yes_or_no', compact('category'));
+})->middleware('auth');

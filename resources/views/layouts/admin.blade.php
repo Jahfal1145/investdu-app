@@ -355,7 +355,7 @@
 
         {{-- Logo --}}
         <div class="sidebar-header">
-            <a href="/admin" class="sidebar-logo">
+            <a href="/" class="sidebar-logo">
                 <span class="sidebar-logo-icon">💰</span>
                 <span class="sidebar-logo-text">INVESTDU</span>
                 <span class="sidebar-logo-badge">ADMIN</span>
@@ -398,11 +398,7 @@
 
             <div class="nav-section-label" style="margin-top: 0.5rem;">── SYSTEM ──</div>
 
-            <a href="#" class="nav-item" id="navMarket">
-                <span class="nav-item-icon">📈</span>
-                Pengaturan Pasar
-                <span class="nav-item-badge">SOON</span>
-            </a>
+
 
             <a href="/admin/users" class="nav-item {{ request()->is('admin/users*') ? 'active' : '' }}" id="navUsers">
                 <span class="nav-item-icon">👥</span>
@@ -477,6 +473,10 @@
             document.getElementById('adminSidebar').classList.toggle('open');
             document.getElementById('sidebarOverlay').classList.toggle('open');
         }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
     </script>
 </body>
 </html>

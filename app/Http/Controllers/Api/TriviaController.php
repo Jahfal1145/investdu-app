@@ -19,6 +19,8 @@ class TriviaController extends Controller
         // Ambil maksimal 20 soal secara acak (random)
         $questions = $query->inRandomOrder()->limit(20)->get();
 
+        \App\Models\GameSession::create(['game_type' => 'quiz']);
+
         // Kembalikan dalam bentuk REST API (JSON)
         return response()->json([
             'status' => 'success',

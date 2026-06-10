@@ -250,6 +250,8 @@
         padding: 0.95rem;
         margin-bottom: 0.85rem;
         background: rgba(255,255,255,0.02);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
     .question-header {
         display: flex;

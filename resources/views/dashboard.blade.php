@@ -678,36 +678,52 @@
                     <path d="M9 24L14 12L18 19L23 10L25 15" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     <circle cx="25" cy="15" r="2.2" fill="#D4AF37"/>
                 </svg>
-                INVEST<span class="gold">DU</span>
+                INVEST<span class="gold" style="margin-left: 0;">DU</span>
             </a>
 
             <div class="sb-section">
-                <div class="sb-section-label">Dashboard</div>
-                <a href="/dashboard" class="sb-nav-item{{ !$activeSlug ? ' active' : '' }}">
+                <div class="sb-section-label">Menu Utama</div>
+                <a href="#artikel" class="sb-nav-item active" onclick="setActiveNav(this)">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                    Beranda
+                    Artikel
+                </a>
+                <a href="#game" class="sb-nav-item" onclick="setActiveNav(this)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="15" cy="13" r="1"/><circle cx="18" cy="11" r="1"/></svg>
+                    Game
+                </a>
+                <a href="#option" class="sb-nav-item" onclick="setActiveNav(this)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    Option
                 </a>
             </div>
 
             <div class="sb-section">
-                <div class="sb-section-label">Kategori Investasi</div>
-                @php
-                    $categoryIcons = [
-                        'piggy-bank' => '🏦',
-                        'trending-up' => '📈',
-                        'users' => '📊',
-                        'file-text' => '📃',
-                        'home' => '🏠',
-                        'award' => '🥇',
-                        'cpu' => '💎',
-                    ];
-                @endphp
-                @foreach($categories as $cat)
-                    <a href="/dashboard?category={{ $cat->slug }}" class="sb-nav-item{{ $activeSlug === $cat->slug ? ' active' : '' }}">
-                        <span class="cat-icon">{{ $categoryIcons[$cat->icon] ?? '📁' }}</span>
-                        {{ $cat->name }}
-                    </a>
-                @endforeach
+                <button type="button" class="sb-nav-item" onclick="document.getElementById('catDropdown').classList.toggle('show')" style="justify-content: space-between; width: 100%;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                        Kategori Investasi
+                    </div>
+                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div id="catDropdown" style="display: {{ $activeSlug ? 'block' : 'none' }}; margin-top: 4px; padding-left: 12px;">
+                    @php
+                        $categoryIcons = [
+                            'piggy-bank' => '🏦',
+                            'trending-up' => '📈',
+                            'users' => '📊',
+                            'file-text' => '📃',
+                            'home' => '🏠',
+                            'award' => '🥇',
+                            'cpu' => '💎',
+                        ];
+                    @endphp
+                    @foreach($categories as $cat)
+                        <a href="/dashboard?category={{ $cat->slug }}#artikel" class="sb-nav-item{{ $activeSlug === $cat->slug ? ' active' : '' }}" style="padding: 8px 12px; font-size: 0.8rem;">
+                            <span class="cat-icon" style="font-size:1rem;">{{ $categoryIcons[$cat->icon] ?? '📁' }}</span>
+                            {{ $cat->name }}
+                        </a>
+                    @endforeach
+                </div>
             </div>
 
             <div class="sb-spacer"></div>
@@ -728,7 +744,7 @@
                 <button class="hamburger" onclick="toggleSidebar()">
                     <span></span><span></span><span></span>
                 </button>
-                <span style="font-weight:700;font-size:1rem;">INVEST<span class="gold">DU</span></span>
+                <span style="font-weight:800;font-size:1.1rem;letter-spacing:-0.03em;">INVEST<span class="gold" style="color:#D4AF37; margin-left:0;">DU</span></span>
                 <button onclick="toggleProfileDropdown()" style="padding:4px;">
                     <div class="avatar gradient" style="width:32px;height:32px;font-size:0.75rem;">
                         @if($user->profile_picture)
@@ -765,10 +781,10 @@
                         </button>
 
                         <div class="profile-dropdown" id="profileDropdown">
-                            <button class="dd-item" onclick="openEditModal()">
+                            <a href="#option" class="dd-item" onclick="document.getElementById('profileDropdown').classList.remove('show')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                                 Edit Profil
-                            </button>
+                            </a>
                             <div class="dd-divider"></div>
                             <form action="/logout" method="POST" style="margin:0;">
                                 @csrf
@@ -800,7 +816,11 @@
                     </div>
                 @endif
 
-                {{-- WELCOME (only on main dashboard) --}}
+
+                {{-- ==============================
+                     ARTIKEL SECTION
+                     ============================== --}}
+                <section id="artikel" style="padding-top: 20px; margin-bottom: 60px;">
                 @if(!$activeCategory)
                     <div class="welcome-card">
                         <h1>👋 Halo, {{ $user->username }}!</h1>
@@ -938,66 +958,130 @@
                         </div>
                     @endif
                 </div>
+                </section>
 
-            </div>
-        </div>
-    </div>
-
-    {{-- ===== EDIT PROFILE MODAL ===== --}}
-    <div class="modal-overlay" id="editModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title">Edit Profil</h3>
-                <button class="modal-close" onclick="closeEditModal()">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-            </div>
-            <form action="/user/profile/update" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-
-                {{-- Photo Upload --}}
-                <div class="form-group">
-                    <label class="form-label">Foto Profil</label>
-                    <div class="avatar-upload">
-                        <div class="avatar-preview" id="avatarPreview">
-                            @if($user->profile_picture)
-                                <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="avatar" id="avatarImg">
-                            @else
-                                <span id="avatarInitials">{{ strtoupper(substr($user->username, 0, 2)) }}</span>
-                            @endif
-                        </div>
-                        <div>
-                            <label class="avatar-upload-btn" for="profilePicInput">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                                Upload Foto
-                            </label>
-                            <input type="file" id="profilePicInput" name="profile_picture" accept="image/*" style="display:none;" onchange="previewAvatar(this)">
-                            <p class="form-hint">JPG, PNG, WebP. Maks. 2MB.</p>
-                        </div>
+                {{-- ==============================
+                     GAME SECTION
+                     ============================== --}}
+                <section id="game" style="padding-top: 40px; margin-bottom: 60px;">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="15" cy="13" r="1"/><circle cx="18" cy="11" r="1"/></svg>
+                            Nilai & Histori Game
+                        </h2>
+                        <span class="section-count">{{ $gameScores->count() }} game dimainkan</span>
                     </div>
-                </div>
 
-                {{-- Username --}}
-                <div class="form-group">
-                    <label class="form-label" for="editUsername">Username</label>
-                    <input type="text" class="form-input" id="editUsername" name="username" value="{{ $user->username }}" required>
-                </div>
+                    @if($gameScores->count() > 0)
+                        <div class="article-grid">
+                            @foreach($gameScores as $score)
+                                <div class="article-card" style="padding: 20px; display: flex; flex-direction: column; gap: 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                        <span class="article-card-badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981; margin: 0;">
+                                            @if($score->game_type === 'trivia')
+                                                Kuis Trivia
+                                            @else
+                                                Benar / Salah
+                                            @endif
+                                        </span>
+                                        <span style="font-size: 0.8rem; color: var(--text-light);">
+                                            {{ $score->created_at->diffForHumans() }}
+                                        </span>
+                                    </div>
+                                    <h3 style="margin: 0; font-size: 1.1rem; color: var(--text);">Kategori: {{ $score->category->name ?? 'Campuran' }}</h3>
+                                    
+                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 12px; border-top: 1px dashed var(--border);">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span style="font-size: 1.5rem;">
+                                                @php
+                                                    $percentage = ($score->correct_answers / max(1, $score->total_questions)) * 100;
+                                                @endphp
+                                                {{ $percentage >= 80 ? '🏆' : ($percentage >= 60 ? '🌟' : ($percentage >= 40 ? '💪' : '📚')) }}
+                                            </span>
+                                            <div style="display: flex; flex-direction: column;">
+                                                <span style="font-size: 0.8rem; color: var(--text-light);">Skor</span>
+                                                <span style="font-weight: bold; color: var(--gold);">{{ $score->score }} PTS</span>
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <span style="font-size: 0.8rem; color: var(--text-light);">Jawaban Benar</span>
+                                            <div style="font-weight: 600; color: var(--text);">{{ $score->correct_answers }} / {{ $score->total_questions }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="empty-state" style="padding: 60px 24px;">
+                            <div class="empty-icon">🎮</div>
+                            <p class="empty-text">Kamu belum pernah memainkan game. Yuk, selesaikan game untuk mengumpulkan nilai pertamamu!</p>
+                            <a href="/" class="empty-action" style="margin-top: 20px;">
+                                Coba Main Game
+                            </a>
+                        </div>
+                    @endif
+                </section>
 
-                {{-- Password --}}
-                <div class="form-group">
-                    <label class="form-label" for="editPassword">Password Baru</label>
-                    <input type="password" class="form-input" id="editPassword" name="password" placeholder="Kosongkan jika tidak ingin ganti">
-                    <p class="form-hint">Minimal 6 karakter. Kosongkan jika tidak ingin mengubah password.</p>
-                </div>
+                {{-- ==============================
+                     OPTION SECTION
+                     ============================== --}}
+                <section id="option" style="padding-top: 40px; margin-bottom: 60px;">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                            Pengaturan Profil
+                        </h2>
+                    </div>
 
-                <div class="modal-actions">
-                    <button type="button" class="btn-cancel" onclick="closeEditModal()">Batalkan</button>
-                    <button type="submit" class="btn-save">Simpan Perubahan</button>
-                </div>
-            </form>
+                    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; max-width: 600px;">
+                        <form action="/user/profile/update" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="form-group">
+                                <label class="form-label">Foto Profil</label>
+                                <div class="avatar-upload">
+                                    <div class="avatar-preview" id="avatarPreviewOption">
+                                        @if($user->profile_picture)
+                                            <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="avatar" style="width: 100%; height: 100%; object-fit: cover;">
+                                        @else
+                                            <span>{{ strtoupper(substr($user->username, 0, 2)) }}</span>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <label class="avatar-upload-btn" for="profilePicInputOption">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                            Upload Foto
+                                        </label>
+                                        <input type="file" id="profilePicInputOption" name="profile_picture" accept="image/*" style="display:none;" onchange="previewAvatarOption(this)">
+                                        <p class="form-hint">JPG, PNG, WebP. Maks. 2MB.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="editUsernameOption">Username</label>
+                                <input type="text" class="form-input" id="editUsernameOption" name="username" value="{{ $user->username }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="editPasswordOption">Password Baru</label>
+                                <input type="password" class="form-input" id="editPasswordOption" name="password" placeholder="Kosongkan jika tidak ingin ganti">
+                                <p class="form-hint">Minimal 6 karakter. Kosongkan jika tidak ingin mengubah password.</p>
+                            </div>
+
+                            <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-light); display: flex; justify-content: flex-end;">
+                                <button type="submit" class="btn-save">Simpan Perubahan</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+            </div>
         </div>
     </div>
+
+
 
     <script>
         // Profile dropdown
@@ -1015,32 +1099,18 @@
             }
         });
 
-        // Edit profile modal
-        function openEditModal() {
-            document.getElementById('editModal').classList.add('show');
-            document.getElementById('profileDropdown').classList.remove('show');
+        // Active nav state
+        function setActiveNav(element) {
+            document.querySelectorAll('.sb-nav-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
         }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('show');
-        }
-
-        // Close modal on overlay click
-        document.getElementById('editModal').addEventListener('click', function(e) {
-            if (e.target === this) closeEditModal();
-        });
-
-        // ESC key to close modal
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeEditModal();
-        });
 
         // Avatar preview
-        function previewAvatar(input) {
+        function previewAvatarOption(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const preview = document.getElementById('avatarPreview');
+                    const preview = document.getElementById('avatarPreviewOption');
                     preview.innerHTML = '<img src="' + e.target.result + '" alt="avatar">';
                 };
                 reader.readAsDataURL(input.files[0]);
