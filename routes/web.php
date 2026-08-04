@@ -120,3 +120,4 @@ Route::get('/run-migrations-secret', function () {
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     return 'Database migrated successfully on Supabase!';
 });
+
