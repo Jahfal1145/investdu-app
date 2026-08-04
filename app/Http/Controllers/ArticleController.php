@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InvestmentCategory;
 use App\Models\Article;
+use App\Models\InvestmentCategory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -51,7 +54,7 @@ class ArticleController extends Controller
             $articlesQuery->where(function ($q) use ($query) {
                 $q->where('title', 'like', "%{$query}%")
                   ->orWhere('excerpt', 'like', "%{$query}%")
-                  ->orWhere('body', 'like', "%{$query}%");
+                  ->orWhere('content', 'like', "%{$query}%"); // Disesuaikan dari 'body' menjadi 'content'
             });
         }
 
@@ -61,9 +64,9 @@ class ArticleController extends Controller
     }
 
     /**
-     * Tampilkan detail satu artikel.
+     * Tampilkan detail satu artikel berdasarkan kategori.
      */
-    public function show($slug, $articleSlug)
+    public function categoryShow($slug, $articleSlug)
     {
         $category = InvestmentCategory::where('slug', $slug)->firstOrFail();
         $article  = Article::where('category_id', $category->id)
@@ -94,7 +97,7 @@ class ArticleController extends Controller
     /**
      * Pencarian pintar artikel berdasarkan judul, excerpt, isi, dan info kategori.
      */
-    public function search(\Illuminate\Http\Request $request)
+    public function search(Request $request)
     {
         $query = $request->input('q');
         $c = $request->input('c', 'all'); // parameter c untuk multi filter kategori (comma-separated slugs)
@@ -107,7 +110,7 @@ class ArticleController extends Controller
                 ->where(function ($q) use ($query) {
                     $q->where('title', 'like', "%{$query}%")
                       ->orWhere('excerpt', 'like', "%{$query}%")
-                      ->orWhere('body', 'like', "%{$query}%")
+                      ->orWhere('content', 'like', "%{$query}%")
                       ->orWhereHas('category', function ($subQ) use ($query) {
                           $subQ->where('name', 'like', "%{$query}%")
                                ->orWhere('description', 'like', "%{$query}%");
@@ -125,5 +128,32 @@ class ArticleController extends Controller
         }
 
         return view('search_results', compact('articles', 'query', 'c'));
+    }
+
+    /**
+     * ==========================================
+     * AREA API (Mobile / React Frontend)
+     * ==========================================
+     */
+    public function apiIndex()
+    {
+        $articles = Article::where('is_published', true)
+            ->orderByDesc('published_at')
+            ->get(['id', 'title', 'slug', 'excerpt', 'image_url', 'published_at']);
+
+        return response()->json($articles);
+    }
+
+    public function apiShow(string $slug)
+    {
+        $article = Article::where('slug', $slug)
+            ->where('is_published', true)
+            ->first();
+
+        if (! $article) {
+            return response()->json(['message' => 'Artikel tidak ditemukan'], 404);
+        }
+
+        return response()->json($article);
     }
 }

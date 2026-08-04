@@ -10,45 +10,37 @@ class YesOrNoQuestionSeeder extends Seeder
 {
     public function run(): void
     {
-        $cryptoId = InvestmentCategory::where('name', 'Crypto')->value('id') ?? 1;
-        $sahamId = InvestmentCategory::where('name', 'Saham')->value('id') ?? $cryptoId;
-        $questions = [
+        // Kita ambil kategori investasi pertama buat nyambungin Relasi Database-nya (Foreign Key)
+        $category = InvestmentCategory::first();
+        $categoryId = $category ? $category->id : 1;
+
+        $soal = [
             [
-                'question' => 'Investasi saham selalu lebih berisiko daripada tabungan biasa.',
+                'question' => 'Investasi saham selalu lebih berisiko daripada menabung di celengan ayam.',
                 'correct_answer' => 'yes',
-                'explanation' => 'Secara umum, saham memiliki risiko lebih tinggi dibandingkan tabungan berjangka karena nilai pasar saham bisa berfluktuasi.',
-                'category_id' => $sahamId,
+                'explanation' => 'Benar! Saham punya fluktuasi harga yang tinggi (High Risk), sedangkan tabungan biasa nilainya tetap.',
+                'category_id' => $categoryId
             ],
             [
-                'question' => 'Obligasi negara biasanya memberikan pembayaran bunga reguler.',
-                'correct_answer' => 'yes',
-                'explanation' => 'Obligasi memberikan kupon atau bunga berkala yang dibayarkan kepada pemegang obligasi.',
-                'category_id' => $sahamId,
-            ],
-            [
-                'question' => 'Reksa dana tidak pernah bisa rugi karena dikelola oleh profesional.',
+                'question' => 'Kita butuh modal minimal Rp 10 Juta untuk mulai investasi Reksa Dana.',
                 'correct_answer' => 'no',
-                'explanation' => 'Meskipun dikelola profesional, nilai reksa dana tetap tergantung pada aset yang berada di dalamnya dan bisa turun.'
+                'explanation' => 'Salah! Di era digital sekarang, banyak Reksa Dana yang bisa dibeli mulai dari Rp 10.000 saja.',
+                'category_id' => $categoryId
             ],
             [
-                'question' => 'Emas adalah contoh aset safe-haven yang sering dicari ketika inflasi naik.',
-                'correct_answer' => 'yes',
-                'explanation' => 'Emas sering digunakan sebagai lindung nilai terhadap inflasi dan ketidakpastian pasar.'
-            ],
-            [
-                'question' => 'Properti bisa dijual dalam hitungan menit kapan saja tanpa risiko kerugian.',
+                'question' => 'Crypto adalah instrumen investasi yang dijamin 100% aman oleh pemerintah.',
                 'correct_answer' => 'no',
-                'explanation' => 'Properti biasanya kurang likuid, sehingga proses jual bisa memakan waktu dan harga dapat berubah.'
-            ],
-            [
-                'question' => 'Tabungan berjangka mendapat bunga tetap selama periode simpanan.',
-                'correct_answer' => 'yes',
-                'explanation' => 'Tabungan berjangka umumnya memberikan bunga tetap sampai periode tenor selesai.'
-            ],
+                'explanation' => 'Salah! Aset Kripto sangat fluktuatif dan tidak dijamin kerugiannya oleh negara, meski perdagangannya diawasi oleh Bappebti.',
+                'category_id' => $categoryId
+            ]
         ];
 
-        foreach ($questions as $question) {
-            YesOrNoQuestion::create($question);
+        foreach ($soal as $item) {
+            // Kita pakai updateOrCreate biar datanya nggak dobel kalau kamu nge-seed 2 kali
+            YesOrNoQuestion::updateOrCreate(
+                ['question' => $item['question']], 
+                $item
+            );
         }
     }
 }

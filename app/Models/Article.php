@@ -2,44 +2,25 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    protected $fillable = [
-        'category_id',
-        'title',
-        'slug',
-        'excerpt',
-        'body',
-        'thumbnail',
-        'is_published',
-    ];
+    use HasFactory;
 
-    protected $casts = [
-        'is_published' => 'boolean',
-    ];
+    // Mengizinkan semua kolom diisi kecuali ID (biar aman dari perbedaan versi Git)
+    protected $guarded = ['id'];
 
+    // Relasi ke Kategori Investasi (karena di tabel temanmu ada category_id)
     public function category()
     {
         return $this->belongsTo(InvestmentCategory::class, 'category_id');
     }
 
-    /**
-     * User yang pernah membaca artikel ini.
-     */
-    public function readers()
+    // Relasi ke User (jika artikel mencatat siapa penulisnya)
+    public function author()
     {
-        return $this->belongsToMany(User::class, 'article_user_reads')
-                    ->withPivot('read_at');
-    }
-
-    /**
-     * User yang mem-bookmark artikel ini.
-     */
-    public function bookmarkers()
-    {
-        return $this->belongsToMany(User::class, 'article_user_bookmarks')
-                    ->withTimestamps();
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

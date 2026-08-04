@@ -3,50 +3,35 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\TriviaQuestion;
-use App\Models\InvestmentCategory;
+use App\Models\TriviaQuestion; // Pastikan modelmu namanya ini
 
 class TriviaQuestionSeeder extends Seeder
 {
     public function run(): void
     {
-        $cryptoId = InvestmentCategory::where('name', 'Crypto')->value('id') ?? 1;
-        $sahamId = InvestmentCategory::where('name', 'Saham')->value('id') ?? $cryptoId;
-        $emasId = InvestmentCategory::where('name', 'Emas')->value('id') ?? $cryptoId;
-        $questions = [
+        $soal = [
             [
-                'question' => 'Aset crypto manakah yang dikenal sebagai "Raja Crypto" dan merupakan cryptocurrency pertama di dunia?',
-                'option_a' => 'Ethereum (ETH)',
-                'option_b' => 'Bitcoin (BTC)',
-                'option_c' => 'Solana (SOL)',
-                'option_d' => 'Ripple (XRP)',
-                'correct_answer' => 'B',
-                'explanation' => 'Bitcoin (BTC) diciptakan pada tahun 2009 oleh Satoshi Nakamoto dan merupakan cryptocurrency pertama sekaligus terbesar di dunia berdasarkan kapitalisasi pasar.',
-                'category_id' => $cryptoId,
+                'question' => 'Apa instrumen investasi yang paling minim risiko?',
+                'option_a' => 'Saham',
+                'option_b' => 'Crypto',
+                'option_c' => 'Reksa Dana Pasar Uang',
+                'option_d' => 'Properti',
+                'correct_answer' => 'C',
+                'explanation' => 'Reksa Dana Pasar Uang berisiko paling rendah karena dananya ditempatkan pada instrumen pasar uang seperti deposito yang pergerakannya stabil.'
             ],
             [
-                'question' => 'Apa yang dimaksud dengan "Diversifikasi" dalam dunia investasi?',
-                'option_a' => 'Menaruh semua modal hanya pada satu aset yang paling untung',
-                'option_b' => 'Meminjam uang ke bank untuk membeli saham',
-                'option_c' => 'Menyebarkan modal ke beberapa jenis aset berbeda untuk mengurangi risiko',
-                'option_d' => 'Menjual seluruh aset ketika pasar sedang turun drastis',
-                'correct_answer' => 'C',
-                'explanation' => 'Diversifikasi adalah strategi membagi modal ke berbagai instrumen investasi (seperti saham, emas, deposito) dengan prinsip "Don\'t put all your eggs in one basket" untuk meminimalisir risiko kerugian.'
-            ],
-            [
-                'question' => 'Manakah di bawah ini yang termasuk jenis investasi dengan risiko paling rendah namun imbal hasilnya cenderung stabil?',
-                'option_a' => 'Saham Gorengan',
-                'option_b' => 'Perdagangan Berjangka Kripto',
-                'option_c' => 'Emas Batangan / Logam Mulia',
-                'option_d' => 'Non-Fungible Token (NFT)',
-                'correct_answer' => 'C',
-                'explanation' => 'Emas batangan dikategorikan sebagai aset safe-haven yang memiliki risiko rendah, tahan terhadap inflasi, dan nilainya cenderung stabil dalam jangka panjang.',
-                'category_id' => $emasId,
+                'question' => 'Apa kepanjangan dari IHSG?',
+                'option_a' => 'Indeks Harga Saham Gabungan',
+                'option_b' => 'Ikatan Harga Saham Global',
+                'option_c' => 'Indeks Hasil Saham Gabungan',
+                'option_d' => 'Investasi Harga Saham Gabungan',
+                'correct_answer' => 'A',
+                'explanation' => 'IHSG (Indeks Harga Saham Gabungan) adalah grafik pengukur kinerja semua saham yang tercatat di Bursa Efek Indonesia.'
             ]
         ];
 
-        foreach ($questions as $q) {
-            TriviaQuestion::create($q);
+        foreach ($soal as $item) {
+            TriviaQuestion::create($item);
         }
     }
 }

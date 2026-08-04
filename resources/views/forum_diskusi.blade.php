@@ -1,16 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forum Diskusi — Investdu</title>
-    <meta name="description" content="Diskusikan topik investasi bersama komunitas Investdu.">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    @vite(['resources/css/app.css'])
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Forum Diskusi | InvestDU</title>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
     <style>
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -651,14 +646,6 @@
 
     </div>
 
-    {{-- FOOTER --}}
-    <footer class="footer">
-        <div class="footer-inner">
-            <span class="footer-brand">INVEST<span class="gold">DU</span></span>
-            <span class="footer-copy">&copy; {{ date('Y') }} Investdu. All rights reserved.</span>
-        </div>
-    </footer>
-
     <script>
         // Auto scroll to bottom of messages
         const messageArea = document.getElementById('messageArea');
@@ -669,6 +656,9 @@
         // Enter to send
         const textarea = document.querySelector('textarea[name="message"]');
         const form = textarea.closest('form');
+        const messageArea = document.querySelector('.message-area');
+        const activeRoomId = {{ $activeRoomId }};
+        const currentUserId = {{ auth()->id() }};
 
         textarea.addEventListener('keydown', function (event) {
             if (event.key === 'Enter' && !event.shiftKey) {
@@ -678,6 +668,33 @@
                 }
             }
         });
+
+        const initChatListener = () => {
+            if (!window.Echo) {
+                return setTimeout(initChatListener, 50);
+            }
+
+            window.Echo.private(`chat-room.${activeRoomId}`)
+                .listen('MessageSent', (event) => {
+                    if (parseInt(event.message.chat_room_id, 10) !== activeRoomId) {
+                        return;
+                    }
+
+                    const isOutgoing = event.message.user?.id === currentUserId;
+                    const time = new Date(event.message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const messageHtml = `
+                        <div class="message ${isOutgoing ? 'outgoing' : 'incoming'}">
+                            <div class="bubble">${event.message.body}</div>
+                            <div class="info">${event.message.user?.username ?? 'User'} · ${time}</div>
+                        </div>
+                    `;
+
+                    messageArea.insertAdjacentHTML('beforeend', messageHtml);
+                    messageArea.scrollTop = messageArea.scrollHeight;
+                });
+        };
+
+        initChatListener();
     </script>
 
 </body>

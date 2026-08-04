@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleController;
 use App\Models\InvestmentCategory;
+use App\Http\Controllers\FaqController;
+use App\Models\Faq;
 
 Route::get('/', function () {
     // Ambil semua kategori dari database
@@ -79,6 +81,15 @@ Route::post('/admin/monitor-game/yes-or-no', [AdminController::class, 'storeYesO
 Route::put('/admin/monitor-game/yes-or-no/{id}', [AdminController::class, 'updateYesOrNo'])->middleware('auth');
 Route::post('/admin/monitor-game/yes-or-no/{id}/delete', [AdminController::class, 'deleteYesOrNo'])->middleware('auth');
 
+
+// Masukkan ini di area khusus admin kamu
+Route::get('/admin/faqs', [FaqController::class, 'index'])->middleware('auth');
+Route::get('/admin/faqs/create', [FaqController::class, 'create'])->middleware('auth');
+Route::post('/admin/faqs', [FaqController::class, 'store'])->middleware('auth');
+Route::get('/admin/faqs/{id}/edit', [FaqController::class, 'edit'])->middleware('auth');
+Route::put('/admin/faqs/{id}', [FaqController::class, 'update'])->middleware('auth');
+Route::post('/admin/faqs/{id}/delete', [FaqController::class, 'destroy'])->middleware('auth'); // Pakai POST sesuai gaya route delete kamu sebelumnya
+
 // --- KELOLA ARTIKEL (ADMIN) ---
 Route::get('/admin/articles', [AdminController::class, 'articlesIndex'])->middleware('auth');
 Route::get('/admin/articles/{categoryId}/create', [AdminController::class, 'articleCreate'])->middleware('auth');
@@ -95,6 +106,10 @@ Route::put('/user/profile/update', [AuthController::class, 'updateProfile'])->mi
 Route::get('/trivia', function () {
     return view('trivia.index');
 })->middleware('auth');
+
+Route::get('/yes-or-no', function () {
+    return view('yes_or_no');
+});
 
 Route::get('/yes-or-no/{slug}', function ($slug) {
     $category = \App\Models\InvestmentCategory::where('slug', $slug)->firstOrFail();

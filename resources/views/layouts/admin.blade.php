@@ -391,6 +391,11 @@
                 Forum Diskusi
             </a>
 
+            <a href="/admin/faqs" class="nav-item {{ request()->is('admin/faqs*') ? 'active' : '' }}" id="navFaqs">
+                <span class="nav-item-icon">❓</span>
+                Kelola FAQ
+            </a>
+
             <div class="nav-section-label" style="margin-top: 0.5rem;">── SYSTEM ──</div>
 
 
