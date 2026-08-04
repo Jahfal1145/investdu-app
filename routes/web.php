@@ -115,3 +115,8 @@ Route::get('/yes-or-no/{slug}', function ($slug) {
     $category = \App\Models\InvestmentCategory::where('slug', $slug)->firstOrFail();
     return view('yes_or_no', compact('category'));
 })->middleware('auth');
+
+Route::get('/run-migrations-secret', function () {
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    return 'Database migrated successfully on Supabase!';
+});
